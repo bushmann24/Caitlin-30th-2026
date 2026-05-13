@@ -8,13 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Premium Palette */
-            --bg-deep: #1a253a; /* Deep Navy background to make card pop */
-            --card-cover: #eac9c9; /* Matte Rose */
-            --card-inside: #fcfcfc; /* Crisp White */
+            --bg-deep: #1a253a; 
+            --card-cover: #eac9c9; 
+            --card-inside: #fcfcfc; 
             --gold-foil: #c6a16e;
-            --spine-shadow: rgba(0,0,0,0.15);
-            --text-main: #4a4a4a;
         }
 
         body, html {
@@ -22,73 +19,68 @@
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-deep);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            overflow: hidden; /* Lock screen scrolling */
-            perspective: 2000px; /* Enhanced 3D depth */
+            overflow: hidden; 
+            perspective: 2500px; /* High perspective for realistic 3D book open */
             color: white;
         }
 
-        /* The Main 3D Card Object */
-        .card-container {
+        /* --- THE FOLDED CARD STRUCTURE --- */
+        .card-wrapper {
             width: 85%; max-width: 340px;
-            height: 70vh; max-height: 520px;
+            height: 65vh; max-height: 500px;
             position: relative;
-            transform-style: preserve-3d;
-            /* Closed state rotation for a slight realistic 3D angle */
-            transform: rotateY(-3deg) rotateX(2deg);
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            
-            /* Realistic Cardstock Shadows (The 'Thick' look) */
-            box-shadow: 
-                -1px 1px 2px rgba(255,255,255,0.3), /* Light top-left edge */
-                1px 3px 15px rgba(0,0,0,0.4),      /* Main shadow */
-                3px 10px 25px rgba(0,0,0,0.2);     /* Deep soft shadow */
-            border-radius: 4px; /* Cut cardstock look, not round */
-            cursor: grab;
-            z-index: 10;
-        }
-        
-        .card-container:active { cursor: grabbing; }
-
-        /* The state when the card is swiped open */
-        .card-container.open {
-            transform: rotateY(-170deg) rotateX(0deg); /* Opens almost full way, slight angle left for depth */
-            cursor: default;
+            transform: rotateX(2deg); /* Slight tilt for depth */
         }
 
-        /* --- Page Base Styles --- */
-        .page {
+        /* The Right Side (Back Cover / Inside Right where cake is) */
+        .card-right-side {
+            position: absolute; top: 0; right: 0;
             width: 100%; height: 100%;
-            position: absolute; top: 0; left: 0;
-            border-radius: 4px;
-            backface-visibility: hidden; /* Critically important for flipping */
-            -webkit-backface-visibility: hidden;
+            background-color: var(--card-inside);
+            border-radius: 4px 10px 10px 4px;
+            box-shadow: 5px 10px 25px rgba(0,0,0,0.3), inset 15px 0 30px rgba(0,0,0,0.05); /* Spine shadow inside */
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-sizing: border-box; padding: 30px;
-            overflow: hidden;
+            z-index: 1;
         }
 
-        /* --- FRONT COVER --- */
-        .card-front {
-            background-color: var(--card-cover);
+        /* The Left Side (Front Cover flap) */
+        .card-left-flap {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform-origin: left center; /* This creates the book hinge */
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 2;
-            transform: translateZ(1px); /* Ensures it's on top when closed */
         }
 
-        /* Realistic Cardstock Spine/Fold */
-        .card-front::before {
-            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 20px;
-            background: linear-gradient(to right, var(--spine-shadow), transparent);
+        /* Swiped State */
+        .card-left-flap.open {
+            transform: rotateY(-155deg); /* Opens like a book to the left */
+        }
+
+        /* The actual faces of the front flap */
+        .flap-face {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 4px 10px 10px 4px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        /* The Front Cover */
+        .flap-front {
+            background-color: var(--card-cover);
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+        .flap-front::before { /* Spine shading */
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 25px;
+            background: linear-gradient(to right, rgba(0,0,0,0.15), transparent);
             border-radius: 4px 0 0 4px;
         }
-        /* Subtled Paper Texture overlay */
-        .card-front::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNhYfEPKscAFWNkAPMZWQEAb90X+R19pLIAAAAASUVORK5CYII=');
-            opacity: 0.15; pointer-events: none;
-        }
-
+        
         .cover-30 {
-            font-family: 'Montserrat', sans-serif;
             font-size: 7rem; font-weight: 600; color: #fff;
             margin: 0; line-height: 1; letter-spacing: -5px;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.05), 0 0 20px rgba(212,163,115,0.5);
@@ -98,26 +90,21 @@
             text-transform: uppercase; letter-spacing: 3px;
         }
 
-        /* --- INSIDE PAGE (THE CAKE) --- */
-        .card-inside {
-            background-color: var(--card-inside-color);
-            transform: rotateY(180deg); /* Face backwards inside */
+        /* The Inside of the Front Cover (Blank white page on left) */
+        .flap-back {
+            background-color: #f7f7f7; /* Slightly off-white */
+            transform: rotateY(180deg);
             z-index: 1;
-            text-align: center;
-            color: var(--text-main);
-            /* Inside fold shadow */
-            box-shadow: inset 15px 0 30px var(--spine-shadow);
+            box-shadow: inset -10px 0 20px rgba(0,0,0,0.05); /* Shadow near the fold */
         }
-        .inside-header { font-family: 'Great Vibes', cursive; color: var(--gold-foil); font-size: 3.5rem; margin: 0; }
-        .inside-sub { font-size: 0.9rem; font-weight: 300; color: #777; margin: 5px 0 30px 0; }
 
-        /* THE PRETTY CAKE */
-        .cake-container { position: relative; width: 180px; height: 130px; margin: 0 auto; }
+        /* --- THE CAKE (Inside Right) --- */
+        .cake-container { position: relative; width: 180px; height: 150px; margin-top: 30px; }
         .cake-tier { background: #fff; border-radius: 8px 8px 0 0; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: inset 0 -3px 6px rgba(0,0,0,0.03); border: 1px solid #eee; }
         .tier-top { width: 100px; height: 50px; bottom: 65px; z-index: 2; }
         .tier-bottom { width: 160px; height: 70px; bottom: 0; z-index: 1; }
 
-        /* Icing with Sprinkles */
+        /* Icing */
         .cake-tier::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px;
             background: #fff0f3; border-radius: 8px 8px 15px 15px;
@@ -135,42 +122,38 @@
         .flame.off { opacity: 0; pointer-events: none; }
         @keyframes flicker { 0% { transform: scale(1) rotate(-1deg); } 100% { transform: scale(1.05) rotate(1deg); } }
 
-        /* Standard Buttons */
+        /* General UI Elements */
         button {
             padding: 12px 28px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 2px;
             background-color: var(--gold-foil); color: white; cursor: pointer;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1); transition: 0.2s;
             font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px;
         }
-        button:active { transform: scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        .mic-btn { background-color: #555; margin-top: 25px; font-size: 0.75rem; text-transform: none; letter-spacing: 1px; border-radius: 20px;}
-
-        /* Heart Animation */
+        button:active { transform: scale(0.97); }
         .heart { position: absolute; color: #ff7675; font-size: 1.5rem; animation: floatUp 3s ease-in forwards; pointer-events: none; z-index: 100;}
         @keyframes floatUp { 0% { transform: translateY(0) scale(0.8); opacity: 1; } 100% { transform: translateY(-100vh) scale(1.3); opacity: 0; } }
 
-        /* --- SWIPE HINT TEXT (BELOW CARD) --- */
         .swipe-instruction {
-            margin-top: 30px; font-size: 0.85rem; color: rgba(255,255,255,0.5);
+            position: absolute; bottom: 10%; width: 100%; text-align: center;
+            font-size: 0.85rem; color: rgba(255,255,255,0.5);
             font-weight: 300; text-transform: uppercase; letter-spacing: 3px;
-            animation: fadePulse 2s infinite; pointer-events: none;
-            z-index: 1;
+            animation: fadePulse 2s infinite; pointer-events: none; z-index: 0;
         }
-        @keyframes fadePulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        @keyframes fadePulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* --- Full Screen Message overlays (Msg, Trick, Timer) --- */
+        /* Overlays */
         .overlay-screen {
             display: none; width: 100%; height: 100%;
             flex-direction: column; justify-content: center; align-items: center;
             position: absolute; top: 0; left: 0; background-color: var(--bg-deep);
             text-align: center; padding: 40px; box-sizing: border-box;
-            z-index: 100; opacity: 0; transition: opacity 0.8s;
+            z-index: 200; opacity: 0; transition: opacity 0.8s;
         }
         .overlay-screen.active { display: flex; opacity: 1; }
         .msg-h1 { font-family: 'Great Vibes', cursive; font-size: 4.5rem; color: var(--gold-foil); margin: 0;}
         .msg-p { color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.7; max-width: 400px; font-weight: 300;}
 
-        /* Trick Screen Buttons */
+        /* Trick Button */
         .btn-container { position: relative; width: 100%; height: 250px; margin-top: 40px; max-width: 300px;}
         #btn-yes { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transition: 0.15s ease-out; white-space: nowrap; z-index: 10;}
         #btn-no { position: absolute; left: 50%; top: 130%; transform: translate(-50%, -50%); background-color: #555; z-index: 5;}
@@ -183,20 +166,12 @@
 </head>
 <body>
 
-    <!-- 3D Card Object -->
-    <div id="main-card" class="card-container">
+    <!-- 3D Card Structure -->
+    <div id="main-card" class="card-wrapper">
         
-        <!-- FRONT COVER -->
-        <div class="page card-front">
-            <h1 class="cover-30">30</h1>
-            <p class="cover-wish">Make a wish</p>
-        </div>
-
-        <!-- INSIDE PAGE (THE CAKE) -->
-        <div class="page card-inside">
-            <h2 class="inside-header">Make a Wish!</h2>
-            <p class="inside-sub">Blow on the mic or tap the flames.</p>
-            
+        <!-- Inside Right Page (The Cake) -->
+        <div class="card-right-side">
+            <!-- Notice: All text removed here per request -->
             <div class="cake-container">
                 <div class="candles">
                     <div class="candle" onclick="tapExtinguish(0)"><div class="flame" id="flame-0"></div></div>
@@ -206,12 +181,22 @@
                 <div class="cake-tier tier-top"></div>
                 <div class="cake-tier tier-bottom"></div>
             </div>
-            
-            <button id="enable-mic-btn" class="mic-btn" onclick="startMic()">Enable Mic to Blow</button>
         </div>
+
+        <!-- Front Flap (Hinged on the left) -->
+        <div id="card-flap" class="card-left-flap">
+            <!-- Front of the card -->
+            <div class="flap-face flap-front">
+                <h1 class="cover-30">30</h1>
+                <p class="cover-wish">Make a wish</p>
+            </div>
+            <!-- Back of the front cover (visible when open) -->
+            <div class="flap-face flap-back"></div>
+        </div>
+
     </div>
 
-    <!-- Instruction text placed *BELOW* the card object in HTML flow -->
+    <!-- Instruction text -->
     <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
 
 
@@ -252,87 +237,73 @@
     <script>
         let flamesOn = 3;
         let micEnabled = false;
-        const card = document.getElementById('main-card');
+        const wrapper = document.getElementById('main-card');
+        const flap = document.getElementById('card-flap');
         const swipeHint = document.getElementById('swipe-hint');
         
-        // --- Robust Swipe Logic ---
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchEndX = 0;
-        let touchEndY = 0;
+        // --- Swipe Logic ---
+        let touchStartX = 0; let touchStartY = 0;
+        let touchEndX = 0; let touchEndY = 0;
 
-        // Listen on body to capture swipe even if off-card slightly
         document.body.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
+            touchStartX = e.changedTouches[0].screenX; touchStartY = e.changedTouches[0].screenY;
         }, false);
 
         document.body.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            touchEndY = e.changedTouches[0].screenY;
+            touchEndX = e.changedTouches[0].screenX; touchEndY = e.changedTouches[0].screenY;
             handleSwipe();
         }, false);
 
         function handleSwipe() {
-            const swipeThreshold = 50; // Min distance
-            const restraintY = 100; // Max vertical variance allowed
-
+            const swipeThreshold = 50; 
+            const restraintY = 100; 
             const deltaX = touchStartX - touchEndX;
             const deltaY = Math.abs(touchStartY - touchEndY);
 
-            // If card is closed, swiped left (positive deltaX), and not scrolling vertically
-            if (!card.classList.contains('open') && deltaX > swipeThreshold && deltaY < restraintY) { 
+            if (!flap.classList.contains('open') && deltaX > swipeThreshold && deltaY < restraintY) { 
                 openCard();
             }
         }
 
-        // Fallback: Click to open for desktop testers
-        card.addEventListener('click', (e) => {
-            // Only trigger if closed and not clicking a button inside
-            if(!card.classList.contains('open') && e.target.tagName !== 'BUTTON') {
-                openCard();
-            }
+        // Desktop click fallback
+        wrapper.addEventListener('click', (e) => {
+            if(!flap.classList.contains('open')) { openCard(); }
         });
 
+        // The Open Card Event
         function openCard() {
-            card.classList.add('open');
-            swipeHint.style.display = 'none'; // Hide instruction
+            flap.classList.add('open');
+            swipeHint.style.display = 'none'; 
             spawnHearts();
+            
+            // As soon as she swipes, ask for Mic permission in the background!
+            if (!micEnabled) { startMic(); }
         }
 
-        // --- Screen Flow Control ---
+        // --- Screen Flow ---
         function showScreen(id) {
-            // Reset main view
-            card.style.display = 'none';
-            // Show overlay
+            wrapper.style.display = 'none';
             document.querySelectorAll('.overlay-screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
         // --- Heart Animation ---
         function spawnHearts() {
-            // Spawn hearts relative to body to avoid card rotation clipping
             for(let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     let heart = document.createElement('div');
-                    heart.innerHTML = '❤️';
-                    heart.className = 'heart';
-                    // Random horizontal start, centered-ish
+                    heart.innerHTML = '❤️'; heart.className = 'heart';
                     heart.style.left = (Math.random() * 60 + 20) + 'vw';
-                    heart.style.top = '70vh'; // Start from card area
+                    heart.style.top = '70vh'; 
                     document.body.appendChild(heart);
-                    // Remove after animation finishes
                     setTimeout(() => heart.remove(), 3000);
                 }, i * 150);
             }
         }
 
-        // --- Candle/Wish Logic ---
+        // --- Candle Logic ---
         function tapExtinguish(index) {
-            // Only allow tap if mic isn't active
-            if(!micEnabled) {
-                extinguish(index);
-            }
+            if(!micEnabled) { extinguish(index); }
         }
 
         function extinguish(index) {
@@ -346,20 +317,19 @@
 
         function checkCandles() {
             if (flamesOn === 0) {
-                // Success! Transition to message
                 setTimeout(() => { showScreen('message-screen'); }, 1500);
             }
         }
 
-        // --- Microphone Blow Detection ---
+        // --- FIXED Microphone Logic ---
         async function startMic() {
-            const micBtn = document.getElementById('enable-mic-btn');
             try {
-                // Browser security requires user interaction (this click) to allow audio context
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const analyser = audioContextContext.createAnalyser();
-                const microphone = audioContextContext.createMediaStreamSource(stream);
+                // Use standard audio context setup (Fixed typo here)
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+                const analyser = audioCtx.createAnalyser();
+                const microphone = audioCtx.createMediaStreamSource(stream);
                 microphone.connect(analyser);
                 analyser.fftSize = 256;
                 
@@ -367,8 +337,6 @@
                 const dataArray = new Uint8Array(bufferLength);
 
                 micEnabled = true;
-                micBtn.innerText = "Blow on your phone now!";
-                micBtn.style.backgroundColor = "#cc8e8e"; // Subtle feedback color
 
                 function detectBlow() {
                     analyser.getByteFrequencyData(dataArray);
@@ -378,7 +346,6 @@
 
                     // Blow detection threshold
                     if (average > 75 && flamesOn > 0) { 
-                        // Extinguish one active flame
                         for(let i=0; i<3; i++) {
                             let f = document.getElementById('flame-'+i);
                             if(!f.classList.contains('off')) {
@@ -387,56 +354,43 @@
                             }
                         }
                     }
-                    // Continue loop if candles remain
                     if (flamesOn > 0) { requestAnimationFrame(detectBlow); }
                 }
                 detectBlow();
 
             } catch (err) {
-                // Fallback if denied or not supported
-                micBtn.innerText = "Mic access denied. Tap flames instead.";
-                micBtn.style.backgroundColor = "#555";
-                micEnabled = false;
+                micEnabled = false; // Fall back to tapping flames if denied
             }
         }
 
-        // --- Runaway "Yes" Button Logic ---
+        // --- Trick Button ---
         const btnYes = document.getElementById('btn-yes');
 
         const moveBtn = (e) => {
-            // Prevent actual 'click' action on mobile
             if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();
-
             const container = document.querySelector('.btn-container');
-            // Constraints based on container size minus button size
             const maxX = container.clientWidth - btnYes.clientWidth;
             const maxY = container.clientHeight - btnYes.clientHeight;
-            
-            // Generate random coordinates within bounds
             const randomX = Math.max(0, Math.floor(Math.random() * maxX));
             const randomY = Math.max(0, Math.floor(Math.random() * maxY));
             
-            // Apply new position, removing absolute center transform
-            btnYes.style.left = `${randomX}px`;
-            btnYes.style.top = `${randomY}px`;
+            btnYes.style.left = `${randomX}px`; btnYes.style.top = `${randomY}px`;
             btnYes.style.transform = 'none'; 
         };
 
-        // Standard triggers: mouseover (desktop), touchstart/click (mobile)
         btnYes.addEventListener('mouseover', moveBtn);
         btnYes.addEventListener('touchstart', moveBtn);
         btnYes.addEventListener('click', moveBtn);
 
-        // --- Countdown Timer Logic ---
+        // --- Countdown ---
         function startCountdown() {
             showScreen('countdown-screen');
             
-            // TARGET TIME: 5:00 PM Today (Change 17 to finish hour, e.g. 18 for 6pm)
+            // Set for 5:00 PM today (17)
             let finishHour = 17;
             let targetTime = new Date();
             targetTime.setHours(finishHour, 0, 0, 0); 
 
-            // If currently past target, count to target *tomorrow*
             if(new Date() > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
@@ -453,18 +407,15 @@
                     return;
                 }
 
-                // Time math
                 let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Add leading zeros for aesthetic
                 const p = (num) => num < 10 ? "0" + num : num;
 
                 timerDisplay.innerHTML = p(hours) + "h " + p(minutes) + "m " + p(seconds) + "s ";
             };
 
-            updateTimer(); // Initial call to avoid jump
+            updateTimer(); 
             const countdownInterval = setInterval(updateTimer, 1000);
         }
     </script>

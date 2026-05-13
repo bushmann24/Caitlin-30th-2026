@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* NEW PASTEL PINK AESTHETIC */
-            --bg-page: #fcf0f4; /* Very soft pastel pink background */
-            --card-cover: #f4a7b9; /* Beautiful soft rose pink for the card */
-            --card-inside: #fffdfd; /* Warm crisp white */
-            --gold-accent: #e08ea2; /* Rose-gold / darker pink for buttons */
-            --text-main: #5c4044; /* Softer, warm charcoal for text */
+            /* CHIC PASTEL & BLUSH PALETTE */
+            --bg-page: #fbf5f6; /* Very soft blush pastel */
+            --card-cover: #e4b5c0; /* Elegant rose/blush pink */
+            --card-inside: #ffffff; /* Crisp white inside */
+            --gold-accent: #d297a7; /* Rose-gold for buttons and highlights */
+            --text-main: #4a4142; /* Soft slate/charcoal instead of brown */
         }
 
         body, html {
@@ -27,7 +27,7 @@
         }
 
         /* =========================================
-           1. SMOOTH PASTEL ENVELOPE & FOLIAGE
+           1. SMOOTH SOLID ENVELOPE & FOLIAGE
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -42,24 +42,26 @@
         }
         .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default; }
 
-        /* Pastel Pink Envelope Coloring */
-        .env-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e6a8b7; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 0; }
-        .env-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff0f3; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 1; }
-        .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; }
+        /* FIXED LAYER TRANSPARENCY */
+        .env-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #eacbd2; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 1; }
+        .env-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fcf4f5; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 2; }
+        .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; overflow: visible; }
 
-        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f3b6c2; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; pointer-events: none;}
-        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f3b6c2; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; pointer-events: none;}
-        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #eeaeb9; z-index: 4; border-radius: 0 0 4px 4px; pointer-events: none;}
+        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f6dce2; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 4; border-radius: 4px 0 0 4px; pointer-events: none;}
+        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f6dce2; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 4; border-radius: 0 4px 4px 0; pointer-events: none;}
+        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #f9e6ea; z-index: 5; border-radius: 0 0 4px 4px; pointer-events: none;}
 
         .env-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 160px solid transparent; border-right: 160px solid transparent;
-            border-top: 120px solid #f8c8d4; transform-origin: top;
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s; z-index: 5;
+            border-top: 120px solid #fdf8f9; transform-origin: top;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s; z-index: 6;
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
-        .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: -1; }
-        .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #a48187; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
+        /* Flap goes to z-index 0 (behind env-back which is 1) ensuring no see-through! */
+        .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 0; }
+        
+        .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #a6989a; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
 
         /* --- THE SWAY ANIMATION --- */
         .f-sway { width: 100%; height: 100%; transform-origin: bottom center; animation: flowerSway 3s ease-in-out infinite alternate; }
@@ -171,7 +173,7 @@
 
         /* UI Overlays */
         .ui-container { position: absolute; bottom: 6%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 5; }
-        .swipe-instruction { font-size: 0.85rem; color: #a48187; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
+        .swipe-instruction { font-size: 0.85rem; color: #a6989a; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
         .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
         @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
@@ -218,14 +220,18 @@
         .lens::after { content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px; background: rgba(255,255,255,0.4); border-radius: 50%; }
         .viewfinder { position: absolute; top: 15px; right: 20px; width: 35px; height: 25px; background: #1e272e; border-radius: 4px; z-index: 5; border: 3px solid #ced6e0; }
         
+        /* PULSING RED SHUTTER BUTTON */
         .shutter-btn {
             position: absolute; top: 15px; left: 15px; width: 30px; height: 30px;
             background: #ff4757; border-radius: 50%; cursor: pointer; z-index: 5;
             box-shadow: 0 0 15px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3);
-            animation: shutterGlow 1s infinite alternate; border: 3px solid #dfe4ea;
+            animation: shutterGlow 0.8s ease-in-out infinite alternate; border: 3px solid #dfe4ea;
         }
-        @keyframes shutterGlow { 0% { box-shadow: 0 0 5px #ff4757; } 100% { box-shadow: 0 0 25px #ff4757; } }
-        .shutter-btn:active { transform: scale(0.95); }
+        @keyframes shutterGlow { 
+            0% { box-shadow: 0 0 5px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); transform: scale(1); } 
+            100% { box-shadow: 0 0 30px 10px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); transform: scale(1.08); } 
+        }
+        .shutter-btn:active { transform: scale(0.95); animation: none; box-shadow: none; }
 
         .flash-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; opacity: 0; pointer-events: none; }
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
@@ -235,11 +241,11 @@
         .polaroid-frame {
             position: absolute; top: 10px; left: 50%; margin-left: -75px; 
             width: 150px; height: 180px;
-            background: white; padding: 10px; padding-bottom: 20px; /* Reduced bottom padding */
+            background: white; padding: 10px; padding-bottom: 20px; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
             z-index: 5; 
-            /* 6 Second Super-Slow Drop Animation */
-            transition: transform 6s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
+            /* 4 SECOND DROP ANIMATION */
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
             transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
         
@@ -265,16 +271,23 @@
         .overlay-screen.active { display: flex; opacity: 1; }
         .msg-h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: var(--card-cover); margin: 0; font-style: italic;}
         .msg-p { color: var(--text-main); font-size: 1.15rem; line-height: 1.8; max-width: 450px; font-weight: 400; margin-top: 20px;}
-        button.standard-btn { margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; background-color: var(--gold-accent); color: white; cursor: pointer; box-shadow: 0 6px 15px rgba(224,142,162,0.3); transition: transform 0.2s; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+        
+        button.standard-btn { 
+            margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; 
+            background-color: var(--gold-accent); color: white; cursor: pointer; 
+            box-shadow: 0 6px 15px rgba(210, 151, 167, 0.4); transition: transform 0.2s; 
+            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; 
+        }
         button.standard-btn:active { transform: scale(0.95); }
         
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
         
-        #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; }
+        /* Replaced dark brown with soft chic gray */
+        #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: #a49799; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 50; }
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
-        .fine-print { font-size: 0.85rem; color: #a48187; font-style: italic; margin-top: 50px;}
+        .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 50px;}
 
     </style>
 </head>
@@ -288,7 +301,6 @@
             <div class="env-inner"></div>
             
             <div class="env-flowers">
-                
                 <!-- BACKGROUND FOLIAGE -->
                 <div class="f-foliage f-foliage-1"><div class="f-sway" style="animation-duration: 3.5s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q50,100 20,20" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q60,120 80,40" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q40,150 10,90" stroke="#1aaa15" stroke-width="2" fill="none"/><path d="M50,200 Q70,140 90,80" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q50,80 50,0" stroke="#079097" stroke-width="4" fill="none"/></svg>
@@ -302,6 +314,7 @@
                 <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg>
                 </div></div>
+                <!-- Extra Foliage -->
                 <div class="f-foliage f-foliage-5"><div class="f-sway" style="animation-duration: 3.3s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q45,100 20,10" stroke="#079097" stroke-width="3" fill="none"/><path d="M50,200 Q55,100 80,20" stroke="#159faa" stroke-width="2" fill="none"/></svg>
                 </div></div>
@@ -311,7 +324,6 @@
                 <div class="f-foliage f-foliage-7"><div class="f-sway" style="animation-duration: 3.6s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q40,120 10,40" stroke="#079097" stroke-width="3" fill="none"/></svg>
                 </div></div>
-
 
                 <!-- DRAGGABLE GLOWING FLOWERS -->
                 <div class="f-wrapper cyan"><div class="f-sway">
@@ -375,7 +387,7 @@
         </div>
     </div>
 
-    <!-- UI Overlay (Deleted immediately on blowout) -->
+    <!-- UI Overlay (Deleted permanently on blowout) -->
     <div class="ui-container" id="card-ui-container" style="z-index: 5;">
         <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
         <button id="mic-btn" class="mic-btn" onclick="startMic()">Tap here</button>
@@ -457,7 +469,7 @@
             timerDisplay.innerHTML = p(h) + "h " + p(m) + "m " + p(s) + "s";
         }
         setInterval(updateTimer, 1000);
-        updateTimer(); // Initial call to pre-load DOM before screen is even visible
+        updateTimer();
 
 
         /* ==================================
@@ -550,10 +562,8 @@
         const targetName = "Caitling";
 
         nameInput.addEventListener('input', () => {
-            // Block input if card is already open
             if(document.getElementById('card-flap').classList.contains('open')) {
-                nameInput.value = targetName;
-                return;
+                nameInput.value = targetName; return;
             }
 
             let len = nameInput.value.length;
@@ -653,14 +663,14 @@
             document.getElementById('flash').classList.add('flash');
             document.getElementById('camera-hint').style.opacity = '0';
             
-            // Wait 1 second for the flash, then eject the photo SLOWLY over 6 seconds
+            // Wait 1 second for the flash, then eject the photo FAST over 4 seconds
             setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 1000);
 
-            // Wait 9.5 total seconds (1s flash delay + 6s drop animation + 2.5s admire time) before moving to next screen
+            // Wait 7.5 total seconds (1s flash delay + 4s drop animation + 2.5s admire time)
             setTimeout(() => {
                 document.getElementById('camera-screen').style.opacity = '0';
                 setTimeout(() => { document.getElementById('camera-screen').classList.remove('active'); showScreen('message-screen'); }, 1000);
-            }, 9500);
+            }, 7500);
         }
 
         /* ==================================
@@ -714,7 +724,6 @@
 
         function startCountdown() {
             showScreen('countdown-screen');
-            // Timer is already ticking via the global updateTimer interval!
         }
     </script>
 </body>

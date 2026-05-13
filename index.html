@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 30th!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-page: #f4ede4; 
@@ -63,7 +63,7 @@
         .f-sway { width: 100%; height: 100%; transform-origin: bottom center; animation: flowerSway 3s ease-in-out infinite alternate; }
         @keyframes flowerSway { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
 
-        /* --- BACKGROUND FOLIAGE (More grass!) --- */
+        /* --- BACKGROUND FOLIAGE (Non-Interactive) --- */
         .f-foliage {
             position: absolute; bottom: 20px; left: 140px; width: 80px; height: 160px;
             transform: scale(0) translateY(50px); opacity: 0; pointer-events: none; z-index: 1;
@@ -74,12 +74,11 @@
         .env-wrapper.open .f-foliage.pop:nth-of-type(2) { transform: translate(120px, -100px) scale(0.7) rotate(30deg); }
         .env-wrapper.open .f-foliage.pop:nth-of-type(3) { transform: translate(-60px, -150px) scale(0.8) rotate(-10deg); }
         .env-wrapper.open .f-foliage.pop:nth-of-type(4) { transform: translate(70px, -130px) scale(0.75) rotate(15deg); }
-        /* Extra Grass Elements */
         .env-wrapper.open .f-foliage.pop:nth-of-type(5) { transform: translate(0px, -180px) scale(0.9) rotate(5deg); }
         .env-wrapper.open .f-foliage.pop:nth-of-type(6) { transform: translate(-140px, -70px) scale(0.6) rotate(-35deg); }
         .env-wrapper.open .f-foliage.pop:nth-of-type(7) { transform: translate(140px, -60px) scale(0.6) rotate(40deg); }
 
-        /* --- DRAGGABLE FLOWERS (Increased Size) --- */
+        /* --- DRAGGABLE FLOWERS (Perfect Goldilocks Size) --- */
         .f-wrapper {
             position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -89,13 +88,12 @@
         .f-wrapper * { pointer-events: none; } 
 
         .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 10; }
-        /* Flowers bumped up from ~0.4 to ~0.55 */
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(8) { transform: translate(calc(-90px + var(--dx)), calc(-170px + var(--dy))) scale(0.55) rotate(-25deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(9) { transform: translate(calc(20px + var(--dx)), calc(-210px + var(--dy))) scale(0.6) rotate(0deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(10) { transform: translate(calc(100px + var(--dx)), calc(-160px + var(--dy))) scale(0.55) rotate(25deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(11) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.5) rotate(-40deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(12) { transform: translate(calc(60px + var(--dx)), calc(-120px + var(--dy))) scale(0.5) rotate(40deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(13) { transform: translate(calc(-10px + var(--dx)), calc(-150px + var(--dy))) scale(0.65) rotate(5deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(8) { transform: translate(calc(-90px + var(--dx)), calc(-170px + var(--dy))) scale(0.48) rotate(-25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(9) { transform: translate(calc(20px + var(--dx)), calc(-210px + var(--dy))) scale(0.52) rotate(0deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(10) { transform: translate(calc(100px + var(--dx)), calc(-160px + var(--dy))) scale(0.48) rotate(25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(11) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.45) rotate(-40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(12) { transform: translate(calc(60px + var(--dx)), calc(-120px + var(--dy))) scale(0.45) rotate(40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(13) { transform: translate(calc(-10px + var(--dx)), calc(-150px + var(--dy))) scale(0.55) rotate(5deg); }
 
         .f-wrapper:nth-of-type(8) .f-sway { animation-duration: 3.2s; animation-delay: 0s; }
         .f-wrapper:nth-of-type(9) .f-sway { animation-duration: 2.8s; animation-delay: -1s; }
@@ -190,7 +188,7 @@
 
         .camera-wrapper {
             position: relative; display: flex; flex-direction: column; align-items: center;
-            margin-top: -100px; /* Lifts the camera up higher */
+            margin-top: -100px; 
         }
 
         /* The Main Camera Body (Z-index 10) */
@@ -206,7 +204,7 @@
         }
         .camera-base {
             position: absolute; bottom: -40px; left: 0; width: 100%; height: 40px;
-            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 10; /* Must cover photo */
+            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 10; 
             box-shadow: inset 0 10px 15px rgba(0,0,0,0.2);
         }
         .lens {
@@ -236,15 +234,16 @@
             width: 150px; height: 180px;
             background: white; padding: 10px; padding-bottom: 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-            z-index: 5; /* Behind retro-camera (10) */
-            /* 6 Second Super-Slow Drop Animation */
-            transition: transform 6s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
+            z-index: 5; 
+            /* Beautiful 8-second slow ejection animation */
+            transition: transform 8s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
             transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
-        .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; }
-        .polaroid-text { font-family: 'Caveat', cursive; text-align: center; font-size: 1.5rem; color: #333; margin-top: 5px; }
         
-        /* Drops down from out from under the camera body */
+        /* Directing to local repo image 'polaroid.webp' */
+        .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; background-image: url('polaroid.webp'); }
+        
+        /* Slow drop down from out from under the camera body */
         .polaroid-frame.eject {
             opacity: 1;
             transform: translateY(210px) scale(1) rotate(-3deg); 
@@ -389,8 +388,7 @@
             <!-- The Photo Placed BEHIND the Camera Body -->
             <div class="polaroid-frame" id="polaroid">
                 <!-- PHOTO URL HERE -->
-                <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
-                <div class="polaroid-text">Memories</div>
+                <div class="polaroid-img"></div>
             </div>
 
             <!-- The Main Camera Body -->
@@ -623,14 +621,14 @@
             document.getElementById('flash').classList.add('flash');
             document.getElementById('camera-hint').style.opacity = '0';
             
-            // Photo ejects SLOWLY DOWN from underneath the camera body
-            setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 300);
+            // Wait 1 second for the flash, then eject the photo SLOWLY over 8 seconds
+            setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 1000);
 
-            // Wait 8.5 seconds (6s for the drop animation + 2.5s to admire it)
+            // Wait 11 total seconds (1s flash delay + 8s drop animation + 2s admire time) before moving to next screen
             setTimeout(() => {
                 document.getElementById('camera-screen').style.opacity = '0';
                 setTimeout(() => { document.getElementById('camera-screen').classList.remove('active'); showScreen('message-screen'); }, 1000);
-            }, 8500);
+            }, 11000);
         }
 
         /* ==================================

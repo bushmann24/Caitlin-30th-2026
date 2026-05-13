@@ -4,153 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 30th!</title>
-    <!-- Importing a fancy font and a clean sans-serif font -->
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fdf5f5; /* Creamy off-white */
-            --card-cover-color: #ffb3b3; /* Soft Rose */
-            --card-inside-color: #ffffff; /* White */
-            --text-color: #4a4a4a;
-            --accent-color: #d4a373; /* Gold/Bronze */
-            --flame-color: #ff9f43;
+            /* Premium Palette */
+            --bg-deep: #1a253a; /* Deep Navy background to make card pop */
+            --card-cover: #eac9c9; /* Matte Rose */
+            --card-inside: #fcfcfc; /* Crisp White */
+            --gold-foil: #c6a16e;
+            --spine-shadow: rgba(0,0,0,0.15);
+            --text-main: #4a4a4a;
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-color);
-            overflow: hidden; /* Prevent scrolling */
-            display: flex; justify-content: center; align-items: center;
-            perspective: 1500px; /* Crucial for 3D flip animation */
+            background-color: var(--bg-deep);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow: hidden; /* Lock screen scrolling */
+            perspective: 2000px; /* Enhanced 3D depth */
+            color: white;
         }
 
-        /* The Main 3D Card Container */
+        /* The Main 3D Card Object */
         .card-container {
-            width: 85%; max-width: 350px; /* Mobile first size */
-            height: 70vh; max-height: 550px;
+            width: 85%; max-width: 340px;
+            height: 70vh; max-height: 520px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            /* Closed state rotation for a slight realistic 3D angle */
+            transform: rotateY(-3deg) rotateX(2deg);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Realistic Cardstock Shadows (The 'Thick' look) */
+            box-shadow: 
+                -1px 1px 2px rgba(255,255,255,0.3), /* Light top-left edge */
+                1px 3px 15px rgba(0,0,0,0.4),      /* Main shadow */
+                3px 10px 25px rgba(0,0,0,0.2);     /* Deep soft shadow */
+            border-radius: 4px; /* Cut cardstock look, not round */
+            cursor: grab;
+            z-index: 10;
         }
         
+        .card-container:active { cursor: grabbing; }
+
         /* The state when the card is swiped open */
         .card-container.open {
-            transform: rotateY(-180deg);
+            transform: rotateY(-170deg) rotateX(0deg); /* Opens almost full way, slight angle left for depth */
+            cursor: default;
         }
 
-        /* Base styles for front and inside pages */
+        /* --- Page Base Styles --- */
         .page {
             width: 100%; height: 100%;
             position: absolute; top: 0; left: 0;
-            border-radius: 10px;
-            backface-visibility: hidden; /* Hides the back of the element when flipped */
+            border-radius: 4px;
+            backface-visibility: hidden; /* Critically important for flipping */
+            -webkit-backface-visibility: hidden;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             box-sizing: border-box; padding: 30px;
+            overflow: hidden;
         }
 
-        /* --- FRONT COVER STYLES --- */
+        /* --- FRONT COVER --- */
         .card-front {
-            background-color: var(--card-cover-color);
+            background-color: var(--card-cover);
             z-index: 2;
-            border: 2px solid rgba(255,255,255,0.3);
+            transform: translateZ(1px); /* Ensures it's on top when closed */
         }
-        .card-front::after { /* A subtle paper texture */
+
+        /* Realistic Cardstock Spine/Fold */
+        .card-front::before {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 20px;
+            background: linear-gradient(to right, var(--spine-shadow), transparent);
+            border-radius: 4px 0 0 4px;
+        }
+        /* Subtled Paper Texture overlay */
+        .card-front::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36z8gAFWNhYfEPKscAFWNkAPMZWQEAb90X+R19pLIAAAAASUVORK5CYII=');
-            opacity: 0.1; pointer-events: none;
+            opacity: 0.15; pointer-events: none;
         }
 
-        .cover-design {
-            font-family: 'Great Vibes', cursive;
-            font-size: 5rem; color: #fff;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1), 0 0 15px rgba(212,163,115,0.8); /* Gold foil effect */
-            margin: 0;
+        .cover-30 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 7rem; font-weight: 600; color: #fff;
+            margin: 0; line-height: 1; letter-spacing: -5px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05), 0 0 20px rgba(212,163,115,0.5);
         }
-        .cover-subtext {
-            color: #fff; font-size: 1rem; margin-top: 10px; font-weight: bold;
-            letter-spacing: 2px;
+        .cover-wish {
+            color: #fff; font-size: 1.1rem; margin-top: 10px; font-weight: 300;
+            text-transform: uppercase; letter-spacing: 3px;
         }
-        .swipe-hint {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            color: rgba(255,255,255,0.7); font-size: 0.8rem;
-            animation: bounceLeft 1.5s infinite;
-        }
-        @keyframes bounceLeft { 0%, 100% { transform: translateX(-50%); } 50% { transform: translateX(-65%); } }
 
-        /* --- INSIDE PAGE STYLES (THE CAKE) --- */
+        /* --- INSIDE PAGE (THE CAKE) --- */
         .card-inside {
             background-color: var(--card-inside-color);
-            transform: rotateY(180deg); /* Faces "backward" until flipped */
+            transform: rotateY(180deg); /* Face backwards inside */
             z-index: 1;
             text-align: center;
+            color: var(--text-main);
+            /* Inside fold shadow */
+            box-shadow: inset 15px 0 30px var(--spine-shadow);
         }
-        .inside-header { font-family: 'Great Vibes', cursive; color: var(--accent-color); font-size: 3rem; margin: 0 0 10px 0; }
-        .inside-subtext { font-size: 0.9rem; color: #777; margin: 0; }
+        .inside-header { font-family: 'Great Vibes', cursive; color: var(--gold-foil); font-size: 3.5rem; margin: 0; }
+        .inside-sub { font-size: 0.9rem; font-weight: 300; color: #777; margin: 5px 0 30px 0; }
 
-        /* THE NEW PRETTY CAKE */
-        .cake-container { position: relative; margin-top: 40px; margin-bottom: 30px;}
-        
-        .cake-tier { background: #fff; border-radius: 10px 10px 0 0; position: relative; box-shadow: inset 0 -5px 10px rgba(0,0,0,0.05); }
-        .tier-top { width: 120px; height: 60px; margin: 0 auto; z-index: 2; }
-        .tier-bottom { width: 180px; height: 80px; margin: -10px auto 0 auto; z-index: 1; }
+        /* THE PRETTY CAKE */
+        .cake-container { position: relative; width: 180px; height: 130px; margin: 0 auto; }
+        .cake-tier { background: #fff; border-radius: 8px 8px 0 0; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: inset 0 -3px 6px rgba(0,0,0,0.03); border: 1px solid #eee; }
+        .tier-top { width: 100px; height: 50px; bottom: 65px; z-index: 2; }
+        .tier-bottom { width: 160px; height: 70px; bottom: 0; z-index: 1; }
 
-        /* Icing drips */
+        /* Icing with Sprinkles */
         .cake-tier::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px;
-            background: #ffecf0; /* Soft pink icing */
-            border-radius: 10px 10px 20px 20px;
-            background-image: radial-gradient(circle, var(--accent-color) 1px, transparent 1.5px);
-            background-size: 10px 10px; /* Sprinkles! */
+            background: #fff0f3; border-radius: 8px 8px 15px 15px;
+            background-image: radial-gradient(circle, var(--gold-foil) 0.5px, transparent 1px), radial-gradient(circle, #ff7675 0.5px, transparent 1px);
+            background-size: 8px 8px, 12px 12px; background-position: 0 0, 4px 4px;
         }
 
-        .candles { display: flex; justify-content: center; position: absolute; top: -45px; width: 100%; z-index: 3;}
-        .candle { width: 12px; height: 50px; background: linear-gradient(var(--accent-color), var(--bg-color)); border-radius: 3px; cursor: pointer; margin: 0 8px;}
+        .candles { display: flex; justify-content: center; position: absolute; top: -45px; width: 100px; left: 50%; transform: translateX(-50%); z-index: 3;}
+        .candle { width: 10px; height: 50px; background: linear-gradient(var(--gold-foil), #fff); border-radius: 2px; cursor: pointer; margin: 0 6px; position: relative;}
         .flame {
-            width: 12px; height: 18px; background-color: orange; border-radius: 50% 50% 20% 20%;
-            position: absolute; top: -22px; box-shadow: 0 0 15px #ffeaa7, 0 0 5px orange;
-            animation: flicker 0.1s infinite alternate; transition: opacity 0.5s;
+            width: 10px; height: 16px; background-color: #ff9f43; border-radius: 50% 50% 20% 20%;
+            position: absolute; top: -20px; left: 0; box-shadow: 0 0 15px #ffeaa7, 0 0 5px orange;
+            animation: flicker 0.1s infinite alternate; transition: opacity 0.4s ease;
         }
         .flame.off { opacity: 0; pointer-events: none; }
-        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+        @keyframes flicker { 0% { transform: scale(1) rotate(-1deg); } 100% { transform: scale(1.05) rotate(1deg); } }
 
-        /* Standardized Buttons */
+        /* Standard Buttons */
         button {
-            padding: 12px 24px; font-size: 1rem; font-weight: bold; border: none; border-radius: 25px;
-            background-color: var(--accent-color); color: white; cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s, background-color 0.2s;
-            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+            padding: 12px 28px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 2px;
+            background-color: var(--gold-foil); color: white; cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1); transition: 0.2s;
+            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px;
         }
-        button:active { transform: scale(0.95); }
-        button:hover { background-color: #c49363; }
-        .mic-btn { background-color: #555; margin-top: 20px; font-size: 0.8rem;}
+        button:active { transform: scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .mic-btn { background-color: #555; margin-top: 25px; font-size: 0.75rem; text-transform: none; letter-spacing: 1px; border-radius: 20px;}
 
-        /* Floating Hearts */
-        .heart { position: absolute; color: #ff7675; font-size: 2em; animation: floatUp 3s ease-in forwards; opacity: 1; pointer-events: none; z-index: 100;}
-        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-100vh) scale(1.5); opacity: 0; } }
+        /* Heart Animation */
+        .heart { position: absolute; color: #ff7675; font-size: 1.5rem; animation: floatUp 3s ease-in forwards; pointer-events: none; z-index: 100;}
+        @keyframes floatUp { 0% { transform: translateY(0) scale(0.8); opacity: 1; } 100% { transform: translateY(-100vh) scale(1.3); opacity: 0; } }
 
-        /* The Non-Card Screens (Message, Trick, Countdown) */
-        .full-screen-message {
+        /* --- SWIPE HINT TEXT (BELOW CARD) --- */
+        .swipe-instruction {
+            margin-top: 30px; font-size: 0.85rem; color: rgba(255,255,255,0.5);
+            font-weight: 300; text-transform: uppercase; letter-spacing: 3px;
+            animation: fadePulse 2s infinite; pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes fadePulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+        /* --- Full Screen Message overlays (Msg, Trick, Timer) --- */
+        .overlay-screen {
             display: none; width: 100%; height: 100%;
             flex-direction: column; justify-content: center; align-items: center;
-            position: absolute; top: 0; left: 0; background-color: var(--bg-color);
+            position: absolute; top: 0; left: 0; background-color: var(--bg-deep);
             text-align: center; padding: 40px; box-sizing: border-box;
-            opacity: 0; transition: opacity 1s;
+            z-index: 100; opacity: 0; transition: opacity 0.8s;
         }
-        .full-screen-message.active { display: flex; opacity: 1; z-index: 50; }
-        .msg-header { font-family: 'Great Vibes', cursive; font-size: 4rem; color: var(--accent-color); margin: 0;}
-        .msg-p { color: var(--text-color); font-size: 1.1rem; line-height: 1.6; max-width: 80%; }
+        .overlay-screen.active { display: flex; opacity: 1; }
+        .msg-h1 { font-family: 'Great Vibes', cursive; font-size: 4.5rem; color: var(--gold-foil); margin: 0;}
+        .msg-p { color: rgba(255,255,255,0.8); font-size: 1.1rem; line-height: 1.7; max-width: 400px; font-weight: 300;}
 
-        /* --- THE TRICK SCREEN STYLES --- */
-        .btn-container { position: relative; width: 100%; height: 250px; margin-top: 30px;}
-        #btn-yes { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transition: top 0.2s, left 0.2s; white-space: nowrap;}
-        #btn-no { position: absolute; left: 50%; top: 120%; transform: translate(-50%, -50%); background-color: #555;}
+        /* Trick Screen Buttons */
+        .btn-container { position: relative; width: 100%; height: 250px; margin-top: 40px; max-width: 300px;}
+        #btn-yes { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transition: 0.15s ease-out; white-space: nowrap; z-index: 10;}
+        #btn-no { position: absolute; left: 50%; top: 130%; transform: translate(-50%, -50%); background-color: #555; z-index: 5;}
         
-        /* --- COUNTDOWN STYLES --- */
-        #timer { font-size: 3.5rem; font-weight: bold; color: var(--accent-color); margin: 20px 0; letter-spacing: -2px;}
-        .small-text { font-size: 0.9rem; color: #777; font-style: italic;}
+        /* Countdown */
+        #timer { font-size: 3.5rem; font-weight: 600; color: var(--gold-foil); margin: 30px 0; letter-spacing: -2px;}
+        .fine-print { font-size: 0.8rem; color: rgba(255,255,255,0.4); font-style: italic; margin-top: 50px;}
 
     </style>
 </head>
@@ -159,23 +186,22 @@
     <!-- 3D Card Object -->
     <div id="main-card" class="card-container">
         
-        <!-- FRONT COVER PAGE -->
+        <!-- FRONT COVER -->
         <div class="page card-front">
-            <h1 class="cover-design">30</h1>
-            <p class="cover-subtext">Happy Birthday</p>
-            <div class="swipe-hint">👈 Swipe Left to Open</div>
+            <h1 class="cover-30">30</h1>
+            <p class="cover-wish">Make a wish</p>
         </div>
 
         <!-- INSIDE PAGE (THE CAKE) -->
         <div class="page card-inside">
             <h2 class="inside-header">Make a Wish!</h2>
-            <p class="inside-subtext">Blow into the mic or tap the flames.</p>
+            <p class="inside-sub">Blow on the mic or tap the flames.</p>
             
             <div class="cake-container">
                 <div class="candles">
-                    <div class="candle" onclick="extinguish(0)"><div class="flame" id="flame-0"></div></div>
-                    <div class="candle" onclick="extinguish(1)"><div class="flame" id="flame-1"></div></div>
-                    <div class="candle" onclick="extinguish(2)"><div class="flame" id="flame-2"></div></div>
+                    <div class="candle" onclick="tapExtinguish(0)"><div class="flame" id="flame-0"></div></div>
+                    <div class="candle" onclick="tapExtinguish(1)"><div class="flame" id="flame-1"></div></div>
+                    <div class="candle" onclick="tapExtinguish(2)"><div class="flame" id="flame-2"></div></div>
                 </div>
                 <div class="cake-tier tier-top"></div>
                 <div class="cake-tier tier-bottom"></div>
@@ -185,18 +211,23 @@
         </div>
     </div>
 
-    <!-- The follow-up screens that replace the card -->
+    <!-- Instruction text placed *BELOW* the card object in HTML flow -->
+    <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
+
+
+    <!-- OVERLAY SCREENS -->
 
     <!-- Screen 3: The Message -->
-    <div id="message-screen" class="full-screen-message">
-        <h1 class="msg-header">Yay!</h1>
+    <div id="message-screen" class="overlay-screen">
+        <h1 class="msg-h1">Yay!</h1>
         <p class="msg-p">Welcome to the 30 club!</p>
         <p class="msg-p">I hope you have the most amazing day ever, because you deserve it.</p>
-        <button onclick="showScreen('trick-screen')">Next</button>
+        <button onclick="showScreen('trick-screen')" style="margin-top:40px;">Next</button>
     </div>
 
     <!-- Screen 4: The Trick -->
-    <div id="trick-screen" class="full-screen-message">
+    <div id="trick-screen" class="overlay-screen">
+        <p class="msg-p">So...</p>
         <h2>Do you wanna see your present now?</h2>
         <div class="btn-container">
             <button id="btn-yes">YES!</button>
@@ -205,64 +236,105 @@
     </div>
 
     <!-- Screen 5: The Joke -->
-    <div id="joke-screen" class="full-screen-message">
-        <h1 class="msg-header">Oh okay...</h1>
+    <div id="joke-screen" class="overlay-screen">
+        <h1 class="msg-h1">Oh okay...</h1>
         <p class="msg-p">I guess I'll just have to give it to you tomorrow........</p>
-        <button onclick="startCountdown()">Wait, what? Next...</button>
+        <button onclick="startCountdown()" style="margin-top:40px;">Wait, what? Next...</button>
     </div>
 
     <!-- Screen 6: Countdown -->
-    <div id="countdown-screen" class="full-screen-message">
-        <h1>We party in...</h1>
+    <div id="countdown-screen" class="overlay-screen">
+        <p class="msg-p">Just kidding. You have to wait exactly...</p>
         <div id="timer">00h 00m 00s</div>
-        <p class="small-text">...this just counts down till I finish work.</p>
+        <p class="fine-print">...this just counts down till I finish work.</p>
     </div>
 
     <script>
         let flamesOn = 3;
+        let micEnabled = false;
         const card = document.getElementById('main-card');
+        const swipeHint = document.getElementById('swipe-hint');
         
-        // --- Swipe Logic for Opening Card ---
-        let startX = 0;
-        card.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; });
-        card.addEventListener('touchend', e => {
-            let endX = e.changedTouches[0].screenX;
-            if (startX - endX > 50 && !card.classList.contains('open')) { 
-                openCard(); // Swiped left
+        // --- Robust Swipe Logic ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        // Listen on body to capture swipe even if off-card slightly
+        document.body.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, false);
+
+        document.body.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // Min distance
+            const restraintY = 100; // Max vertical variance allowed
+
+            const deltaX = touchStartX - touchEndX;
+            const deltaY = Math.abs(touchStartY - touchEndY);
+
+            // If card is closed, swiped left (positive deltaX), and not scrolling vertically
+            if (!card.classList.contains('open') && deltaX > swipeThreshold && deltaY < restraintY) { 
+                openCard();
+            }
+        }
+
+        // Fallback: Click to open for desktop testers
+        card.addEventListener('click', (e) => {
+            // Only trigger if closed and not clicking a button inside
+            if(!card.classList.contains('open') && e.target.tagName !== 'BUTTON') {
+                openCard();
             }
         });
 
         function openCard() {
             card.classList.add('open');
+            swipeHint.style.display = 'none'; // Hide instruction
             spawnHearts();
         }
 
-        // Standard flow control
+        // --- Screen Flow Control ---
         function showScreen(id) {
-            // Hide card object
+            // Reset main view
             card.style.display = 'none';
-            // Show new screen
-            document.querySelectorAll('.full-screen-message').forEach(s => s.classList.remove('active'));
+            // Show overlay
+            document.querySelectorAll('.overlay-screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
         // --- Heart Animation ---
         function spawnHearts() {
-            const container = card.classList.contains('open') ? document.querySelector('.card-inside') : document.body;
-            for(let i = 0; i < 20; i++) {
+            // Spawn hearts relative to body to avoid card rotation clipping
+            for(let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     let heart = document.createElement('div');
                     heart.innerHTML = '❤️';
                     heart.className = 'heart';
-                    heart.style.left = Math.random() * 100 + 'vw';
-                    heart.style.top = '100vh';
+                    // Random horizontal start, centered-ish
+                    heart.style.left = (Math.random() * 60 + 20) + 'vw';
+                    heart.style.top = '70vh'; // Start from card area
                     document.body.appendChild(heart);
+                    // Remove after animation finishes
                     setTimeout(() => heart.remove(), 3000);
-                }, i * 100);
+                }, i * 150);
             }
         }
 
-        // --- Candle Logic ---
+        // --- Candle/Wish Logic ---
+        function tapExtinguish(index) {
+            // Only allow tap if mic isn't active
+            if(!micEnabled) {
+                extinguish(index);
+            }
+        }
+
         function extinguish(index) {
             let flame = document.getElementById('flame-' + index);
             if (!flame.classList.contains('off')) {
@@ -274,25 +346,29 @@
 
         function checkCandles() {
             if (flamesOn === 0) {
+                // Success! Transition to message
                 setTimeout(() => { showScreen('message-screen'); }, 1500);
             }
         }
 
-        // Microphone Logic (unchanged from functional version)
+        // --- Microphone Blow Detection ---
         async function startMic() {
             const micBtn = document.getElementById('enable-mic-btn');
             try {
+                // Browser security requires user interaction (this click) to allow audio context
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const analyser = audioContext.createAnalyser();
-                const microphone = audioContext.createMediaStreamSource(stream);
+                const analyser = audioContextContext.createAnalyser();
+                const microphone = audioContextContext.createMediaStreamSource(stream);
                 microphone.connect(analyser);
                 analyser.fftSize = 256;
+                
                 const bufferLength = analyser.frequencyBinCount;
                 const dataArray = new Uint8Array(bufferLength);
 
+                micEnabled = true;
                 micBtn.innerText = "Blow on your phone now!";
-                micBtn.style.backgroundColor = var(--accent-color);
+                micBtn.style.backgroundColor = "#cc8e8e"; // Subtle feedback color
 
                 function detectBlow() {
                     analyser.getByteFrequencyData(dataArray);
@@ -300,7 +376,9 @@
                     for (let i = 0; i < bufferLength; i++) { sum += dataArray[i]; }
                     let average = sum / bufferLength;
 
-                    if (average > 70 && flamesOn > 0) { // Slightly lower threshold
+                    // Blow detection threshold
+                    if (average > 75 && flamesOn > 0) { 
+                        // Extinguish one active flame
                         for(let i=0; i<3; i++) {
                             let f = document.getElementById('flame-'+i);
                             if(!f.classList.contains('off')) {
@@ -309,53 +387,56 @@
                             }
                         }
                     }
+                    // Continue loop if candles remain
                     if (flamesOn > 0) { requestAnimationFrame(detectBlow); }
                 }
                 detectBlow();
+
             } catch (err) {
-                micBtn.innerText = "Mic denied. Tap flames instead.";
-                micBtn.style.backgroundColor = "#cc8e8e";
+                // Fallback if denied or not supported
+                micBtn.innerText = "Mic access denied. Tap flames instead.";
+                micBtn.style.backgroundColor = "#555";
+                micEnabled = false;
             }
         }
 
-        // --- Runaway "Yes" Button ---
+        // --- Runaway "Yes" Button Logic ---
         const btnYes = document.getElementById('btn-yes');
-        const trickScreen = document.getElementById('trick-screen');
 
         const moveBtn = (e) => {
-            // Prevent accidental click on mobile
-            if(e.type === 'touchstart') e.preventDefault();
+            // Prevent actual 'click' action on mobile
+            if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();
 
             const container = document.querySelector('.btn-container');
-            // Ensure button doesn't move off screen, calculate bounds
+            // Constraints based on container size minus button size
             const maxX = container.clientWidth - btnYes.clientWidth;
             const maxY = container.clientHeight - btnYes.clientHeight;
             
-            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+            // Generate random coordinates within bounds
+            const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(0, Math.floor(Math.random() * maxY));
             
+            // Apply new position, removing absolute center transform
             btnYes.style.left = `${randomX}px`;
             btnYes.style.top = `${randomY}px`;
-            btnYes.style.transform = 'none'; // remove center translation
+            btnYes.style.transform = 'none'; 
         };
 
-        // Track both hover (desktop) and touch (mobile)
+        // Standard triggers: mouseover (desktop), touchstart/click (mobile)
         btnYes.addEventListener('mouseover', moveBtn);
         btnYes.addEventListener('touchstart', moveBtn);
-        btnYes.addEventListener('click', (e) => {
-             e.preventDefault(); // Extra protection against clicking
-             moveBtn(e);
-        });
+        btnYes.addEventListener('click', moveBtn);
 
-        // --- Countdown Logic ---
+        // --- Countdown Timer Logic ---
         function startCountdown() {
             showScreen('countdown-screen');
             
-            // Counts down to 5:00 PM today (Change 17 to whatever hour you finish)
+            // TARGET TIME: 5:00 PM Today (Change 17 to finish hour, e.g. 18 for 6pm)
+            let finishHour = 17;
             let targetTime = new Date();
-            targetTime.setHours(17, 0, 0, 0); 
+            targetTime.setHours(finishHour, 0, 0, 0); 
 
-            // If it's past 5pm, set for tomorrow
+            // If currently past target, count to target *tomorrow*
             if(new Date() > targetTime) {
                 targetTime.setDate(targetTime.getDate() + 1);
             }
@@ -368,23 +449,23 @@
 
                 if (distance < 0) {
                     timerDisplay.innerHTML = "PARTY TIME!";
+                    clearInterval(countdownInterval);
                     return;
                 }
 
+                // Time math
                 let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Add leading zeros
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+                // Add leading zeros for aesthetic
+                const p = (num) => num < 10 ? "0" + num : num;
 
-                timerDisplay.innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+                timerDisplay.innerHTML = p(hours) + "h " + p(minutes) + "m " + p(seconds) + "s ";
             };
 
-            updateTimer(); // Initial call
-            setInterval(updateTimer, 1000);
+            updateTimer(); // Initial call to avoid jump
+            const countdownInterval = setInterval(updateTimer, 1000);
         }
     </script>
 </body>

@@ -189,95 +189,56 @@
         }
         #camera-screen.active { opacity: 1; pointer-events: auto; }
 
-        .camera-wrapper {
-            position: relative; display: flex; flex-direction: column; align-items: center;
-            margin-top: -100px; 
-        }
+        .camera-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: -100px; }
 
-        /* The Main Camera Body (Z-index 10) */
-        .retro-camera {
-            width: 220px; height: 160px; background: #fdfaf6; border-radius: 10px 10px 0 0;
-            position: relative; display: flex; justify-content: center; z-index: 10;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        .camera-stripe {
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 40px; height: 100%; z-index: 2;
-            background: linear-gradient(to right, #ff4757 20%, #ffa502 20% 40%, #eccc68 40% 60%, #2ed573 60% 80%, #1e90ff 80%);
-        }
-        .camera-base {
-            position: absolute; bottom: -40px; left: 0; width: 100%; height: 40px;
-            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 10; 
-            box-shadow: inset 0 10px 15px rgba(0,0,0,0.2);
-        }
-        .lens {
-            width: 90px; height: 90px; background: #1e272e; border-radius: 50%;
-            position: absolute; top: 25px; border: 12px solid #ced6e0; z-index: 4;
-            box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2);
-        }
+        .retro-camera { width: 220px; height: 160px; background: #fdfaf6; border-radius: 10px 10px 0 0; position: relative; display: flex; justify-content: center; z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .camera-stripe { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 100%; z-index: 2; background: linear-gradient(to right, #ff4757 20%, #ffa502 20% 40%, #eccc68 40% 60%, #2ed573 60% 80%, #1e90ff 80%); }
+        .camera-base { position: absolute; bottom: -40px; left: 0; width: 100%; height: 40px; background: #2f3542; border-radius: 0 0 10px 10px; z-index: 10; box-shadow: inset 0 10px 15px rgba(0,0,0,0.2); }
+        .lens { width: 90px; height: 90px; background: #1e272e; border-radius: 50%; position: absolute; top: 25px; border: 12px solid #ced6e0; z-index: 4; box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2); }
         .lens::after { content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px; background: rgba(255,255,255,0.4); border-radius: 50%; }
         .viewfinder { position: absolute; top: 15px; right: 20px; width: 35px; height: 25px; background: #1e272e; border-radius: 4px; z-index: 5; border: 3px solid #ced6e0; }
         
-        /* PULSING RED SHUTTER BUTTON */
         .shutter-btn {
             position: absolute; top: 15px; left: 15px; width: 30px; height: 30px;
             background: #ff4757; border-radius: 50%; cursor: pointer; z-index: 5;
             box-shadow: 0 0 15px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3);
             animation: shutterGlow 0.8s ease-in-out infinite alternate; border: 3px solid #dfe4ea;
         }
-        @keyframes shutterGlow { 
-            0% { box-shadow: 0 0 5px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); transform: scale(1); } 
-            100% { box-shadow: 0 0 30px 10px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); transform: scale(1.08); } 
-        }
+        @keyframes shutterGlow { 0% { box-shadow: 0 0 5px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); transform: scale(1); } 100% { box-shadow: 0 0 30px 10px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); transform: scale(1.08); } }
         .shutter-btn:active { transform: scale(0.95); animation: none; box-shadow: none; }
 
         .flash-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; opacity: 0; pointer-events: none; }
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
         @keyframes screenFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-        /* The Photo (Placed behind the camera body, Z-index 5) */
         .polaroid-frame {
-            position: absolute; top: 10px; left: 50%; margin-left: -75px; 
-            width: 150px; height: 180px;
-            background: white; padding: 10px; padding-bottom: 20px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-            z-index: 5; 
-            /* 4 SECOND DROP ANIMATION */
-            transition: transform 4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
+            position: absolute; top: 10px; left: 50%; margin-left: -75px; width: 150px; height: 180px; background: white; padding: 10px; padding-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            z-index: 5; transition: transform 4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
             transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
         
-        /* Directing to local repo image 'polaroid.webp' */
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; background-image: url('polaroid.webp'); }
         
-        /* Drops down from out from under the camera body */
-        .polaroid-frame.eject {
-            opacity: 1;
-            transform: translateY(210px) scale(1) rotate(-3deg); 
-            z-index: 5;
-        }
-
-        .camera-instruction {
-            color: white; margin-top: 280px; font-family: 'Montserrat'; font-size: 0.9rem; 
-            text-transform: uppercase; letter-spacing: 2px; transition: opacity 0.5s;
-        }
+        .polaroid-frame.eject { opacity: 1; transform: translateY(210px) scale(1) rotate(-3deg); z-index: 5; }
+        .camera-instruction { color: white; margin-top: 280px; font-family: 'Montserrat'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: opacity 0.5s; }
 
         /* =========================================
-           4. STANDARD OVERLAYS (Message, Trick)
+           4. STANDARD OVERLAYS (SMOOTH CROSSFADES)
         ========================================= */
-        .overlay-screen { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; text-align: center; padding: 40px; box-sizing: border-box; z-index: 200; opacity: 0; transition: opacity 1s ease-in; }
-        .overlay-screen.active { display: flex; opacity: 1; }
-        
-        /* CUSTOM JAVON MESSAGE STYLING */
-        .msg-container {
-            max-width: 90%; background: rgba(255,255,255,0.7); padding: 30px; 
-            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        .overlay-screen { 
+            visibility: hidden; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; 
+            position: absolute; top: 0; left: 0; text-align: center; padding: 40px; box-sizing: border-box; 
+            z-index: 200; opacity: 0; transition: opacity 0.8s ease-in-out, visibility 0.8s; display: flex; pointer-events: none;
         }
+        .overlay-screen.active { visibility: visible; opacity: 1; pointer-events: auto; z-index: 210;}
+        
+        .msg-container { max-width: 90%; background: rgba(255,255,255,0.7); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .msg-h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--card-cover); margin: 0 0 10px 0; font-style: italic;}
         .msg-p { color: var(--text-main); font-size: 1rem; line-height: 1.6; text-align: left;}
         
-        /* LARGE PARTY HEADING */
-        .party-h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 12vw, 5.5rem); line-height: 1.1; color: var(--card-cover); margin-bottom: 20px; font-style: italic;}
+        /* Raised Layout for Final Page */
+        .countdown-wrapper { display: flex; flex-direction: column; align-items: center; transform: translateY(-8vh); }
+        .party-h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 12vw, 4.5rem); line-height: 1.1; color: var(--card-cover); margin-bottom: 20px; font-style: italic; text-shadow: 2px 2px 0px rgba(0,0,0,0.05);}
 
         button.standard-btn { 
             margin-top: 30px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; 
@@ -289,80 +250,56 @@
         
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
         
-        /* Replaced dark brown with soft chic gray */
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: #a49799; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 50; }
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 10px 0;}
         .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 30px;}
 
+        /* CONFETTI CSS */
+        .confetti {
+            position: absolute; width: 10px; height: 10px; opacity: 0; top: -20px;
+            animation: confetti-fall linear forwards; z-index: 1000; pointer-events: none;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
     </style>
 </head>
 <body>
 
+    <!-- AUDIO ELEMENT (Autoplays at end) -->
+    <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
+
     <!-- PHASE 1: ENVELOPE SCREEN -->
     <div id="envelope-screen">
         <div class="env-wrapper" id="env-container" onclick="openEnvelope()">
-            
             <div class="env-back"></div>
             <div class="env-inner"></div>
             
             <div class="env-flowers">
-                <!-- BACKGROUND FOLIAGE -->
-                <div class="f-foliage f-foliage-1"><div class="f-sway" style="animation-duration: 3.5s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q50,100 20,20" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q60,120 80,40" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q40,150 10,90" stroke="#1aaa15" stroke-width="2" fill="none"/><path d="M50,200 Q70,140 90,80" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q50,80 50,0" stroke="#079097" stroke-width="4" fill="none"/></svg>
-                </div></div>
-                <div class="f-foliage f-foliage-2"><div class="f-sway" style="animation-duration: 2.8s; animation-delay: -1s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q30,100 60,0 Q60,100 50,200" fill="#079097"/><path d="M50,200 Q30,100 60,0" stroke="#1aaa15" stroke-width="2" fill="none" /></svg>
-                </div></div>
-                <div class="f-foliage f-foliage-3"><div class="f-sway" style="animation-duration: 3.1s; animation-delay: -0.5s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q40,100 10,10" stroke="#159faa" stroke-width="4" fill="none"/><path d="M40,140 Q20,130 15,145 Q30,150 40,140" fill="#159faa"/><path d="M35,90 Q55,80 60,95 Q40,100 35,90" fill="#159faa"/><path d="M25,50 Q10,40 5,55 Q20,60 25,50" fill="#159faa"/></svg>
-                </div></div>
-                <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg>
-                </div></div>
-                <div class="f-foliage f-foliage-5"><div class="f-sway" style="animation-duration: 3.3s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q45,100 20,10" stroke="#079097" stroke-width="3" fill="none"/><path d="M50,200 Q55,100 80,20" stroke="#159faa" stroke-width="2" fill="none"/></svg>
-                </div></div>
-                <div class="f-foliage f-foliage-6"><div class="f-sway" style="animation-duration: 2.9s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q60,120 90,40" stroke="#1aaa15" stroke-width="3" fill="none"/></svg>
-                </div></div>
-                <div class="f-foliage f-foliage-7"><div class="f-sway" style="animation-duration: 3.6s;">
-                    <svg viewBox="0 0 100 200"><path d="M50,200 Q40,120 10,40" stroke="#079097" stroke-width="3" fill="none"/></svg>
-                </div></div>
+                <!-- Foliage -->
+                <div class="f-foliage f-foliage-1"><div class="f-sway" style="animation-duration: 3.5s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q50,100 20,20" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q60,120 80,40" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q40,150 10,90" stroke="#1aaa15" stroke-width="2" fill="none"/><path d="M50,200 Q70,140 90,80" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q50,80 50,0" stroke="#079097" stroke-width="4" fill="none"/></svg></div></div>
+                <div class="f-foliage f-foliage-2"><div class="f-sway" style="animation-duration: 2.8s; animation-delay: -1s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q30,100 60,0 Q60,100 50,200" fill="#079097"/><path d="M50,200 Q30,100 60,0" stroke="#1aaa15" stroke-width="2" fill="none" /></svg></div></div>
+                <div class="f-foliage f-foliage-3"><div class="f-sway" style="animation-duration: 3.1s; animation-delay: -0.5s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q40,100 10,10" stroke="#159faa" stroke-width="4" fill="none"/><path d="M40,140 Q20,130 15,145 Q30,150 40,140" fill="#159faa"/><path d="M35,90 Q55,80 60,95 Q40,100 35,90" fill="#159faa"/><path d="M25,50 Q10,40 5,55 Q20,60 25,50" fill="#159faa"/></svg></div></div>
+                <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg></div></div>
+                <div class="f-foliage f-foliage-5"><div class="f-sway" style="animation-duration: 3.3s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q45,100 20,10" stroke="#079097" stroke-width="3" fill="none"/><path d="M50,200 Q55,100 80,20" stroke="#159faa" stroke-width="2" fill="none"/></svg></div></div>
+                <div class="f-foliage f-foliage-6"><div class="f-sway" style="animation-duration: 2.9s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q60,120 90,40" stroke="#1aaa15" stroke-width="3" fill="none"/></svg></div></div>
+                <div class="f-foliage f-foliage-7"><div class="f-sway" style="animation-duration: 3.6s;"><svg viewBox="0 0 100 200"><path d="M50,200 Q40,120 10,40" stroke="#079097" stroke-width="3" fill="none"/></svg></div></div>
 
-                <!-- DRAGGABLE GLOWING FLOWERS -->
-                <div class="f-wrapper cyan"><div class="f-sway">
-                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
-                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div></div>
-                <div class="f-wrapper pink"><div class="f-sway">
-                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
-                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div></div>
-                <div class="f-wrapper purple"><div class="f-sway">
-                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
-                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div></div>
-                <div class="f-wrapper yellow"><div class="f-sway">
-                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
-                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div></div>
-                <div class="f-wrapper red"><div class="f-sway">
-                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
-                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div></div>
-                <div class="f-wrapper orange"><div class="f-sway">
-                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
-                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div></div>
+                <!-- Glowing Flowers -->
+                <div class="f-wrapper cyan"><div class="f-sway"><div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div><div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div></div></div>
+                <div class="f-wrapper pink"><div class="f-sway"><div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div><div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div></div></div>
+                <div class="f-wrapper purple"><div class="f-sway"><div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div><div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div></div></div>
+                <div class="f-wrapper yellow"><div class="f-sway"><div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div><div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div></div></div>
+                <div class="f-wrapper red"><div class="f-sway"><div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div><div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div></div></div>
+                <div class="f-wrapper orange"><div class="f-sway"><div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div><div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div></div></div>
             </div>
 
-            <div class="env-front-left"></div>
-            <div class="env-front-right"></div>
-            <div class="env-front-bottom"></div>
+            <div class="env-front-left"></div><div class="env-front-right"></div><div class="env-front-bottom"></div>
             <div class="env-flap"></div>
-            
             <div class="env-instruction" id="env-hint">Tap to open</div>
         </div>
     </div>
@@ -405,13 +342,9 @@
         <div class="flash-overlay" id="flash"></div>
         
         <div class="camera-wrapper">
-            <!-- The Photo Placed BEHIND the Camera Body -->
             <div class="polaroid-frame" id="polaroid">
-                <!-- PHOTO URL HERE (local repo file) -->
                 <div class="polaroid-img"></div>
             </div>
-
-            <!-- The Main Camera Body -->
             <div class="retro-camera">
                 <div class="camera-stripe"></div>
                 <div class="viewfinder"></div>
@@ -419,7 +352,6 @@
                 <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
                 <div class="camera-base"></div>
             </div>
-            
             <p id="camera-hint" class="camera-instruction">Tap the red button</p>
         </div>
     </div>
@@ -458,16 +390,19 @@
     </div>
 
     <div id="countdown-screen" class="overlay-screen">
-        <h1 class="party-h1">Time till we PARTY!!!</h1>
-        <div id="timer">Loading...</div>
-        <p class="fine-print">...this just counts down till I finish work.</p>
+        <div class="countdown-wrapper">
+            <h1 class="party-h1">Time till we PARTY!!!</h1>
+            <div id="timer">Loading...</div>
+            <p class="fine-print">...this just counts down till I finish work.</p>
+            <button class="standard-btn" onclick="fireConfetti()">Celebrate again</button>
+        </div>
     </div>
 
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
         /* ==================================
-           GLOBAL: PRE-LOAD TIMER IN BACKGROUND
+           GLOBAL: PRE-LOAD TIMER & CONFETTI
         ================================== */
         let targetTime = new Date();
         targetTime.setHours(17, 0, 0, 0); 
@@ -487,6 +422,21 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
+        function fireConfetti() {
+            const colors = ["#d4af37", "#e4b5c0", "#f4a7b9", "#54b8aa", "#ffb703", "#d63996"];
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement("div");
+                confetti.className = "confetti";
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.width = Math.random() * 8 + 6 + "px";
+                confetti.style.height = Math.random() * 8 + 6 + "px";
+                confetti.style.animationDelay = Math.random() * 1.5 + "s";
+                confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
 
         /* ==================================
            1. ENVELOPE & FLOWER LOGIC
@@ -575,7 +525,7 @@
         let canSwipe = false; 
         const nameInput = document.getElementById('name-input');
         const swipeHint = document.getElementById('swipe-hint');
-        const targetName = "Caitling"; // (Inside joke spelling!)
+        const targetName = "Caitling"; 
 
         nameInput.addEventListener('input', () => {
             if(document.getElementById('card-flap').classList.contains('open')) {
@@ -629,11 +579,10 @@
             isBlown = true;
             micEnabled = false; 
             
-            // Clean up microphone to prevent background audio bug
+            // Clean up microphone
             if (micStream) micStream.getTracks().forEach(track => track.stop());
             if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
             
-            // Delete entire UI container so text never returns
             document.getElementById('card-ui-container').style.display = 'none';
 
             document.getElementById('flame-0').classList.add('off');
@@ -661,7 +610,7 @@
                 micEnabled = true;
                 micBtn.innerText = "Blow now!"; micBtn.style.color = "var(--text-main)"; micBtn.style.borderColor = "var(--text-main)";
 
-                // 10 Second Security Timer - Shuts off mic to save battery/audio conflicts
+                // 10-Second Timer to automatically shut off mic
                 setTimeout(() => {
                     if (micEnabled && !isBlown) {
                         micEnabled = false;
@@ -697,10 +646,8 @@
             document.getElementById('flash').classList.add('flash');
             document.getElementById('camera-hint').style.opacity = '0';
             
-            // Wait 1 second for the flash, then eject the photo FAST over 4 seconds
             setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 1000);
 
-            // Wait 7.5 total seconds (1s flash delay + 4s drop animation + 2.5s admire time)
             setTimeout(() => {
                 document.getElementById('camera-screen').style.opacity = '0';
                 setTimeout(() => { document.getElementById('camera-screen').classList.remove('active'); showScreen('message-screen'); }, 1000);
@@ -708,7 +655,7 @@
         }
 
         /* ==================================
-           5. COLLISION TRICK & COUNTDOWN
+           5. SMOOTH TRANSITIONS & FINAL PAGE
         ================================== */
         function showScreen(id) {
             document.querySelectorAll('.overlay-screen').forEach(s => s.classList.remove('active'));
@@ -758,6 +705,16 @@
 
         function startCountdown() {
             showScreen('countdown-screen');
+            
+            // Autoplay music
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.volume = 0.6;
+                bgMusic.play().catch(e => console.log("Audio autoplay was blocked by browser."));
+            }
+            
+            // Launch initial confetti
+            fireConfetti();
         }
     </script>
 </body>

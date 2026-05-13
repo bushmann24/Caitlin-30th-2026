@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 30th!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
             /* CHIC PASTEL & BLUSH PALETTE */
@@ -213,8 +213,7 @@
 
         .polaroid-frame {
             position: absolute; top: 10px; left: 50%; margin-left: -75px; width: 150px; height: 180px; background: white; padding: 10px; padding-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-            z-index: 5; transition: transform 4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
-            transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
+            z-index: 5; transition: transform 4s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s; transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
         
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; background-image: url('polaroid.webp'); }
@@ -253,17 +252,19 @@
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: #a49799; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 50; }
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
-        #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 10px 0;}
-        .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 30px;}
+        #timer { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: clamp(2.5rem, 9vw, 4rem); color: var(--gold-accent); margin: 10px 0; font-variant-numeric: tabular-nums; letter-spacing: 1px;}
+        .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 20px; margin-bottom: 20px;}
 
         /* CONFETTI CSS */
         .confetti {
-            position: absolute; width: 10px; height: 10px; opacity: 0; top: -20px;
-            animation: confetti-fall linear forwards; z-index: 1000; pointer-events: none;
+            position: absolute; z-index: 1000; pointer-events: none;
+            /* Cannon blast animation */
+            animation: cannonBlast ease-out forwards;
         }
-        @keyframes confetti-fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        @keyframes cannonBlast {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.8); opacity: 0; }
         }
 
     </style>
@@ -422,19 +423,35 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
+        // Firework Cannon Confetti!
         function fireConfetti() {
             const colors = ["#d4af37", "#e4b5c0", "#f4a7b9", "#54b8aa", "#ffb703", "#d63996"];
             for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement("div");
                 confetti.className = "confetti";
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + "vw";
+                
+                // Shoot from bottom corners (alternate left and right)
+                const isLeft = i % 2 === 0;
+                confetti.style.left = isLeft ? "-5vw" : "105vw";
+                confetti.style.bottom = "-5vh";
+                
+                // X distance: shoot across the screen
+                const tx = isLeft ? (Math.random() * 80 + 20) + "vw" : -(Math.random() * 80 + 20) + "vw";
+                // Y distance: shoot high up
+                const ty = -(Math.random() * 100 + 40) + "vh"; 
+                const rot = (Math.random() * 720) + "deg";
+                
+                confetti.style.setProperty('--tx', tx);
+                confetti.style.setProperty('--ty', ty);
+                confetti.style.setProperty('--rot', rot);
+                
                 confetti.style.width = Math.random() * 8 + 6 + "px";
                 confetti.style.height = Math.random() * 8 + 6 + "px";
-                confetti.style.animationDelay = Math.random() * 1.5 + "s";
-                confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+                confetti.style.animationDuration = Math.random() * 1.5 + 2 + "s";
+                
                 document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 5000);
+                setTimeout(() => confetti.remove(), 4000);
             }
         }
 
@@ -579,7 +596,6 @@
             isBlown = true;
             micEnabled = false; 
             
-            // Clean up microphone
             if (micStream) micStream.getTracks().forEach(track => track.stop());
             if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
             
@@ -610,7 +626,6 @@
                 micEnabled = true;
                 micBtn.innerText = "Blow now!"; micBtn.style.color = "var(--text-main)"; micBtn.style.borderColor = "var(--text-main)";
 
-                // 10-Second Timer to automatically shut off mic
                 setTimeout(() => {
                     if (micEnabled && !isBlown) {
                         micEnabled = false;
@@ -710,7 +725,7 @@
             const bgMusic = document.getElementById('bg-music');
             if (bgMusic) {
                 bgMusic.volume = 0.6;
-                bgMusic.play().catch(e => console.log("Audio autoplay was blocked by browser."));
+                bgMusic.play().catch(e => console.log("Audio autoplay blocked, needs interaction."));
             }
             
             // Launch initial confetti

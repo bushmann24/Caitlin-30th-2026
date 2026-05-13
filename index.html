@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy 30th!</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6e6;
+            overflow: hidden; /* Prevents scrolling */
+            display: flex; justify-content: center; align-items: center;
+        }
+        .screen {
+            display: none; width: 100%; height: 100%;
+            flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px; box-sizing: border-box;
+            position: absolute; top: 0; left: 0;
+        }
+        .active { display: flex; }
+        
+        /* Typography */
+        h1 { color: #ff4d4d; font-size: 3em; margin-bottom: 10px; }
+        p { color: #333; font-size: 1.2em; max-width: 80%; }
+        
+        /* Buttons */
+        button {
+            padding: 15px 30px; font-size: 1.2em; border: none; border-radius: 25px;
+            background-color: #ff4d4d; color: white; cursor: pointer;
+            margin: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s;
+        }
+        button:active { transform: scale(0.95); }
+
+        /* Screen 1: Cover */
+        #cover-screen { background-color: #ffcccc; }
+        .swipe-hint { animation: bounceLeft 1.5s infinite; font-size: 1.5em; margin-top: 50px; font-weight: bold; color: #ff4d4d;}
+        @keyframes bounceLeft {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-20px); }
+        }
+
+        /* Screen 2: Cake */
+        .cake-container { position: relative; margin-top: 50px; }
+        .cake { width: 200px; height: 100px; background-color: #fff; border-radius: 10px; border: 3px solid #ff4d4d; position: relative;}
+        .candles { display: flex; justify-content: space-around; position: absolute; top: -50px; width: 100%; }
+        .candle { width: 20px; height: 50px; background-color: pink; position: relative; border-radius: 5px; cursor: pointer;}
+        .flame { width: 16px; height: 25px; background-color: orange; border-radius: 50% 50% 20% 20%; position: absolute; top: -30px; left: 2px; box-shadow: 0 0 10px yellow; animation: flicker 0.1s infinite alternate;}
+        .flame.off { display: none; }
+        @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.1); opacity: 0.8; } }
+        .mic-btn { background-color: #555; font-size: 1em; margin-top: 40px;}
+
+        /* Floating Hearts */
+        .heart { position: absolute; color: red; font-size: 2em; animation: floatUp 3s ease-in forwards; opacity: 1; pointer-events: none;}
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-100vh) scale(1.5); opacity: 0; } }
+
+        /* Screen 4: Trick */
+        .btn-container { position: relative; width: 100%; height: 200px; margin-top: 30px;}
+        #btn-yes { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transition: top 0.2s, left 0.2s; }
+        #btn-no { position: absolute; left: 50%; top: 120%; transform: translate(-50%, -50%); background-color: #555;}
+        
+        /* Screen 6: Countdown */
+        #timer { font-size: 3em; font-weight: bold; color: #ff4d4d; margin: 20px 0; }
+        .small-text { font-size: 0.9em; color: #777; font-style: italic;}
+
+    </style>
+</head>
+<body>
+
+    <!-- Screen 1: The Cover -->
+    <div id="cover-screen" class="screen active">
+        <h1>Happy 30th Birthday!</h1>
+        <p>I got you a card...</p>
+        <div class="swipe-hint">👈 Swipe Left to Open</div>
+        <!-- Button fallback for desktop users who can't swipe easily -->
+        <button style="margin-top: 40px; background-color: transparent; color: #ff4d4d; border: 2px solid #ff4d4d;" onclick="openCard()">Or click here to open</button>
+    </div>
+
+    <!-- Screen 2: The Cake -->
+    <div id="cake-screen" class="screen">
+        <h2>Make a wish!</h2>
+        <p>Blow into your microphone, or tap the flames to put them out.</p>
+        
+        <div class="cake-container">
+            <div class="candles">
+                <div class="candle" onclick="extinguish(0)"><div class="flame" id="flame-0"></div></div>
+                <div class="candle" onclick="extinguish(1)"><div class="flame" id="flame-1"></div></div>
+                <div class="candle" onclick="extinguish(2)"><div class="flame" id="flame-2"></div></div>
+            </div>
+            <div class="cake"></div>
+        </div>
+        
+        <button class="mic-btn" onclick="startMic()">Enable Microphone to blow them out!</button>
+    </div>
+
+    <!-- Screen 3: The Message -->
+    <div id="message-screen" class="screen">
+        <h1>Yay!</h1>
+        <p>Welcome to the 30 club!</p>
+        <p>I hope you have the most amazing day ever because you deserve it.</p>
+        <button onclick="showScreen('trick-screen')">Next</button>
+    </div>
+
+    <!-- Screen 4: The Trick -->
+    <div id="trick-screen" class="screen">
+        <h2>Do you wanna see your present now?</h2>
+        <div class="btn-container">
+            <button id="btn-yes">YES!</button>
+            <button id="btn-no" onclick="showScreen('joke-screen')">No, I'll wait.</button>
+        </div>
+    </div>
+
+    <!-- Screen 5: The Joke -->
+    <div id="joke-screen" class="screen">
+        <h2>Oh okay...</h2>
+        <p>I guess I'll just have to give it to you tomorrow........</p>
+        <button onclick="startCountdown()">Wait, what? Next...</button>
+    </div>
+
+    <!-- Screen 6: Countdown -->
+    <div id="countdown-screen" class="screen">
+        <h1>We party in...</h1>
+        <div id="timer">00:00:00</div>
+        <p class="small-text">...this just counts down till I finish work.</p>
+    </div>
+
+    <script>
+        // State management
+        let flamesOn = 3;
+        
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Swipe logic for Screen 1
+        let startX = 0;
+        document.getElementById('cover-screen').addEventListener('touchstart', e => {
+            startX = e.changedTouches[0].screenX;
+        });
+        document.getElementById('cover-screen').addEventListener('touchend', e => {
+            let endX = e.changedTouches[0].screenX;
+            if (startX - endX > 50) { openCard(); } // Swiped left
+        });
+
+        function openCard() {
+            showScreen('cake-screen');
+            spawnHearts();
+        }
+
+        // Heart Animation
+        function spawnHearts() {
+            for(let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    let heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.className = 'heart';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = '100vh';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        // Candle Logic (Tapping fallback)
+        function extinguish(index) {
+            let flame = document.getElementById('flame-' + index);
+            if (!flame.classList.contains('off')) {
+                flame.classList.add('off');
+                flamesOn--;
+                checkCandles();
+            }
+        }
+
+        function checkCandles() {
+            if (flamesOn === 0) {
+                setTimeout(() => { showScreen('message-screen'); }, 1000);
+            }
+        }
+
+        // Microphone Logic (Blow out candles)
+        async function startMic() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                const microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser);
+                analyser.fftSize = 256;
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+
+                document.querySelector('.mic-btn').innerText = "Blow on your phone now!";
+
+                function detectBlow() {
+                    analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    for (let i = 0; i < bufferLength; i++) { sum += dataArray[i]; }
+                    let average = sum / bufferLength;
+
+                    // If volume crosses a threshold, blow out a random active candle
+                    if (average > 80 && flamesOn > 0) { 
+                        for(let i=0; i<3; i++) {
+                            let f = document.getElementById('flame-'+i);
+                            if(!f.classList.contains('off')) {
+                                extinguish(i);
+                                break;
+                            }
+                        }
+                    }
+                    if (flamesOn > 0) { requestAnimationFrame(detectBlow); }
+                }
+                detectBlow();
+            } catch (err) {
+                alert("Mic access denied or unavailable! Just tap the flames to put them out instead.");
+            }
+        }
+
+        // Runaway "Yes" Button
+        const btnYes = document.getElementById('btn-yes');
+        const moveBtn = () => {
+            const container = document.querySelector('.btn-container');
+            const maxX = container.clientWidth - btnYes.clientWidth;
+            const maxY = container.clientHeight - btnYes.clientHeight;
+            
+            // Random position within the container bounds
+            const randomX = Math.max(0, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+            
+            btnYes.style.left = `${randomX}px`;
+            btnYes.style.top = `${randomY}px`;
+            btnYes.style.transform = 'none'; // remove center translation
+        };
+
+        btnYes.addEventListener('mouseover', moveBtn);
+        btnYes.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Prevent accidental clicks on mobile
+            moveBtn();
+        });
+        btnYes.addEventListener('click', moveBtn);
+
+        // Countdown Logic
+        function startCountdown() {
+            showScreen('countdown-screen');
+            
+            // Set time to 5:00 PM of the current day
+            let targetTime = new Date();
+            targetTime.setHours(17, 0, 0, 0); 
+
+            // If it's already past 5pm, set it for 5pm tomorrow just in case
+            if(new Date() > targetTime) {
+                targetTime.setDate(targetTime.getDate() + 1);
+            }
+
+            setInterval(() => {
+                let now = new Date().getTime();
+                let distance = targetTime.getTime() - now;
+
+                if (distance < 0) {
+                    document.getElementById("timer").innerHTML = "IT'S TIME!";
+                    return;
+                }
+
+                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Add leading zeros
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                document.getElementById("timer").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

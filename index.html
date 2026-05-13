@@ -26,7 +26,7 @@
         }
 
         /* =========================================
-           1. SMOOTH ENVELOPE & LIVING FLOWERS
+           1. SMOOTH ENVELOPE, FOLIAGE & FLOWERS
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -58,46 +58,48 @@
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
         .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: -1; }
-
         .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
 
-        /* --- DRAGGABLE WRAPPER --- */
+        /* --- THE SWAY ANIMATION --- */
+        .f-sway { width: 100%; height: 100%; transform-origin: bottom center; animation: flowerSway 3s ease-in-out infinite alternate; }
+        @keyframes flowerSway { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
+
+        /* --- BACKGROUND FOLIAGE (Non-Interactive) --- */
+        .f-foliage {
+            position: absolute; bottom: 20px; left: 140px; width: 80px; height: 160px;
+            transform: scale(0) translateY(50px); opacity: 0; pointer-events: none; z-index: 1;
+            transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .env-wrapper.open .f-foliage.pop { opacity: 1; z-index: 5; }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(1) { transform: translate(-120px, -110px) scale(0.6) rotate(-20deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(2) { transform: translate(120px, -100px) scale(0.6) rotate(30deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(3) { transform: translate(-60px, -150px) scale(0.7) rotate(-10deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(4) { transform: translate(70px, -130px) scale(0.65) rotate(15deg); }
+
+        /* --- DRAGGABLE FLOWERS --- */
         .f-wrapper {
             position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: grab; z-index: 1; opacity: 0;
-            --dx: 0px; --dy: 0px; 
+            cursor: grab; z-index: 1; opacity: 0; --dx: 0px; --dy: 0px; 
         }
         .f-wrapper:active { cursor: grabbing; }
         .f-wrapper * { pointer-events: none; } 
 
-        /* Pop Out Initial Positions */
         .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 10; }
-        .env-wrapper.open .f-wrapper.pop:nth-child(1) { transform: translate(calc(-80px + var(--dx)), calc(-170px + var(--dy))) scale(0.4) rotate(-25deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(2) { transform: translate(calc(10px + var(--dx)), calc(-200px + var(--dy))) scale(0.45) rotate(0deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(3) { transform: translate(calc(90px + var(--dx)), calc(-160px + var(--dy))) scale(0.4) rotate(25deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(4) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(-40deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(5) { transform: translate(calc(50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(40deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(6) { transform: translate(calc(0px + var(--dx)), calc(-150px + var(--dy))) scale(0.5) rotate(5deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(5) { transform: translate(calc(-80px + var(--dx)), calc(-170px + var(--dy))) scale(0.4) rotate(-25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(6) { transform: translate(calc(10px + var(--dx)), calc(-200px + var(--dy))) scale(0.45) rotate(0deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(7) { transform: translate(calc(90px + var(--dx)), calc(-160px + var(--dy))) scale(0.4) rotate(25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(8) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(-40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(9) { transform: translate(calc(50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(10) { transform: translate(calc(0px + var(--dx)), calc(-150px + var(--dy))) scale(0.5) rotate(5deg); }
 
-        /* --- THE CONTINUOUS SWAY ANIMATION --- */
-        .f-sway {
-            width: 100%; height: 100%; transform-origin: bottom center;
-            animation: flowerSway 3s ease-in-out infinite alternate;
-        }
-        @keyframes flowerSway {
-            0% { transform: rotate(-8deg); }
-            100% { transform: rotate(8deg); }
-        }
-        /* Randomize the sway timings so they look natural */
-        .f-wrapper:nth-child(1) .f-sway { animation-duration: 3.2s; animation-delay: 0s; }
-        .f-wrapper:nth-child(2) .f-sway { animation-duration: 2.8s; animation-delay: -1s; }
-        .f-wrapper:nth-child(3) .f-sway { animation-duration: 3.5s; animation-delay: -2s; }
-        .f-wrapper:nth-child(4) .f-sway { animation-duration: 3.0s; animation-delay: -0.5s; }
-        .f-wrapper:nth-child(5) .f-sway { animation-duration: 3.8s; animation-delay: -1.5s; }
-        .f-wrapper:nth-child(6) .f-sway { animation-duration: 2.5s; animation-delay: -0.8s; }
+        .f-wrapper:nth-of-type(5) .f-sway { animation-duration: 3.2s; animation-delay: 0s; }
+        .f-wrapper:nth-of-type(6) .f-sway { animation-duration: 2.8s; animation-delay: -1s; }
+        .f-wrapper:nth-child(7) .f-sway { animation-duration: 3.5s; animation-delay: -2s; }
+        .f-wrapper:nth-child(8) .f-sway { animation-duration: 3.0s; animation-delay: -0.5s; }
+        .f-wrapper:nth-child(9) .f-sway { animation-duration: 3.8s; animation-delay: -1.5s; }
+        .f-wrapper:nth-child(10) .f-sway { animation-duration: 2.5s; animation-delay: -0.8s; }
 
-        /* Flower Color Themes */
         .f-wrapper.cyan { --f-c1: #54b8aa; --f-c2: #a7ffee; --f-c3: #39c6d6; --f-glow: #6bf0ff; --f-stem: #14757a; }
         .f-wrapper.pink { --f-c1: #b8548a; --f-c2: #ffa7d8; --f-c3: #d63996; --f-glow: #ff6bbf; --f-stem: #7a1445; }
         .f-wrapper.purple { --f-c1: #8a54b8; --f-c2: #d8a7ff; --f-c3: #9639d6; --f-glow: #bf6bff; --f-stem: #4a147a; }
@@ -105,7 +107,6 @@
         .f-wrapper.red { --f-c1: #b85454; --f-c2: #ffa7a7; --f-c3: #d63939; --f-glow: #ff6b6b; --f-stem: #7a1414; }
         .f-wrapper.orange { --f-c1: #b87b54; --f-c2: #ffd2a7; --f-c3: #d67a39; --f-glow: #ffaf6b; --f-stem: #7a4214; }
 
-        /* Flower Parts */
         .f-leafs { position: relative; width: 80px; height: 80px; }
         .f-leafs::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background-color: var(--f-glow); filter: blur(30px); z-index: -1; }
         .f-leaf { position: absolute; bottom: 0; left: 50%; width: 80px; height: 110px; border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%; background-color: var(--f-c2); background-image: linear-gradient(to top, var(--f-c1), var(--f-c2)); transform-origin: bottom center; opacity: 0.9; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5); }
@@ -176,7 +177,7 @@
         .mic-btn:active { background-color: var(--gold-accent); color: white; }
 
         /* =========================================
-           3. THE CLASSIC POLAROID CAMERA 
+           3. THE BOTTOM-DROP POLAROID CAMERA 
         ========================================= */
         #camera-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -185,43 +186,34 @@
         }
         #camera-screen.active { opacity: 1; pointer-events: auto; }
 
-        /* Redesigned OneStep Body */
+        .camera-wrapper {
+            position: relative; display: flex; flex-direction: column; align-items: center;
+            margin-top: -80px; /* Lifts the camera up higher */
+        }
+
         .retro-camera {
             width: 220px; height: 160px; background: #fdfaf6; border-radius: 10px 10px 0 0;
             position: relative; display: flex; justify-content: center; z-index: 10;
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            margin-top: 150px; /* Pushed down to leave room for hovering photo */
         }
-        
-        /* The Classic Rainbow Stripe */
         .camera-stripe {
             position: absolute; top: 0; left: 50%; transform: translateX(-50%);
             width: 40px; height: 100%; z-index: 2;
             background: linear-gradient(to right, #ff4757 20%, #ffa502 20% 40%, #eccc68 40% 60%, #2ed573 60% 80%, #1e90ff 80%);
         }
-        
-        /* The Black Base */
         .camera-base {
             position: absolute; bottom: -40px; left: 0; width: 100%; height: 40px;
-            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 3;
+            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 5;
             box-shadow: inset 0 10px 15px rgba(0,0,0,0.2);
         }
-
-        /* The Giant Lens */
         .lens {
             width: 90px; height: 90px; background: #1e272e; border-radius: 50%;
             position: absolute; top: 25px; border: 12px solid #ced6e0; z-index: 4;
             box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2);
         }
         .lens::after { content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px; background: rgba(255,255,255,0.4); border-radius: 50%; }
+        .viewfinder { position: absolute; top: 15px; right: 20px; width: 35px; height: 25px; background: #1e272e; border-radius: 4px; z-index: 5; border: 3px solid #ced6e0; }
         
-        /* Viewfinder */
-        .viewfinder {
-            position: absolute; top: 15px; right: 20px; width: 35px; height: 25px;
-            background: #1e272e; border-radius: 4px; z-index: 5; border: 3px solid #ced6e0;
-        }
-
-        /* Red Shutter Button */
         .shutter-btn {
             position: absolute; top: 15px; left: 15px; width: 30px; height: 30px;
             background: #ff4757; border-radius: 50%; cursor: pointer; z-index: 5;
@@ -235,23 +227,27 @@
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
         @keyframes screenFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-        /* The Photo That Ejects Upwards */
+        /* The Photo That Ejects DOWN */
         .polaroid-frame {
-            position: absolute; top: 0px; width: 150px; height: 180px;
+            position: absolute; bottom: 0px; width: 150px; height: 180px;
             background: white; padding: 10px; padding-bottom: 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-            z-index: 1; /* Sits behind the lens and base, but inside camera */
-            transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: translateY(20px) scale(0.8); pointer-events: none; opacity: 0;
+            z-index: 2; /* Behind the black camera base (z-index 5) */
+            transition: transform 3s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
+            transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; }
         .polaroid-text { font-family: 'Caveat', cursive; text-align: center; font-size: 1.5rem; color: #333; margin-top: 5px; }
         
-        /* The Eject Animation -> Moves UP and hovers over the camera */
         .polaroid-frame.eject {
             opacity: 1;
-            transform: translateY(-165px) scale(1) rotate(-3deg);
-            z-index: 1;
+            transform: translateY(180px) scale(1) rotate(-2deg); /* Slides out the bottom */
+            z-index: 2;
+        }
+
+        .camera-instruction {
+            color: white; margin-top: 250px; font-family: 'Montserrat'; font-size: 0.9rem; 
+            text-transform: uppercase; letter-spacing: 2px; transition: opacity 0.5s;
         }
 
         /* =========================================
@@ -266,9 +262,7 @@
         
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
         
-        /* NO Button (Normal size, lower z-index) */
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; }
-        /* YES Button (Higher z-index so it never goes behind NO) */
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
@@ -286,7 +280,23 @@
             <div class="env-inner"></div>
             
             <div class="env-flowers">
-                <!-- 6 Swaying Glowing Flowers -->
+                
+                <!-- BACKGROUND FOLIAGE (Non-Interactive, just sways beautifully) -->
+                <div class="f-foliage f-foliage-1"><div class="f-sway" style="animation-duration: 3.5s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q50,100 20,20" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q60,120 80,40" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q40,150 10,90" stroke="#1aaa15" stroke-width="2" fill="none"/><path d="M50,200 Q70,140 90,80" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q50,80 50,0" stroke="#079097" stroke-width="4" fill="none"/></svg>
+                </div></div>
+                <div class="f-foliage f-foliage-2"><div class="f-sway" style="animation-duration: 2.8s; animation-delay: -1s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q30,100 60,0 Q60,100 50,200" fill="#079097"/><path d="M50,200 Q30,100 60,0" stroke="#1aaa15" stroke-width="2" fill="none" /></svg>
+                </div></div>
+                <div class="f-foliage f-foliage-3"><div class="f-sway" style="animation-duration: 3.1s; animation-delay: -0.5s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q40,100 10,10" stroke="#159faa" stroke-width="4" fill="none"/><path d="M40,140 Q20,130 15,145 Q30,150 40,140" fill="#159faa"/><path d="M35,90 Q55,80 60,95 Q40,100 35,90" fill="#159faa"/><path d="M25,50 Q10,40 5,55 Q20,60 25,50" fill="#159faa"/></svg>
+                </div></div>
+                <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg>
+                </div></div>
+
+
+                <!-- DRAGGABLE GLOWING FLOWERS -->
                 <div class="f-wrapper cyan"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
@@ -359,26 +369,25 @@
     <div id="camera-screen">
         <div class="flash-overlay" id="flash"></div>
         
-        <!-- Classic Polaroid Design -->
-        <div class="retro-camera">
-            <div class="camera-stripe"></div>
-            
-            <!-- The Photo Ejects Upwards From Inside -->
-            <div class="polaroid-frame" id="polaroid">
-                <!-- ==========================================
-                     ⬇️ PASTE YOUR PHOTO URL IN THE URL() BELOW ⬇️ 
-                     ========================================== -->
-                <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
-                <div class="polaroid-text">Memories</div>
-            </div>
+        <div class="camera-wrapper">
+            <div class="retro-camera">
+                <div class="camera-stripe"></div>
+                
+                <!-- The Photo Slides DOWN from behind the base -->
+                <div class="polaroid-frame" id="polaroid">
+                    <!-- PHOTO URL HERE -->
+                    <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
+                    <div class="polaroid-text">Memories</div>
+                </div>
 
-            <div class="viewfinder"></div>
-            <div class="lens"></div>
-            <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
-            <div class="camera-base"></div>
+                <div class="viewfinder"></div>
+                <div class="lens"></div>
+                <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
+                <div class="camera-base"></div>
+            </div>
+            
+            <p id="camera-hint" class="camera-instruction">Tap the red button</p>
         </div>
-        
-        <p style="color: white; margin-top: 150px; font-family: 'Montserrat'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Tap the red button</p>
     </div>
 
 
@@ -393,7 +402,6 @@
         <p class="msg-p" style="margin-bottom: 0;">So...</p>
         <h2 style="font-weight: 500; font-size: 1.8rem; color: var(--text-main); margin-top: 10px;">Do you wanna see your present now?</h2>
         <div class="btn-container">
-            <!-- Notice YES is structurally BELOW No so it floats above it naturally -->
             <button id="btn-no" class="standard-btn" onclick="showScreen('joke-screen')">No, I'll wait.</button>
             <button id="btn-yes" class="standard-btn">YES!</button>
         </div>
@@ -425,14 +433,11 @@
             if (envelopeOpened) return;
             envelopeOpened = true;
             
-            const envContainer = document.getElementById('env-container');
-            const hint = document.getElementById('env-hint');
-            
-            envContainer.classList.add('open');
-            hint.innerText = "Drag flowers away";
+            document.getElementById('env-container').classList.add('open');
+            document.getElementById('env-hint').innerText = "Drag flowers away";
             
             setTimeout(() => {
-                document.querySelectorAll('.f-wrapper').forEach(f => f.classList.add('pop'));
+                document.querySelectorAll('.f-wrapper, .f-foliage').forEach(f => f.classList.add('pop'));
             }, 600); 
         }
 
@@ -464,9 +469,7 @@
             let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
             let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
-            curDX = clientX - startX; 
-            curDY = clientY - startY;
-            
+            curDX = clientX - startX; curDY = clientY - startY;
             activeFlower.style.setProperty('--dx', curDX + 'px');
             activeFlower.style.setProperty('--dy', curDY + 'px');
         }
@@ -497,7 +500,6 @@
             activeFlower = null;
         }
 
-
         /* ==================================
            2. MAGIC TYPING LOGIC
         ================================== */
@@ -512,15 +514,12 @@
             nameInput.value = targetName.substring(0, len);
 
             if (nameInput.value === targetName) {
-                swipeHint.classList.add('show');
-                canSwipe = true;
+                swipeHint.classList.add('show'); canSwipe = true;
                 setTimeout(() => nameInput.blur(), 300); 
             } else {
-                swipeHint.classList.remove('show');
-                canSwipe = false;
+                swipeHint.classList.remove('show'); canSwipe = false;
             }
         });
-
 
         /* ==================================
            3. CARD SWIPE & CAKE BLOWOUT
@@ -533,26 +532,17 @@
         
         let touchSX = 0, touchSY = 0, touchEX = 0, touchEY = 0;
 
-        document.body.addEventListener('touchstart', e => {
-            touchSX = e.changedTouches[0].screenX; touchSY = e.changedTouches[0].screenY;
-        }, {passive: true});
-
-        document.body.addEventListener('touchend', e => {
-            touchEX = e.changedTouches[0].screenX; touchEY = e.changedTouches[0].screenY;
-            if(canSwipe) handleCardSwipe();
-        }, {passive: true});
+        document.body.addEventListener('touchstart', e => { touchSX = e.changedTouches[0].screenX; touchSY = e.changedTouches[0].screenY; }, {passive: true});
+        document.body.addEventListener('touchend', e => { touchEX = e.changedTouches[0].screenX; touchEY = e.changedTouches[0].screenY; if(canSwipe) handleCardSwipe(); }, {passive: true});
 
         function handleCardSwipe() {
             const deltaX = touchSX - touchEX;
-            const deltaY = Math.abs(touchSY - touchEY);
-            if (deltaY < 100) {
+            if (Math.abs(touchSY - touchEY) < 100) {
                 if (!flap.classList.contains('open') && deltaX > 40) { 
-                    flap.classList.add('open');
-                    swipeHint.classList.remove('show'); swipeHint.style.display = 'none';
+                    flap.classList.add('open'); swipeHint.classList.remove('show'); swipeHint.style.display = 'none';
                     setTimeout(() => { if(!micEnabled && !isBlown) micBtn.classList.add('visible'); }, 800);
                 } else if (flap.classList.contains('open') && deltaX < -40) {
-                    flap.classList.remove('open');
-                    swipeHint.style.display = 'block'; setTimeout(() => { swipeHint.classList.add('show'); }, 50);
+                    flap.classList.remove('open'); swipeHint.style.display = 'block'; setTimeout(() => swipeHint.classList.add('show'), 50);
                     micBtn.classList.remove('visible');
                 }
             }
@@ -569,7 +559,7 @@
 
             setTimeout(() => {
                 wrapper.classList.add('exit');
-                setTimeout(() => { document.getElementById('camera-screen').classList.add('active'); }, 1000);
+                setTimeout(() => document.getElementById('camera-screen').classList.add('active'), 1000);
             }, 1200); 
         }
 
@@ -582,19 +572,16 @@
                 const audioCtx = new AudioContext();
                 const analyser = audioCtx.createAnalyser();
                 const microphone = audioCtx.createMediaStreamSource(stream);
-                microphone.connect(analyser);
-                analyser.fftSize = 256;
+                microphone.connect(analyser); analyser.fftSize = 256;
                 const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
                 micEnabled = true;
-                micBtn.innerText = "Blow now!";
-                micBtn.style.color = "var(--text-main)"; micBtn.style.borderColor = "var(--text-main)";
+                micBtn.innerText = "Blow now!"; micBtn.style.color = "var(--text-main)"; micBtn.style.borderColor = "var(--text-main)";
 
                 function detectBlow() {
                     if (isBlown) return;
                     analyser.getByteFrequencyData(dataArray);
-                    let sum = 0;
-                    for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+                    let sum = 0; for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
                     if ((sum / dataArray.length) > 75) blowOutCandles();
                     else requestAnimationFrame(detectBlow);
                 }
@@ -612,22 +599,19 @@
             if (photoTaken) return;
             photoTaken = true;
             
-            const shutter = document.getElementById('shutter');
-            const flash = document.getElementById('flash');
-            const polaroid = document.getElementById('polaroid');
-            const cameraScreen = document.getElementById('camera-screen');
+            document.getElementById('shutter').style.animation = 'none'; 
+            document.getElementById('shutter').style.boxShadow = '0 0 5px #ff4757';
+            document.getElementById('flash').classList.add('flash');
+            document.getElementById('camera-hint').style.opacity = '0';
             
-            shutter.style.animation = 'none'; shutter.style.boxShadow = '0 0 5px #ff4757';
-            flash.classList.add('flash');
-            
-            // Photo ejects UP and hovers over camera
-            setTimeout(() => { polaroid.classList.add('eject'); }, 300);
+            // Photo ejects DOWN out of the bottom slot
+            setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 300);
 
             // Wait 5 seconds so she can admire the photo, then proceed
             setTimeout(() => {
-                cameraScreen.style.opacity = '0';
-                setTimeout(() => { cameraScreen.classList.remove('active'); showScreen('message-screen'); }, 1000);
-            }, 5000);
+                document.getElementById('camera-screen').style.opacity = '0';
+                setTimeout(() => { document.getElementById('camera-screen').classList.remove('active'); showScreen('message-screen'); }, 1000);
+            }, 6000);
         }
 
         /* ==================================
@@ -648,11 +632,9 @@
             const maxX = container.clientWidth - btnYes.clientWidth;
             const maxY = container.clientHeight - btnYes.clientHeight;
             
-            // Bounding box of the NO button relative to container
             const noRect = btnNo.getBoundingClientRect();
             const contRect = container.getBoundingClientRect();
             
-            // Adding a 15px padding so it doesn't touch the edge of NO
             const noL = noRect.left - contRect.left - 15; 
             const noT = noRect.top - contRect.top - 15;
             const noR = noRect.right - contRect.left + 15;
@@ -661,7 +643,7 @@
             let randomX, randomY;
             let isSafe = false;
 
-            // Collision Detection Loop: Keep trying coordinates until it finds an empty space
+            // Ensures YES button never overlaps NO button
             while(!isSafe) {
                 randomX = Math.floor(Math.random() * maxX);
                 randomY = Math.floor(Math.random() * maxY);
@@ -669,12 +651,8 @@
                 let yesR = randomX + btnYes.clientWidth;
                 let yesB = randomY + btnYes.clientHeight;
 
-                // Check if YES box overlaps with NO box
-                if (randomX < noR && yesR > noL && randomY < noB && yesB > noT) {
-                    isSafe = false; // It hit the NO button, try again
-                } else {
-                    isSafe = true; // Found a safe spot
-                }
+                if (randomX < noR && yesR > noL && randomY < noB && yesB > noT) isSafe = false; 
+                else isSafe = true; 
             }
             
             btnYes.style.left = `${randomX}px`; 

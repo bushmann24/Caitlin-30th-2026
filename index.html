@@ -22,11 +22,11 @@
             overflow: hidden; 
             perspective: 2500px; 
             color: var(--text-main);
-            touch-action: none; 
+            touch-action: none; /* Stops the screen from bouncing on mobile */
         }
 
         /* =========================================
-           1. SMOOTH ENVELOPE & GLOWING FLOWERS
+           1. SMOOTH ENVELOPE & 6 FLOWERS
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -37,30 +37,39 @@
         
         .env-wrapper {
             position: relative; width: 320px; height: 210px;
-            transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
             cursor: pointer; transform: scale(1);
         }
-        .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default;}
+        /* The Smooth 10% Zoom */
+        .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default; }
 
+        /* The Solid Backing & Interior */
         .env-back {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #e0d8cc; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            background: #d0c5b5; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 0;
+        }
+        .env-inner {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #faf5f0; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 1;
         }
 
         .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; }
 
-        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; }
-        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; }
-        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #fffdfa; z-index: 4; border-radius: 0 0 4px 4px; }
+        /* Envelope Front Flaps (Pointer events none so they don't block flower grabbing) */
+        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; pointer-events: none;}
+        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; pointer-events: none;}
+        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #fffdfa; z-index: 4; border-radius: 0 0 4px 4px; pointer-events: none;}
 
+        /* The Top Flap */
         .env-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 160px solid transparent; border-right: 160px solid transparent;
             border-top: 120px solid #fdfbf7; transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s; z-index: 5;
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
-        .env-wrapper.open .env-flap { transform: rotateX(180deg); }
+        /* Drops behind the envelope back so it doesn't show through! */
+        .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: -1; }
 
         .env-instruction {
             position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
@@ -68,26 +77,32 @@
             text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite;
         }
 
-        /* --- THE GLOWING FLOWERS COMPONENT --- */
+        /* --- THE 6 FLOWERS COMPONENT --- */
         .f-wrapper {
             position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: grab; z-index: 1; opacity: 0;
+            --dx: 0px; --dy: 0px; /* Custom JS tracking variables */
         }
         .f-wrapper:active { cursor: grabbing; }
         .f-wrapper * { pointer-events: none; } /* Crucial for smooth dragging */
 
-        /* Pop Out Positions */
-        .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 6; }
-        .env-wrapper.open .f-wrapper.pop:nth-child(1) { transform: translate(-80px, -170px) scale(0.4) rotate(-15deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(2) { transform: translate(10px, -200px) scale(0.45) rotate(5deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(3) { transform: translate(90px, -160px) scale(0.4) rotate(20deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-child(4) { transform: translate(-30px, -150px) scale(0.35) rotate(-25deg); }
+        /* Pop Out Positions (Includes dynamic drag tracking) */
+        .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 10; }
+        .env-wrapper.open .f-wrapper.pop:nth-child(1) { transform: translate(calc(-80px + var(--dx)), calc(-170px + var(--dy))) scale(0.4) rotate(-25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(2) { transform: translate(calc(10px + var(--dx)), calc(-200px + var(--dy))) scale(0.45) rotate(0deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(3) { transform: translate(calc(90px + var(--dx)), calc(-160px + var(--dy))) scale(0.4) rotate(25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(4) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(-40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(5) { transform: translate(calc(50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(6) { transform: translate(calc(0px + var(--dx)), calc(-150px + var(--dy))) scale(0.5) rotate(5deg); }
 
         /* Flower Color Themes */
         .f-wrapper.cyan { --f-c1: #54b8aa; --f-c2: #a7ffee; --f-c3: #39c6d6; --f-glow: #6bf0ff; --f-stem: #14757a; }
         .f-wrapper.pink { --f-c1: #b8548a; --f-c2: #ffa7d8; --f-c3: #d63996; --f-glow: #ff6bbf; --f-stem: #7a1445; }
         .f-wrapper.purple { --f-c1: #8a54b8; --f-c2: #d8a7ff; --f-c3: #9639d6; --f-glow: #bf6bff; --f-stem: #4a147a; }
+        .f-wrapper.yellow { --f-c1: #b8a054; --f-c2: #ffeea7; --f-c3: #d6b839; --f-glow: #ffdf6b; --f-stem: #7a6a14; }
+        .f-wrapper.red { --f-c1: #b85454; --f-c2: #ffa7a7; --f-c3: #d63939; --f-glow: #ff6b6b; --f-stem: #7a1414; }
+        .f-wrapper.orange { --f-c1: #b87b54; --f-c2: #ffd2a7; --f-c3: #d67a39; --f-glow: #ffaf6b; --f-stem: #7a4214; }
 
         /* Flower Head */
         .f-leafs { position: relative; width: 80px; height: 80px; }
@@ -175,15 +190,8 @@
             text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.3); text-align: center; width: 100%;
         }
         
-        .name-input-container {
-            width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6);
-            margin-top: 40px; display: flex; justify-content: center;
-        }
-        
-        .name-input {
-            background: transparent; border: none; 
-            color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
+        .name-input-container { width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6); margin-top: 40px; display: flex; justify-content: center; }
+        .name-input { background: transparent; border: none; color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         .name-input::placeholder { color: rgba(255,255,255,0.4); font-size: 1.2rem; font-style: italic; font-family: 'Montserrat', sans-serif; text-shadow: none; }
 
         /* Cake Elements */
@@ -219,9 +227,9 @@
         .ui-container { position: absolute; bottom: 6%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 5; }
         
         .swipe-instruction { font-size: 0.85rem; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
-        /* When ready to swipe, show and pulse */
         .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
-        
+        @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
         .mic-btn { margin-top: 15px; padding: 12px 28px; font-size: 0.8rem; font-weight: 600; border: 2px solid var(--gold-accent); border-radius: 30px; background-color: transparent; color: var(--gold-accent); cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px; opacity: 0; pointer-events: none; }
         .mic-btn.visible { opacity: 1; pointer-events: auto; }
         .mic-btn:active { background-color: var(--gold-accent); color: white; }
@@ -229,84 +237,35 @@
         /* =========================================
            3. THE POLAROID CAMERA SCREEN
         ========================================= */
-        #camera-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #2c3e50; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 250; opacity: 0; pointer-events: none; transition: opacity 1s;
-        }
+        #camera-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #2c3e50; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 250; opacity: 0; pointer-events: none; transition: opacity 1s; }
         #camera-screen.active { opacity: 1; pointer-events: auto; }
-
-        .retro-camera {
-            width: 200px; height: 180px; background: #fdf5e6; border-radius: 20px;
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; z-index: 10;
-        }
-        .retro-camera::after {
-            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 30px; height: 100%; background: linear-gradient(to right, #ff5e5e 33%, #ffb142 33%, #ffb142 66%, #4b7bec 66%); z-index: 1;
-        }
-        .lens {
-            width: 90px; height: 90px; background: #2f3640; border-radius: 50%;
-            position: absolute; top: 30px; border: 10px solid #7f8fa6;
-            z-index: 2; box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .lens::after { 
-            content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px;
-            background: rgba(255,255,255,0.4); border-radius: 50%;
-        }
-        .shutter-btn {
-            position: absolute; top: -15px; right: 25px; width: 40px; height: 20px;
-            background: #ff4757; border-radius: 5px 5px 0 0; cursor: pointer;
-            box-shadow: 0 0 15px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3);
-            animation: shutterGlow 1s infinite alternate; z-index: 1;
-        }
+        .retro-camera { width: 200px; height: 180px; background: #fdf5e6; border-radius: 20px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; justify-content: center; z-index: 10; }
+        .retro-camera::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 100%; background: linear-gradient(to right, #ff5e5e 33%, #ffb142 33%, #ffb142 66%, #4b7bec 66%); z-index: 1; }
+        .lens { width: 90px; height: 90px; background: #2f3640; border-radius: 50%; position: absolute; top: 30px; border: 10px solid #7f8fa6; z-index: 2; box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2); }
+        .lens::after { content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px; background: rgba(255,255,255,0.4); border-radius: 50%; }
+        .shutter-btn { position: absolute; top: -15px; right: 25px; width: 40px; height: 20px; background: #ff4757; border-radius: 5px 5px 0 0; cursor: pointer; box-shadow: 0 0 15px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); animation: shutterGlow 1s infinite alternate; z-index: 1; }
         @keyframes shutterGlow { 0% { box-shadow: 0 0 5px #ff4757; } 100% { box-shadow: 0 0 25px #ff4757; } }
         .shutter-btn:active { transform: translateY(5px); }
-
         .flash-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; opacity: 0; pointer-events: none; }
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
         @keyframes screenFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
-
-        .polaroid-frame {
-            position: absolute; bottom: 10px; width: 150px; height: 180px;
-            background: white; padding: 10px; padding-bottom: 40px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 5;
-            transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: translateY(0) scale(0.8); pointer-events: none;
-        }
+        .polaroid-frame { position: absolute; bottom: 10px; width: 150px; height: 180px; background: white; padding: 10px; padding-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 5; transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1); transform: translateY(0) scale(0.8); pointer-events: none; }
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; }
         .polaroid-text { font-family: 'Caveat', cursive; text-align: center; font-size: 1.5rem; color: #333; margin-top: 5px; }
         .polaroid-frame.eject { transform: translateY(200px) scale(1.1) rotate(2deg); }
 
-
         /* =========================================
            4. STANDARD OVERLAYS (Message, Trick)
         ========================================= */
-        .overlay-screen {
-            display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center;
-            position: absolute; top: 0; left: 0; text-align: center; padding: 40px; box-sizing: border-box;
-            z-index: 200; opacity: 0; transition: opacity 1s ease-in;
-        }
+        .overlay-screen { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; text-align: center; padding: 40px; box-sizing: border-box; z-index: 200; opacity: 0; transition: opacity 1s ease-in; }
         .overlay-screen.active { display: flex; opacity: 1; }
-        
         .msg-h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: var(--card-cover); margin: 0; font-style: italic;}
         .msg-p { color: var(--text-main); font-size: 1.15rem; line-height: 1.8; max-width: 450px; font-weight: 400; margin-top: 20px;}
-
-        button.standard-btn {
-            margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px;
-            background-color: var(--gold-accent); color: white; cursor: pointer;
-            box-shadow: 0 6px 15px rgba(212,175,55,0.3); transition: transform 0.2s;
-            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px;
-        }
+        button.standard-btn { margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; background-color: var(--gold-accent); color: white; cursor: pointer; box-shadow: 0 6px 15px rgba(212,175,55,0.3); transition: transform 0.2s; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         button.standard-btn:active { transform: scale(0.95); }
-
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
-        
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
-        
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; transition: transform 0.2s; }
-        
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
         .fine-print { font-size: 0.85rem; color: #888; font-style: italic; margin-top: 50px;}
 
@@ -317,50 +276,43 @@
     <!-- PHASE 1: ENVELOPE SCREEN -->
     <div id="envelope-screen">
         <div class="env-wrapper" id="env-container" onclick="openEnvelope()">
+            
             <div class="env-back"></div>
+            <div class="env-inner"></div>
             
             <div class="env-flowers">
-                
-                <!-- Custom Glowing CSS Flowers -->
+                <!-- 6 Custom Glowing Flowers -->
                 <div class="f-wrapper cyan">
-                    <div class="f-leafs">
-                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
-                        <div class="f-white-circle"></div>
-                    </div>
+                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-
                 <div class="f-wrapper pink">
-                    <div class="f-leafs">
-                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
-                        <div class="f-white-circle"></div>
-                    </div>
+                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-
                 <div class="f-wrapper purple">
-                    <div class="f-leafs">
-                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
-                        <div class="f-white-circle"></div>
-                    </div>
+                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-
-                <div class="f-wrapper pink">
-                    <div class="f-leafs">
-                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
-                        <div class="f-white-circle"></div>
-                    </div>
+                <div class="f-wrapper yellow">
+                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-
+                <div class="f-wrapper red">
+                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
+                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
+                </div>
+                <div class="f-wrapper orange">
+                    <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
+                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
+                </div>
             </div>
 
             <div class="env-front-left"></div>
             <div class="env-front-right"></div>
             <div class="env-front-bottom"></div>
             <div class="env-flap"></div>
-
+            
             <div class="env-instruction" id="env-hint">Tap to open</div>
         </div>
     </div>
@@ -391,7 +343,7 @@
         </div>
     </div>
 
-    <!-- UI Overlay (Swipe Hint is ONLY shown on front page, never cake) -->
+    <!-- UI Overlay -->
     <div class="ui-container" style="z-index: 5;">
         <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
         <button id="mic-btn" class="mic-btn" onclick="startMic()">Tap here</button>
@@ -404,11 +356,8 @@
         <div class="retro-camera">
             <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
             <div class="lens"></div>
-            
             <div class="polaroid-frame" id="polaroid">
-                <!-- ==========================================
-                     ⬇️ PASTE YOUR PHOTO URL IN THE URL() BELOW ⬇️ 
-                     ========================================== -->
+                <!-- PHOTO URL HERE -->
                 <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
                 <div class="polaroid-text">Memories</div>
             </div>
@@ -453,7 +402,7 @@
         ================================== */
         let envelopeOpened = false;
         let draggedFlowers = 0;
-        const totalFlowers = 4; // We have 4 glowing CSS flowers
+        const totalFlowers = 6;
 
         function openEnvelope() {
             if (envelopeOpened) return;
@@ -465,16 +414,13 @@
             envContainer.classList.add('open');
             hint.innerText = "Drag flowers away";
             
-            // Pop out flowers after flap opens
             setTimeout(() => {
-                document.querySelectorAll('.f-wrapper').forEach(f => {
-                    f.classList.add('pop');
-                });
+                document.querySelectorAll('.f-wrapper').forEach(f => f.classList.add('pop'));
             }, 600); 
         }
 
         let activeFlower = null;
-        let startX, startY, curX = 0, curY = 0;
+        let startX, startY, curDX = 0, curDY = 0;
 
         document.querySelectorAll('.f-wrapper').forEach(f => {
             f.addEventListener('mousedown', dragStart);
@@ -484,15 +430,12 @@
         function dragStart(e) {
             if(!envelopeOpened) return;
             activeFlower = e.currentTarget;
-            let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
-            let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
+            startX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            startY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
-            let style = window.getComputedStyle(activeFlower);
-            let matrix = new WebKitCSSMatrix(style.transform);
-            curX = matrix.m41; curY = matrix.m42;
-            
-            startX = clientX - curX; startY = clientY - curY;
-            activeFlower.style.zIndex = 10;
+            activeFlower.style.transition = 'none'; // Stop CSS transition while dragging
+            activeFlower.style.zIndex = 100;
+            curDX = 0; curDY = 0;
         }
 
         document.addEventListener('mousemove', dragMove);
@@ -504,8 +447,12 @@
             let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
             let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
-            curX = clientX - startX; curY = clientY - startY;
-            activeFlower.style.transform = `translate(${curX}px, ${curY}px) scale(0.6) rotate(${curX/5}deg)`;
+            curDX = clientX - startX; 
+            curDY = clientY - startY;
+            
+            // Uses CSS variables to flawlessly drag without breaking the original CSS position!
+            activeFlower.style.setProperty('--dx', curDX + 'px');
+            activeFlower.style.setProperty('--dy', curDY + 'px');
         }
 
         document.addEventListener('mouseup', dragEnd);
@@ -514,20 +461,25 @@
         function dragEnd() {
             if(!activeFlower) return;
             
-            if(Math.abs(curX) > 150 || Math.abs(curY) > 150) {
+            // If they drag it more than 60px in any direction, it disappears
+            if(Math.abs(curDX) > 60 || Math.abs(curDY) > 60) {
+                activeFlower.style.transition = 'opacity 0.3s, transform 0.3s';
                 activeFlower.style.opacity = '0';
                 activeFlower.style.pointerEvents = 'none';
-                draggedFlowers++;
                 
+                draggedFlowers++;
                 if(draggedFlowers >= totalFlowers) {
                     const envScreen = document.getElementById('envelope-screen');
                     envScreen.style.opacity = '0';
                     setTimeout(() => envScreen.style.display = 'none', 1000);
                 }
             } else {
-                activeFlower.style.transform = `translate(${curX/2}px, ${curY/2}px) scale(0.4)`;
+                // Snap back gently if not dragged enough
+                activeFlower.style.transition = 'transform 0.4s';
+                activeFlower.style.setProperty('--dx', '0px');
+                activeFlower.style.setProperty('--dy', '0px');
             }
-            activeFlower.style.zIndex = 6;
+            activeFlower.style.zIndex = 10;
             activeFlower = null;
         }
 
@@ -543,8 +495,6 @@
         nameInput.addEventListener('input', () => {
             let len = nameInput.value.length;
             if (len > targetName.length) len = targetName.length;
-            
-            // Magic replacement!
             nameInput.value = targetName.substring(0, len);
 
             if (nameInput.value === targetName) {
@@ -584,19 +534,11 @@
             if (deltaY < 100) {
                 if (!flap.classList.contains('open') && deltaX > 40) { 
                     flap.classList.add('open');
-                    
-                    // Remove swipe hint completely once opened
-                    swipeHint.classList.remove('show'); 
-                    swipeHint.style.display = 'none';
-
+                    swipeHint.classList.remove('show'); swipeHint.style.display = 'none';
                     setTimeout(() => { if(!micEnabled && !isBlown) micBtn.classList.add('visible'); }, 800);
                 } else if (flap.classList.contains('open') && deltaX < -40) {
                     flap.classList.remove('open');
-                    
-                    // Bring hint back when closed
-                    swipeHint.style.display = 'block';
-                    setTimeout(() => { swipeHint.classList.add('show'); }, 50);
-
+                    swipeHint.style.display = 'block'; setTimeout(() => { swipeHint.classList.add('show'); }, 50);
                     micBtn.classList.remove('visible');
                 }
             }
@@ -613,9 +555,7 @@
 
             setTimeout(() => {
                 wrapper.classList.add('exit');
-                setTimeout(() => { 
-                    document.getElementById('camera-screen').classList.add('active'); 
-                }, 1000);
+                setTimeout(() => { document.getElementById('camera-screen').classList.add('active'); }, 1000);
             }, 1200); 
         }
 
@@ -641,7 +581,6 @@
                     analyser.getByteFrequencyData(dataArray);
                     let sum = 0;
                     for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-                    
                     if ((sum / dataArray.length) > 75) blowOutCandles();
                     else requestAnimationFrame(detectBlow);
                 }
@@ -651,12 +590,10 @@
             }
         }
 
-
         /* ==================================
            4. POLAROID CAMERA LOGIC
         ================================== */
         let photoTaken = false;
-
         function takePhoto() {
             if (photoTaken) return;
             photoTaken = true;
@@ -666,21 +603,15 @@
             const polaroid = document.getElementById('polaroid');
             const cameraScreen = document.getElementById('camera-screen');
             
-            shutter.style.animation = 'none';
-            shutter.style.boxShadow = '0 0 5px #ff4757';
+            shutter.style.animation = 'none'; shutter.style.boxShadow = '0 0 5px #ff4757';
             flash.classList.add('flash');
-            
             setTimeout(() => { polaroid.classList.add('eject'); }, 300);
 
             setTimeout(() => {
                 cameraScreen.style.opacity = '0';
-                setTimeout(() => {
-                    cameraScreen.classList.remove('active');
-                    showScreen('message-screen');
-                }, 1000);
+                setTimeout(() => { cameraScreen.classList.remove('active'); showScreen('message-screen'); }, 1000);
             }, 4500);
         }
-
 
         /* ==================================
            5. 30-TAP TRICK & COUNTDOWN
@@ -692,9 +623,7 @@
 
         const btnYes = document.getElementById('btn-yes');
         const btnNo = document.getElementById('btn-no');
-        let currentScale = 1;
-        let tapCount = 0;
-        const maxTaps = 30; // Slower growth, 30 taps to fill screen
+        let currentScale = 1; let tapCount = 0; const maxTaps = 30;
 
         const handleTrick = (e) => {
             if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();

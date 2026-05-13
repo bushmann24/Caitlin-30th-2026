@@ -22,11 +22,11 @@
             overflow: hidden; 
             perspective: 2500px; 
             color: var(--text-main);
-            touch-action: none; /* Stops the screen from bouncing on mobile */
+            touch-action: none; 
         }
 
         /* =========================================
-           1. SMOOTH ENVELOPE & 6 FLOWERS
+           1. SMOOTH ENVELOPE & LIVING FLOWERS
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -40,27 +40,16 @@
             transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
             cursor: pointer; transform: scale(1);
         }
-        /* The Smooth 10% Zoom */
         .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default; }
 
-        /* The Solid Backing & Interior */
-        .env-back {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #d0c5b5; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 0;
-        }
-        .env-inner {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #faf5f0; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 1;
-        }
-
+        .env-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #d0c5b5; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 0; }
+        .env-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #faf5f0; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 1; }
         .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; }
 
-        /* Envelope Front Flaps (Pointer events none so they don't block flower grabbing) */
         .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; pointer-events: none;}
         .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; pointer-events: none;}
         .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #fffdfa; z-index: 4; border-radius: 0 0 4px 4px; pointer-events: none;}
 
-        /* The Top Flap */
         .env-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 160px solid transparent; border-right: 160px solid transparent;
@@ -68,26 +57,21 @@
             transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s; z-index: 5;
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
-        /* Drops behind the envelope back so it doesn't show through! */
         .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: -1; }
 
-        .env-instruction {
-            position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
-            width: 100%; text-align: center; color: #888; font-size: 0.85rem;
-            text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite;
-        }
+        .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
 
-        /* --- THE 6 FLOWERS COMPONENT --- */
+        /* --- DRAGGABLE WRAPPER --- */
         .f-wrapper {
             position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: grab; z-index: 1; opacity: 0;
-            --dx: 0px; --dy: 0px; /* Custom JS tracking variables */
+            --dx: 0px; --dy: 0px; 
         }
         .f-wrapper:active { cursor: grabbing; }
-        .f-wrapper * { pointer-events: none; } /* Crucial for smooth dragging */
+        .f-wrapper * { pointer-events: none; } 
 
-        /* Pop Out Positions (Includes dynamic drag tracking) */
+        /* Pop Out Initial Positions */
         .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 10; }
         .env-wrapper.open .f-wrapper.pop:nth-child(1) { transform: translate(calc(-80px + var(--dx)), calc(-170px + var(--dy))) scale(0.4) rotate(-25deg); }
         .env-wrapper.open .f-wrapper.pop:nth-child(2) { transform: translate(calc(10px + var(--dx)), calc(-200px + var(--dy))) scale(0.45) rotate(0deg); }
@@ -95,6 +79,23 @@
         .env-wrapper.open .f-wrapper.pop:nth-child(4) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(-40deg); }
         .env-wrapper.open .f-wrapper.pop:nth-child(5) { transform: translate(calc(50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(40deg); }
         .env-wrapper.open .f-wrapper.pop:nth-child(6) { transform: translate(calc(0px + var(--dx)), calc(-150px + var(--dy))) scale(0.5) rotate(5deg); }
+
+        /* --- THE CONTINUOUS SWAY ANIMATION --- */
+        .f-sway {
+            width: 100%; height: 100%; transform-origin: bottom center;
+            animation: flowerSway 3s ease-in-out infinite alternate;
+        }
+        @keyframes flowerSway {
+            0% { transform: rotate(-8deg); }
+            100% { transform: rotate(8deg); }
+        }
+        /* Randomize the sway timings so they look natural */
+        .f-wrapper:nth-child(1) .f-sway { animation-duration: 3.2s; animation-delay: 0s; }
+        .f-wrapper:nth-child(2) .f-sway { animation-duration: 2.8s; animation-delay: -1s; }
+        .f-wrapper:nth-child(3) .f-sway { animation-duration: 3.5s; animation-delay: -2s; }
+        .f-wrapper:nth-child(4) .f-sway { animation-duration: 3.0s; animation-delay: -0.5s; }
+        .f-wrapper:nth-child(5) .f-sway { animation-duration: 3.8s; animation-delay: -1.5s; }
+        .f-wrapper:nth-child(6) .f-sway { animation-duration: 2.5s; animation-delay: -0.8s; }
 
         /* Flower Color Themes */
         .f-wrapper.cyan { --f-c1: #54b8aa; --f-c2: #a7ffee; --f-c3: #39c6d6; --f-glow: #6bf0ff; --f-stem: #14757a; }
@@ -104,92 +105,33 @@
         .f-wrapper.red { --f-c1: #b85454; --f-c2: #ffa7a7; --f-c3: #d63939; --f-glow: #ff6b6b; --f-stem: #7a1414; }
         .f-wrapper.orange { --f-c1: #b87b54; --f-c2: #ffd2a7; --f-c3: #d67a39; --f-glow: #ffaf6b; --f-stem: #7a4214; }
 
-        /* Flower Head */
+        /* Flower Parts */
         .f-leafs { position: relative; width: 80px; height: 80px; }
-        .f-leafs::after { 
-            content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-            width: 80px; height: 80px; background-color: var(--f-glow); filter: blur(30px); z-index: -1; 
-        }
-        .f-leaf {
-            position: absolute; bottom: 0; left: 50%; width: 80px; height: 110px;
-            border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%;
-            background-color: var(--f-c2); background-image: linear-gradient(to top, var(--f-c1), var(--f-c2));
-            transform-origin: bottom center; opacity: 0.9; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-        .f-leaf--1 { transform: translate(-50%, 0) rotate(-40deg); }
-        .f-leaf--2 { transform: translate(-50%, 0) rotate(0deg); }
-        .f-leaf--3 { transform: translate(-50%, 0) rotate(40deg); }
-        .f-leaf--4 {
-            width: 80px; height: 80px; transform-origin: bottom left; border-radius: 40px 100px 40px 40px;
-            transform: translate(-50%, 0) rotate(-43deg); background-image: linear-gradient(to top, var(--f-c3), var(--f-c2)); z-index: 1; opacity: 0.8;
-        }
-        .f-white-circle {
-            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-            width: 90px; height: 40px; border-radius: 50%; background-color: #fff; z-index: 2;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-        }
-        /* Stem & Leaves */
-        .f-line {
-            position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
-            width: 15px; height: 250px;
-            background-image: linear-gradient(to top, transparent 5%, var(--f-stem), var(--f-c3));
-            box-shadow: inset 0 0 2px rgba(0,0,0,0.5); z-index: -1;
-        }
-        .f-line__leaf {
-            position: absolute; top: 20%; left: 100%; width: 70px; height: 90px;
-            border-top-right-radius: 90px; border-bottom-left-radius: 90px;
-            background-image: linear-gradient(to top, rgba(0,0,0, 0.2), var(--f-c3));
-            transform-origin: bottom left; transform: rotate(30deg);
-        }
+        .f-leafs::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background-color: var(--f-glow); filter: blur(30px); z-index: -1; }
+        .f-leaf { position: absolute; bottom: 0; left: 50%; width: 80px; height: 110px; border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%; background-color: var(--f-c2); background-image: linear-gradient(to top, var(--f-c1), var(--f-c2)); transform-origin: bottom center; opacity: 0.9; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5); }
+        .f-leaf--1 { transform: translate(-50%, 0) rotate(-40deg); } .f-leaf--2 { transform: translate(-50%, 0) rotate(0deg); } .f-leaf--3 { transform: translate(-50%, 0) rotate(40deg); }
+        .f-leaf--4 { width: 80px; height: 80px; transform-origin: bottom left; border-radius: 40px 100px 40px 40px; transform: translate(-50%, 0) rotate(-43deg); background-image: linear-gradient(to top, var(--f-c3), var(--f-c2)); z-index: 1; opacity: 0.8; }
+        .f-white-circle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 90px; height: 40px; border-radius: 50%; background-color: #fff; z-index: 2; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .f-line { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 15px; height: 250px; background-image: linear-gradient(to top, transparent 5%, var(--f-stem), var(--f-c3)); box-shadow: inset 0 0 2px rgba(0,0,0,0.5); z-index: -1; }
+        .f-line__leaf { position: absolute; top: 20%; left: 100%; width: 70px; height: 90px; border-top-right-radius: 90px; border-bottom-left-radius: 90px; background-image: linear-gradient(to top, rgba(0,0,0, 0.2), var(--f-c3)); transform-origin: bottom left; transform: rotate(30deg); }
         .f-line__leaf--2 { top: 50%; left: -460%; transform-origin: bottom right; border-radius: 90px 0 0 90px; transform: rotate(-30deg); }
 
 
         /* =========================================
            2. THE 3D CARD & CAKE
         ========================================= */
-        .card-wrapper {
-            width: 85%; max-width: 350px; height: 65vh; max-height: 500px;
-            position: relative; transform: rotateX(2deg); 
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s; z-index: 10;
-        }
+        .card-wrapper { width: 85%; max-width: 350px; height: 65vh; max-height: 500px; position: relative; transform: rotateX(2deg); transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s; z-index: 10; }
         .card-wrapper.exit { transform: translateY(120vh) rotateZ(10deg) rotateX(20deg); opacity: 0; pointer-events: none; }
-
-        .card-right-side {
-            position: absolute; top: 0; right: 0; width: 100%; height: 100%;
-            background-color: var(--card-inside); border-radius: 4px 12px 12px 4px;
-            box-shadow: 15px 20px 40px rgba(0,0,0,0.12), inset 25px 0 30px rgba(0,0,0,0.04); 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 1; overflow: hidden;
-        }
-
-        .card-left-flap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            transform-origin: left center; transform-style: preserve-3d;
-            transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 2;
-        }
+        .card-right-side { position: absolute; top: 0; right: 0; width: 100%; height: 100%; background-color: var(--card-inside); border-radius: 4px 12px 12px 4px; box-shadow: 15px 20px 40px rgba(0,0,0,0.12), inset 25px 0 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1; overflow: hidden; }
+        .card-left-flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: left center; transform-style: preserve-3d; transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 2; }
         .card-left-flap.open { transform: rotateY(-165deg); }
-
-        .flap-face {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            backface-visibility: hidden; -webkit-backface-visibility: hidden;
-            border-radius: 4px 12px 12px 4px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
+        .flap-face { position: absolute; top: 0; left: 0; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 4px 12px 12px 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .flap-front { background-color: var(--card-cover); box-shadow: 5px 10px 25px rgba(0,0,0,0.2); z-index: 2; }
-        .flap-front::before { 
-            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 40px;
-            background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, transparent 100%); border-radius: 4px 0 0 4px;
-        }
-        .flap-back {
-            background-color: #fcfcfc; transform: rotateY(180deg); z-index: 1;
-            background: linear-gradient(to left, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 15%, #fcfcfc 40%); border-radius: 12px 4px 4px 12px; 
-        }
+        .flap-front::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 40px; background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, transparent 100%); border-radius: 4px 0 0 4px; }
+        .flap-back { background-color: #fcfcfc; transform: rotateY(180deg); z-index: 1; background: linear-gradient(to left, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 15%, #fcfcfc 40%); border-radius: 12px 4px 4px 12px; }
 
         /* Magic Typing Typography */
-        .cover-title {
-            font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1;
-            text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.3); text-align: center; width: 100%;
-        }
-        
+        .cover-title { font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1; text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.3); text-align: center; width: 100%; }
         .name-input-container { width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6); margin-top: 40px; display: flex; justify-content: center; }
         .name-input { background: transparent; border: none; color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         .name-input::placeholder { color: rgba(255,255,255,0.4); font-size: 1.2rem; font-style: italic; font-family: 'Montserrat', sans-serif; text-shadow: none; }
@@ -223,9 +165,8 @@
         @keyframes flameAnim { 0%, 25%, 100% {transform: scaleY(1) rotate(-45deg);} 50%, 75% {transform: scaleY(1.1) rotate(-45deg);} }
         .flame.off, .flame2.off, .flame3.off { opacity: 0; pointer-events: none; }
 
-        /* --- UI ELEMENTS --- */
+        /* UI Overlays */
         .ui-container { position: absolute; bottom: 6%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 5; }
-        
         .swipe-instruction { font-size: 0.85rem; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
         .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
         @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
@@ -235,24 +176,83 @@
         .mic-btn:active { background-color: var(--gold-accent); color: white; }
 
         /* =========================================
-           3. THE POLAROID CAMERA SCREEN
+           3. THE CLASSIC POLAROID CAMERA 
         ========================================= */
-        #camera-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #2c3e50; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 250; opacity: 0; pointer-events: none; transition: opacity 1s; }
+        #camera-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #2c3e50; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 250; opacity: 0; pointer-events: none; transition: opacity 1s;
+        }
         #camera-screen.active { opacity: 1; pointer-events: auto; }
-        .retro-camera { width: 200px; height: 180px; background: #fdf5e6; border-radius: 20px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; justify-content: center; z-index: 10; }
-        .retro-camera::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 100%; background: linear-gradient(to right, #ff5e5e 33%, #ffb142 33%, #ffb142 66%, #4b7bec 66%); z-index: 1; }
-        .lens { width: 90px; height: 90px; background: #2f3640; border-radius: 50%; position: absolute; top: 30px; border: 10px solid #7f8fa6; z-index: 2; box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* Redesigned OneStep Body */
+        .retro-camera {
+            width: 220px; height: 160px; background: #fdfaf6; border-radius: 10px 10px 0 0;
+            position: relative; display: flex; justify-content: center; z-index: 10;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            margin-top: 150px; /* Pushed down to leave room for hovering photo */
+        }
+        
+        /* The Classic Rainbow Stripe */
+        .camera-stripe {
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 100%; z-index: 2;
+            background: linear-gradient(to right, #ff4757 20%, #ffa502 20% 40%, #eccc68 40% 60%, #2ed573 60% 80%, #1e90ff 80%);
+        }
+        
+        /* The Black Base */
+        .camera-base {
+            position: absolute; bottom: -40px; left: 0; width: 100%; height: 40px;
+            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 3;
+            box-shadow: inset 0 10px 15px rgba(0,0,0,0.2);
+        }
+
+        /* The Giant Lens */
+        .lens {
+            width: 90px; height: 90px; background: #1e272e; border-radius: 50%;
+            position: absolute; top: 25px; border: 12px solid #ced6e0; z-index: 4;
+            box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2);
+        }
         .lens::after { content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px; background: rgba(255,255,255,0.4); border-radius: 50%; }
-        .shutter-btn { position: absolute; top: -15px; right: 25px; width: 40px; height: 20px; background: #ff4757; border-radius: 5px 5px 0 0; cursor: pointer; box-shadow: 0 0 15px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3); animation: shutterGlow 1s infinite alternate; z-index: 1; }
+        
+        /* Viewfinder */
+        .viewfinder {
+            position: absolute; top: 15px; right: 20px; width: 35px; height: 25px;
+            background: #1e272e; border-radius: 4px; z-index: 5; border: 3px solid #ced6e0;
+        }
+
+        /* Red Shutter Button */
+        .shutter-btn {
+            position: absolute; top: 15px; left: 15px; width: 30px; height: 30px;
+            background: #ff4757; border-radius: 50%; cursor: pointer; z-index: 5;
+            box-shadow: 0 0 15px #ff4757, inset 0 -2px 5px rgba(0,0,0,0.3);
+            animation: shutterGlow 1s infinite alternate; border: 3px solid #dfe4ea;
+        }
         @keyframes shutterGlow { 0% { box-shadow: 0 0 5px #ff4757; } 100% { box-shadow: 0 0 25px #ff4757; } }
-        .shutter-btn:active { transform: translateY(5px); }
+        .shutter-btn:active { transform: scale(0.95); }
+
         .flash-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; opacity: 0; pointer-events: none; }
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
         @keyframes screenFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
-        .polaroid-frame { position: absolute; bottom: 10px; width: 150px; height: 180px; background: white; padding: 10px; padding-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 5; transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1); transform: translateY(0) scale(0.8); pointer-events: none; }
+
+        /* The Photo That Ejects Upwards */
+        .polaroid-frame {
+            position: absolute; top: 0px; width: 150px; height: 180px;
+            background: white; padding: 10px; padding-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            z-index: 1; /* Sits behind the lens and base, but inside camera */
+            transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(20px) scale(0.8); pointer-events: none; opacity: 0;
+        }
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; }
         .polaroid-text { font-family: 'Caveat', cursive; text-align: center; font-size: 1.5rem; color: #333; margin-top: 5px; }
-        .polaroid-frame.eject { transform: translateY(200px) scale(1.1) rotate(2deg); }
+        
+        /* The Eject Animation -> Moves UP and hovers over the camera */
+        .polaroid-frame.eject {
+            opacity: 1;
+            transform: translateY(-165px) scale(1) rotate(-3deg);
+            z-index: 1;
+        }
 
         /* =========================================
            4. STANDARD OVERLAYS (Message, Trick)
@@ -263,9 +263,14 @@
         .msg-p { color: var(--text-main); font-size: 1.15rem; line-height: 1.8; max-width: 450px; font-weight: 400; margin-top: 20px;}
         button.standard-btn { margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; background-color: var(--gold-accent); color: white; cursor: pointer; box-shadow: 0 6px 15px rgba(212,175,55,0.3); transition: transform 0.2s; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         button.standard-btn:active { transform: scale(0.95); }
+        
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
+        
+        /* NO Button (Normal size, lower z-index) */
+        #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; }
+        /* YES Button (Higher z-index so it never goes behind NO) */
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
-        #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; transition: transform 0.2s; }
+        
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
         .fine-print { font-size: 0.85rem; color: #888; font-style: italic; margin-top: 50px;}
 
@@ -281,31 +286,31 @@
             <div class="env-inner"></div>
             
             <div class="env-flowers">
-                <!-- 6 Custom Glowing Flowers -->
-                <div class="f-wrapper cyan">
+                <!-- 6 Swaying Glowing Flowers -->
+                <div class="f-wrapper cyan"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div>
-                <div class="f-wrapper pink">
+                </div></div>
+                <div class="f-wrapper pink"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div>
-                <div class="f-wrapper purple">
+                </div></div>
+                <div class="f-wrapper purple"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div>
-                <div class="f-wrapper yellow">
+                </div></div>
+                <div class="f-wrapper yellow"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div>
-                <div class="f-wrapper red">
+                </div></div>
+                <div class="f-wrapper red"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div>
-                <div class="f-wrapper orange">
+                </div></div>
+                <div class="f-wrapper orange"><div class="f-sway">
                     <div class="f-leafs"><div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div><div class="f-white-circle"></div></div>
                     <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
-                </div>
+                </div></div>
             </div>
 
             <div class="env-front-left"></div>
@@ -353,16 +358,27 @@
     <!-- PHASE 3: POLAROID CAMERA -->
     <div id="camera-screen">
         <div class="flash-overlay" id="flash"></div>
+        
+        <!-- Classic Polaroid Design -->
         <div class="retro-camera">
-            <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
-            <div class="lens"></div>
+            <div class="camera-stripe"></div>
+            
+            <!-- The Photo Ejects Upwards From Inside -->
             <div class="polaroid-frame" id="polaroid">
-                <!-- PHOTO URL HERE -->
+                <!-- ==========================================
+                     ⬇️ PASTE YOUR PHOTO URL IN THE URL() BELOW ⬇️ 
+                     ========================================== -->
                 <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
                 <div class="polaroid-text">Memories</div>
             </div>
+
+            <div class="viewfinder"></div>
+            <div class="lens"></div>
+            <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
+            <div class="camera-base"></div>
         </div>
-        <p style="color: white; margin-top: 250px; font-family: 'Montserrat'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Tap the red button</p>
+        
+        <p style="color: white; margin-top: 150px; font-family: 'Montserrat'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Tap the red button</p>
     </div>
 
 
@@ -377,6 +393,7 @@
         <p class="msg-p" style="margin-bottom: 0;">So...</p>
         <h2 style="font-weight: 500; font-size: 1.8rem; color: var(--text-main); margin-top: 10px;">Do you wanna see your present now?</h2>
         <div class="btn-container">
+            <!-- Notice YES is structurally BELOW No so it floats above it naturally -->
             <button id="btn-no" class="standard-btn" onclick="showScreen('joke-screen')">No, I'll wait.</button>
             <button id="btn-yes" class="standard-btn">YES!</button>
         </div>
@@ -433,7 +450,7 @@
             startX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
             startY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
-            activeFlower.style.transition = 'none'; // Stop CSS transition while dragging
+            activeFlower.style.transition = 'none'; 
             activeFlower.style.zIndex = 100;
             curDX = 0; curDY = 0;
         }
@@ -450,7 +467,6 @@
             curDX = clientX - startX; 
             curDY = clientY - startY;
             
-            // Uses CSS variables to flawlessly drag without breaking the original CSS position!
             activeFlower.style.setProperty('--dx', curDX + 'px');
             activeFlower.style.setProperty('--dy', curDY + 'px');
         }
@@ -461,7 +477,6 @@
         function dragEnd() {
             if(!activeFlower) return;
             
-            // If they drag it more than 60px in any direction, it disappears
             if(Math.abs(curDX) > 60 || Math.abs(curDY) > 60) {
                 activeFlower.style.transition = 'opacity 0.3s, transform 0.3s';
                 activeFlower.style.opacity = '0';
@@ -474,7 +489,6 @@
                     setTimeout(() => envScreen.style.display = 'none', 1000);
                 }
             } else {
-                // Snap back gently if not dragged enough
                 activeFlower.style.transition = 'transform 0.4s';
                 activeFlower.style.setProperty('--dx', '0px');
                 activeFlower.style.setProperty('--dy', '0px');
@@ -605,16 +619,19 @@
             
             shutter.style.animation = 'none'; shutter.style.boxShadow = '0 0 5px #ff4757';
             flash.classList.add('flash');
+            
+            // Photo ejects UP and hovers over camera
             setTimeout(() => { polaroid.classList.add('eject'); }, 300);
 
+            // Wait 5 seconds so she can admire the photo, then proceed
             setTimeout(() => {
                 cameraScreen.style.opacity = '0';
                 setTimeout(() => { cameraScreen.classList.remove('active'); showScreen('message-screen'); }, 1000);
-            }, 4500);
+            }, 5000);
         }
 
         /* ==================================
-           5. 30-TAP TRICK & COUNTDOWN
+           5. COLLISION TRICK & COUNTDOWN
         ================================== */
         function showScreen(id) {
             document.querySelectorAll('.overlay-screen').forEach(s => s.classList.remove('active'));
@@ -623,24 +640,48 @@
 
         const btnYes = document.getElementById('btn-yes');
         const btnNo = document.getElementById('btn-no');
-        let currentScale = 1; let tapCount = 0; const maxTaps = 30;
 
         const handleTrick = (e) => {
             if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();
             const container = document.querySelector('.btn-container');
+            
             const maxX = container.clientWidth - btnYes.clientWidth;
             const maxY = container.clientHeight - btnYes.clientHeight;
             
-            btnYes.style.left = `${Math.max(0, Math.floor(Math.random() * maxX))}px`; 
-            btnYes.style.top = `${Math.max(0, Math.floor(Math.random() * maxY))}px`;
-            btnYes.style.transform = 'none'; 
+            // Bounding box of the NO button relative to container
+            const noRect = btnNo.getBoundingClientRect();
+            const contRect = container.getBoundingClientRect();
+            
+            // Adding a 15px padding so it doesn't touch the edge of NO
+            const noL = noRect.left - contRect.left - 15; 
+            const noT = noRect.top - contRect.top - 15;
+            const noR = noRect.right - contRect.left + 15;
+            const noB = noRect.bottom - contRect.top + 15;
 
-            if (tapCount < maxTaps) {
-                tapCount++;
-                currentScale += 0.4; 
-                btnNo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+            let randomX, randomY;
+            let isSafe = false;
+
+            // Collision Detection Loop: Keep trying coordinates until it finds an empty space
+            while(!isSafe) {
+                randomX = Math.floor(Math.random() * maxX);
+                randomY = Math.floor(Math.random() * maxY);
+                
+                let yesR = randomX + btnYes.clientWidth;
+                let yesB = randomY + btnYes.clientHeight;
+
+                // Check if YES box overlaps with NO box
+                if (randomX < noR && yesR > noL && randomY < noB && yesB > noT) {
+                    isSafe = false; // It hit the NO button, try again
+                } else {
+                    isSafe = true; // Found a safe spot
+                }
             }
+            
+            btnYes.style.left = `${randomX}px`; 
+            btnYes.style.top = `${randomY}px`;
+            btnYes.style.transform = 'none'; 
         };
+        
         btnYes.addEventListener('mouseover', handleTrick);
         btnYes.addEventListener('touchstart', handleTrick);
         btnYes.addEventListener('click', handleTrick);

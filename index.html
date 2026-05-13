@@ -82,10 +82,23 @@
             border-radius: 4px 0 0 4px;
         }
         
-        .cover-30 {
+        /* MAGIC TYPING FRONT COVER STYLES */
+        .cover-title {
             font-family: 'Playfair Display', serif;
-            font-size: 8rem; font-style: italic; color: #fff; margin: 0; line-height: 1;
+            font-size: 3.2rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1;
             text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.4);
+            text-align: center; width: 100%;
+        }
+
+        .name-input {
+            background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.8);
+            color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem;
+            text-align: center; width: 80%; outline: none; margin-top: 40px; padding-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .name-input::placeholder {
+            color: rgba(255,255,255,0.4); font-size: 1.2rem; font-style: italic;
+            font-family: 'Montserrat', sans-serif; text-shadow: none;
         }
 
         .flap-back {
@@ -96,11 +109,11 @@
             border-radius: 12px 4px 4px 12px; 
         }
 
-        /* --- NEW CSS CHOCOLATE CAKE --- */
+        /* --- CSS CHOCOLATE CAKE --- */
         .cake-scale-wrapper {
             position: relative; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            transform: scale(0.65); /* Scales the cake perfectly into the card */
+            transform: scale(0.65); 
             margin-top: 40px;
         }
 
@@ -150,10 +163,13 @@
             left:175px; top:0;
         }
 
+        /* Candles container - Only place where clicks will trigger blowout */
         .candles {
             position: absolute; width:30px; height: 80px;
             background-color: #0081a7; top:-160px; left:-20px;
             box-shadow: 50px 20px #0081a7, -50px 20px #0081a7;
+            cursor: pointer; /* Hints that it can be tapped */
+            z-index: 10;
         }
 
         .candles:before {
@@ -190,7 +206,7 @@
         }
 
         .flame, .flame3, .flame2 {
-            cursor: pointer; width:30px; height: 30px; transform: rotate(-45deg); z-index:4;
+            width:30px; height: 30px; transform: rotate(-45deg); z-index:4;
             background-color: rgba(252,191,73,.8);
             transition: opacity 0.5s ease-out;
             animation: flameAnim 0.5s infinite;
@@ -209,9 +225,7 @@
             50%, 75% {transform: scaleY(1.1) rotate(-45deg);}
         }
 
-        /* Class added by JS to extinguish flames smoothly */
         .flame.off, .flame2.off, .flame3.off { opacity: 0; pointer-events: none; }
-
 
         /* --- UI ELEMENTS --- */
         .ui-container {
@@ -221,8 +235,14 @@
         
         .swipe-instruction {
             font-size: 0.85rem; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 5px;
-            animation: fadePulse 2.5s infinite; transition: opacity 0.5s;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s;
         }
+        
+        /* Class added dynamically when name is fully typed */
+        .swipe-instruction.show {
+            opacity: 1; animation: fadePulse 2.5s infinite;
+        }
+
         @keyframes fadePulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
         .mic-btn {
@@ -233,9 +253,6 @@
         }
         .mic-btn.visible { opacity: 1; pointer-events: auto; }
         .mic-btn:active { background-color: var(--gold-accent); color: white; }
-
-        .heart { position: absolute; color: var(--card-cover); font-size: 1.5rem; animation: floatUp 3.5s ease-in forwards; pointer-events: none; z-index: 100;}
-        @keyframes floatUp { 0% { transform: translateY(0) scale(0.8) rotate(-10deg); opacity: 0.8; } 100% { transform: translateY(-100vh) scale(1.8) rotate(20deg); opacity: 0; } }
 
         /* --- OVERLAY SCREENS --- */
         .overlay-screen {
@@ -259,18 +276,15 @@
         /* Trick Button Screen */
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
         
-        /* YES Button: Highest z-index so it NEVER hides behind the No button */
         #btn-yes { 
             position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); 
             transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; 
             z-index: 1000; 
         }
-        /* NO Button: Lower z-index so it grows behind the Yes button */
         #btn-no { 
-            position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%) scale(1); 
+            position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); 
             background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             z-index: 50; 
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
         
         /* Countdown */
@@ -284,7 +298,6 @@
     <div id="main-card" class="card-wrapper">
         
         <div class="card-right-side" id="blowArea">
-            <!-- Scaled container to perfectly fit the new CSS cake -->
             <div class="cake-scale-wrapper">
                 <div id="birthday-cake">
                   <div class="cake">
@@ -292,7 +305,8 @@
                     <div class="chocs"></div>
                     <div class="top"></div>
                   </div>
-                  <div class="candles">
+                  <!-- The onclick is securely bound ONLY to the candles now -->
+                  <div class="candles" onclick="blowOutCandles()">
                     <div class="flame" id="flame-0"></div>
                     <div class="flame2" id="flame-1"></div>
                     <div class="flame3" id="flame-2"></div>
@@ -304,7 +318,9 @@
 
         <div id="card-flap" class="card-left-flap">
             <div class="flap-face flap-front">
-                <h1 class="cover-30">30</h1>
+                <h1 class="cover-title">Happy 30th<br>Birthday</h1>
+                <!-- Magic Input Field -->
+                <input type="text" id="name-input" class="name-input" placeholder="Type name here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             </div>
             <div class="flap-face flap-back"></div>
         </div>
@@ -326,7 +342,6 @@
         <p class="msg-p" style="margin-bottom: 0;">So...</p>
         <h2 style="font-weight: 500; font-size: 1.8rem; color: var(--text-main); margin-top: 10px;">Do you wanna see your present now?</h2>
         <div class="btn-container">
-            <!-- Notice YES is above NO in the code now too -->
             <button id="btn-no" class="standard-btn" onclick="showScreen('joke-screen')">No, I'll wait.</button>
             <button id="btn-yes" class="standard-btn">YES!</button>
         </div>
@@ -347,12 +362,37 @@
     <script>
         let micEnabled = false;
         let isBlown = false;
+        let canSwipe = false; // Locked until name is typed
+        
         const wrapper = document.getElementById('main-card');
         const flap = document.getElementById('card-flap');
         const swipeHint = document.getElementById('swipe-hint');
         const micBtn = document.getElementById('mic-btn');
-        const blowArea = document.getElementById("blowArea");
+        const nameInput = document.getElementById('name-input');
         
+        // --- MAGIC TYPING LOGIC ---
+        const targetName = "Caitling";
+
+        nameInput.addEventListener('input', (e) => {
+            let len = nameInput.value.length;
+            
+            // Prevent going over the target name length
+            if (len > targetName.length) len = targetName.length;
+            
+            // Force the value to spell the target name up to the typed length
+            nameInput.value = targetName.substring(0, len);
+
+            if (nameInput.value === targetName) {
+                swipeHint.classList.add('show');
+                canSwipe = true;
+                // Briefly wait then drop the mobile keyboard so she can see the swipe prompt
+                setTimeout(() => nameInput.blur(), 300); 
+            } else {
+                swipeHint.classList.remove('show');
+                canSwipe = false;
+            }
+        });
+
         // --- SWIPE LOGIC ---
         let touchStartX = 0; let touchStartY = 0;
         let touchEndX = 0; let touchEndY = 0;
@@ -367,6 +407,8 @@
         }, {passive: true});
 
         function handleSwipe() {
+            if (!canSwipe) return; // Block swipe if name isn't fully typed
+
             const swipeThreshold = 40; 
             const restraintY = 100; 
             const deltaX = touchStartX - touchEndX;
@@ -383,8 +425,7 @@
 
         function openCard() {
             flap.classList.add('open');
-            swipeHint.style.opacity = '0'; 
-            spawnHearts();
+            swipeHint.style.display = 'none'; // Permanently hide instruction
             
             // Show mic button slightly after open
             setTimeout(() => {
@@ -396,7 +437,7 @@
 
         function closeCard() {
             flap.classList.remove('open');
-            swipeHint.style.opacity = '1';
+            swipeHint.style.display = 'block'; 
             micBtn.classList.remove('visible');
         }
 
@@ -406,30 +447,12 @@
             document.getElementById(id).classList.add('active');
         }
 
-        function spawnHearts() {
-            for(let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    let heart = document.createElement('div');
-                    heart.innerHTML = '❤️'; heart.className = 'heart';
-                    heart.style.left = (Math.random() * 80 + 10) + 'vw';
-                    heart.style.top = '70vh'; 
-                    document.body.appendChild(heart);
-                    setTimeout(() => heart.remove(), 3500);
-                }, i * 150);
-            }
-        }
-
-        // --- BLOW OUT LOGIC ---
-        // Clicking the card area also puts them out if mic isn't used
-        blowArea.addEventListener("click", blowOutCandles);
-        blowArea.addEventListener("touchstart", blowOutCandles);
-
+        // --- BLOW OUT LOGIC (Now safely locked to candles div) ---
         function blowOutCandles() {
             if (isBlown) return;
             isBlown = true;
             micBtn.classList.remove('visible'); 
 
-            // Add the 'off' class to trigger CSS opacity fade
             document.getElementById('flame-0').classList.add('off');
             document.getElementById('flame-1').classList.add('off');
             document.getElementById('flame-2').classList.add('off');
@@ -467,7 +490,6 @@
                     for (let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
                     let average = sum / dataArray.length;
 
-                    // Trigger blow out
                     if (average > 75) { 
                         blowOutCandles();
                     } else {
@@ -476,23 +498,18 @@
                 }
                 detectBlow();
             } catch (err) {
-                micBtn.innerText = "Mic Denied (Tap Card)";
+                // If mic fails, instruct her to tap the candles directly
+                micBtn.innerText = "Mic Denied (Tap Candles)";
                 micEnabled = false; 
             }
         }
 
-        // --- 30-TAP TRICK LOGIC ---
+        // --- CLASSIC PRANK TRICK LOGIC ---
         const btnYes = document.getElementById('btn-yes');
-        const btnNo = document.getElementById('btn-no');
         
-        let currentScale = 1;
-        let tapCount = 0;
-        const maxTaps = 30;
-
         const handleTrick = (e) => {
             if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();
             
-            // 1. Teleport the YES button randomly
             const container = document.querySelector('.btn-container');
             const maxX = container.clientWidth - btnYes.clientWidth;
             const maxY = container.clientHeight - btnYes.clientHeight;
@@ -501,14 +518,6 @@
             
             btnYes.style.left = `${randomX}px`; btnYes.style.top = `${randomY}px`;
             btnYes.style.transform = 'none'; 
-
-            // 2. Slowly grow the NO button over 30 taps
-            if (tapCount < maxTaps) {
-                tapCount++;
-                // Add 1.0 scale per tap. (After 30 taps, scale = 31, huge screen coverage)
-                currentScale += 1.0; 
-                btnNo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
-            }
         };
 
         btnYes.addEventListener('mouseover', handleTrick);

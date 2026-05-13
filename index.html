@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy 30th!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600;1,700&family=Montserrat:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-page: #f4ede4; 
-            --card-cover: #c98a83; 
-            --card-inside: #fcfcfc; 
-            --gold-accent: #d4af37; 
-            --text-main: #333333;
+            /* NEW PASTEL PINK AESTHETIC */
+            --bg-page: #fcf0f4; /* Very soft pastel pink background */
+            --card-cover: #f4a7b9; /* Beautiful soft rose pink for the card */
+            --card-inside: #fffdfd; /* Warm crisp white */
+            --gold-accent: #e08ea2; /* Rose-gold / darker pink for buttons */
+            --text-main: #5c4044; /* Softer, warm charcoal for text */
         }
 
         body, html {
@@ -26,7 +27,7 @@
         }
 
         /* =========================================
-           1. SMOOTH ENVELOPE, EXTRA FOLIAGE & FLOWERS
+           1. SMOOTH PASTEL ENVELOPE & FOLIAGE
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -41,23 +42,24 @@
         }
         .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default; }
 
-        .env-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #d0c5b5; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 0; }
-        .env-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #faf5f0; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 1; }
+        /* Pastel Pink Envelope Coloring */
+        .env-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e6a8b7; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 0; }
+        .env-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff0f3; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 1; }
         .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; }
 
-        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; pointer-events: none;}
-        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; pointer-events: none;}
-        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #fffdfa; z-index: 4; border-radius: 0 0 4px 4px; pointer-events: none;}
+        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f3b6c2; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; pointer-events: none;}
+        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f3b6c2; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; pointer-events: none;}
+        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #eeaeb9; z-index: 4; border-radius: 0 0 4px 4px; pointer-events: none;}
 
         .env-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 160px solid transparent; border-right: 160px solid transparent;
-            border-top: 120px solid #fdfbf7; transform-origin: top;
+            border-top: 120px solid #f8c8d4; transform-origin: top;
             transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s; z-index: 5;
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
         .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: -1; }
-        .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
+        .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #a48187; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
 
         /* --- THE SWAY ANIMATION --- */
         .f-sway { width: 100%; height: 100%; transform-origin: bottom center; animation: flowerSway 3s ease-in-out infinite alternate; }
@@ -78,7 +80,7 @@
         .env-wrapper.open .f-foliage.pop:nth-of-type(6) { transform: translate(-140px, -70px) scale(0.6) rotate(-35deg); }
         .env-wrapper.open .f-foliage.pop:nth-of-type(7) { transform: translate(140px, -60px) scale(0.6) rotate(40deg); }
 
-        /* --- DRAGGABLE FLOWERS (Perfect Goldilocks Size) --- */
+        /* --- DRAGGABLE FLOWERS --- */
         .f-wrapper {
             position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -131,13 +133,14 @@
         .flap-face { position: absolute; top: 0; left: 0; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 4px 12px 12px 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .flap-front { background-color: var(--card-cover); box-shadow: 5px 10px 25px rgba(0,0,0,0.2); z-index: 2; }
         .flap-front::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 40px; background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, transparent 100%); border-radius: 4px 0 0 4px; }
-        .flap-back { background-color: #fcfcfc; transform: rotateY(180deg); z-index: 1; background: linear-gradient(to left, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 15%, #fcfcfc 40%); border-radius: 12px 4px 4px 12px; }
+        .flap-back { background-color: var(--card-inside); transform: rotateY(180deg); z-index: 1; background: linear-gradient(to left, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 15%, var(--card-inside) 40%); border-radius: 12px 4px 4px 12px; }
 
-        .cover-title { font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1; text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.3); text-align: center; width: 100%; }
+        .cover-title { font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1; text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(255,255,255,0.4); text-align: center; width: 100%; }
         .name-input-container { width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6); margin-top: 40px; display: flex; justify-content: center; }
         .name-input { background: transparent; border: none; color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-        .name-input::placeholder { color: rgba(255,255,255,0.4); font-size: 1.2rem; font-style: italic; font-family: 'Montserrat', sans-serif; text-shadow: none; }
+        .name-input::placeholder { color: rgba(255,255,255,0.6); font-size: 1.2rem; font-style: italic; font-family: 'Montserrat', sans-serif; text-shadow: none; }
 
+        /* Cake Elements */
         .cake-scale-wrapper { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform: scale(0.65); margin-top: 40px; }
         #birthday-cake { position: relative; top: 20px; left: 0; }
         #birthday-cake:before { content:""; position: absolute; background-color: #ede0d4; width: 400px; height:140px; border-radius:50%; left:50%; top:50%; transform: translate(-50%,-10%); box-shadow: inset -2px -5px #e6ccb2; }
@@ -168,7 +171,7 @@
 
         /* UI Overlays */
         .ui-container { position: absolute; bottom: 6%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 5; }
-        .swipe-instruction { font-size: 0.85rem; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
+        .swipe-instruction { font-size: 0.85rem; color: #a48187; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
         .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
         @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
@@ -232,18 +235,18 @@
         .polaroid-frame {
             position: absolute; top: 10px; left: 50%; margin-left: -75px; 
             width: 150px; height: 180px;
-            background: white; padding: 10px; padding-bottom: 40px;
+            background: white; padding: 10px; padding-bottom: 20px; /* Reduced bottom padding */
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
             z-index: 5; 
-            /* Beautiful 8-second slow ejection animation */
-            transition: transform 8s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
+            /* 6 Second Super-Slow Drop Animation */
+            transition: transform 6s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
             transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
         
         /* Directing to local repo image 'polaroid.webp' */
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; background-image: url('polaroid.webp'); }
         
-        /* Slow drop down from out from under the camera body */
+        /* Drops down from out from under the camera body */
         .polaroid-frame.eject {
             opacity: 1;
             transform: translateY(210px) scale(1) rotate(-3deg); 
@@ -262,7 +265,7 @@
         .overlay-screen.active { display: flex; opacity: 1; }
         .msg-h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: var(--card-cover); margin: 0; font-style: italic;}
         .msg-p { color: var(--text-main); font-size: 1.15rem; line-height: 1.8; max-width: 450px; font-weight: 400; margin-top: 20px;}
-        button.standard-btn { margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; background-color: var(--gold-accent); color: white; cursor: pointer; box-shadow: 0 6px 15px rgba(212,175,55,0.3); transition: transform 0.2s; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+        button.standard-btn { margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; background-color: var(--gold-accent); color: white; cursor: pointer; box-shadow: 0 6px 15px rgba(224,142,162,0.3); transition: transform 0.2s; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
         button.standard-btn:active { transform: scale(0.95); }
         
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
@@ -271,7 +274,7 @@
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
-        .fine-print { font-size: 0.85rem; color: #888; font-style: italic; margin-top: 50px;}
+        .fine-print { font-size: 0.85rem; color: #a48187; font-style: italic; margin-top: 50px;}
 
     </style>
 </head>
@@ -299,7 +302,6 @@
                 <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg>
                 </div></div>
-                <!-- Extra Foliage -->
                 <div class="f-foliage f-foliage-5"><div class="f-sway" style="animation-duration: 3.3s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q45,100 20,10" stroke="#079097" stroke-width="3" fill="none"/><path d="M50,200 Q55,100 80,20" stroke="#159faa" stroke-width="2" fill="none"/></svg>
                 </div></div>
@@ -373,8 +375,8 @@
         </div>
     </div>
 
-    <!-- UI Overlay -->
-    <div class="ui-container" style="z-index: 5;">
+    <!-- UI Overlay (Deleted immediately on blowout) -->
+    <div class="ui-container" id="card-ui-container" style="z-index: 5;">
         <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
         <button id="mic-btn" class="mic-btn" onclick="startMic()">Tap here</button>
     </div>
@@ -387,7 +389,7 @@
         <div class="camera-wrapper">
             <!-- The Photo Placed BEHIND the Camera Body -->
             <div class="polaroid-frame" id="polaroid">
-                <!-- PHOTO URL HERE -->
+                <!-- PHOTO URL HERE (local repo file) -->
                 <div class="polaroid-img"></div>
             </div>
 
@@ -429,13 +431,35 @@
 
     <div id="countdown-screen" class="overlay-screen">
         <p class="msg-p" style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">Just kidding. You have to wait exactly...</p>
-        <div id="timer">00h 00m 00s</div>
+        <div id="timer">Loading...</div>
         <p class="fine-print">...this just counts down till I finish work.</p>
     </div>
 
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        /* ==================================
+           GLOBAL: PRE-LOAD TIMER IN BACKGROUND
+        ================================== */
+        let targetTime = new Date();
+        targetTime.setHours(17, 0, 0, 0); 
+        if(new Date() > targetTime) targetTime.setDate(targetTime.getDate() + 1); 
+
+        function updateTimer() {
+            const timerDisplay = document.getElementById("timer");
+            if(!timerDisplay) return;
+            let distance = targetTime.getTime() - new Date().getTime();
+            if (distance < 0) { timerDisplay.innerHTML = "PARTY TIME!"; return; }
+            let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let s = Math.floor((distance % (1000 * 60)) / 1000);
+            const p = (num) => num < 10 ? "0" + num : num;
+            timerDisplay.innerHTML = p(h) + "h " + p(m) + "m " + p(s) + "s";
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer(); // Initial call to pre-load DOM before screen is even visible
+
+
         /* ==================================
            1. ENVELOPE & FLOWER LOGIC
         ================================== */
@@ -526,6 +550,12 @@
         const targetName = "Caitling";
 
         nameInput.addEventListener('input', () => {
+            // Block input if card is already open
+            if(document.getElementById('card-flap').classList.contains('open')) {
+                nameInput.value = targetName;
+                return;
+            }
+
             let len = nameInput.value.length;
             if (len > targetName.length) len = targetName.length;
             nameInput.value = targetName.substring(0, len);
@@ -568,7 +598,9 @@
         function blowOutCandles() {
             if (isBlown) return;
             isBlown = true;
-            micBtn.classList.remove('visible'); 
+            
+            // Delete entire UI container so text never returns
+            document.getElementById('card-ui-container').style.display = 'none';
 
             document.getElementById('flame-0').classList.add('off');
             document.getElementById('flame-1').classList.add('off');
@@ -621,14 +653,14 @@
             document.getElementById('flash').classList.add('flash');
             document.getElementById('camera-hint').style.opacity = '0';
             
-            // Wait 1 second for the flash, then eject the photo SLOWLY over 8 seconds
+            // Wait 1 second for the flash, then eject the photo SLOWLY over 6 seconds
             setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 1000);
 
-            // Wait 11 total seconds (1s flash delay + 8s drop animation + 2s admire time) before moving to next screen
+            // Wait 9.5 total seconds (1s flash delay + 6s drop animation + 2.5s admire time) before moving to next screen
             setTimeout(() => {
                 document.getElementById('camera-screen').style.opacity = '0';
                 setTimeout(() => { document.getElementById('camera-screen').classList.remove('active'); showScreen('message-screen'); }, 1000);
-            }, 11000);
+            }, 9500);
         }
 
         /* ==================================
@@ -682,20 +714,7 @@
 
         function startCountdown() {
             showScreen('countdown-screen');
-            let targetTime = new Date();
-            targetTime.setHours(17, 0, 0, 0); 
-            if(new Date() > targetTime) targetTime.setDate(targetTime.getDate() + 1); 
-
-            const timerDisplay = document.getElementById("timer");
-            setInterval(() => {
-                let distance = targetTime.getTime() - new Date().getTime();
-                if (distance < 0) { timerDisplay.innerHTML = "PARTY TIME!"; return; }
-                let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                let s = Math.floor((distance % (1000 * 60)) / 1000);
-                const p = (num) => num < 10 ? "0" + num : num;
-                timerDisplay.innerHTML = p(h) + "h " + p(m) + "m " + p(s) + "s";
-            }, 1000);
+            // Timer is already ticking via the global updateTimer interval!
         }
     </script>
 </body>

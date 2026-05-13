@@ -22,11 +22,11 @@
             overflow: hidden; 
             perspective: 2500px; 
             color: var(--text-main);
-            touch-action: none; /* Prevents whole page from bouncing on mobile */
+            touch-action: none; /* Prevents screen bouncing while dragging flowers */
         }
 
         /* =========================================
-           1. ENVELOPE & FLOWERS SCREEN
+           1. SMOOTH ENVELOPE & SVG FLOWERS
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -35,53 +35,83 @@
             z-index: 300; transition: opacity 1s;
         }
         
-        .envelope-container { position: relative; cursor: pointer; }
+        .env-wrapper {
+            position: relative; width: 320px; height: 210px;
+            transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer; transform: scale(1);
+        }
         
-        .envelope-body {
-            width: 300px; height: 200px; background: #fafafa;
-            border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative; z-index: 2;
-            /* Inner flap lines */
-            background-image: linear-gradient(30deg, transparent 48%, #eee 50%, transparent 52%), linear-gradient(-30deg, transparent 48%, #eee 50%, transparent 52%);
+        /* Smooth zoom-in animation when tapped */
+        .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default;}
+
+        .env-back {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #e0d8cc; border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
-        .envelope-flap {
-            position: absolute; top: 0; left: 0;
-            width: 0; height: 0;
-            border-left: 150px solid transparent; border-right: 150px solid transparent;
-            border-top: 130px solid #f2f2f2;
-            transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 3; drop-shadow: 0 5px 5px rgba(0,0,0,0.05);
+        .env-flowers {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; overflow: visible;
         }
 
-        .envelope-container.open .envelope-flap {
-            transform: rotateX(180deg); z-index: 1; /* Fold back behind */
+        .env-front-left {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 160px solid #f9f5f0;
+            border-top: 105px solid transparent; border-bottom: 105px solid transparent;
+            z-index: 3; border-radius: 4px 0 0 4px;
         }
+        .env-front-right {
+            position: absolute; top: 0; right: 0; width: 0; height: 0;
+            border-right: 160px solid #f9f5f0;
+            border-top: 105px solid transparent; border-bottom: 105px solid transparent;
+            z-index: 3; border-radius: 0 4px 4px 0;
+        }
+        .env-front-bottom {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-left: 160px solid transparent; border-right: 160px solid transparent;
+            border-bottom: 115px solid #fffdfa;
+            z-index: 4; border-radius: 0 0 4px 4px;
+        }
+
+        .env-flap {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 160px solid transparent; border-right: 160px solid transparent;
+            border-top: 120px solid #fdfbf7;
+            transform-origin: top;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
+        }
+        
+        .env-wrapper.open .env-flap { transform: rotateX(180deg); }
 
         .env-instruction {
-            position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
-            width: 100%; text-align: center; color: #888; font-size: 0.9rem;
-            text-transform: uppercase; letter-spacing: 3px; animation: pulseFade 2s infinite;
+            position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
+            width: 100%; text-align: center; color: #888; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite;
         }
-        @keyframes pulseFade { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* Flowers */
+        /* SVG Flowers */
         .flower {
-            position: absolute; top: 50px; left: 120px;
-            font-size: 3.5rem; width: 60px; height: 60px;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; transform: scale(0) translateY(0); transition: opacity 0.3s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1; /* Hidden in envelope initially */
+            position: absolute; bottom: 20px; left: 120px;
+            width: 80px; height: 160px;
+            opacity: 0; transform: scale(0.2) translateY(50px); 
+            transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1; /* Starts hidden inside */
             cursor: grab;
         }
         .flower:active { cursor: grabbing; }
         
-        .envelope-container.open .flower.pop { opacity: 1; z-index: 4; }
-        .envelope-container.open .flower.pop:nth-child(1) { transform: translate(-100px, -120px) scale(1) rotate(-15deg); }
-        .envelope-container.open .flower.pop:nth-child(2) { transform: translate(100px, -140px) scale(1) rotate(20deg); }
-        .envelope-container.open .flower.pop:nth-child(3) { transform: translate(-140px, -20px) scale(1.2) rotate(-30deg); }
-        .envelope-container.open .flower.pop:nth-child(4) { transform: translate(140px, -10px) scale(1.1) rotate(40deg); }
-        .envelope-container.open .flower.pop:nth-child(5) { transform: translate(0px, -160px) scale(1.3) rotate(5deg); }
+        /* The pop out animation class */
+        .flower.pop { opacity: 1; z-index: 6; }
+        .flower.pop:nth-child(1) { transform: translate(-100px, -130px) scale(0.9) rotate(-25deg); }
+        .flower.pop:nth-child(2) { transform: translate(-40px, -160px) scale(1) rotate(-10deg); }
+        .flower.pop:nth-child(3) { transform: translate(20px, -170px) scale(1.1) rotate(5deg); }
+        .flower.pop:nth-child(4) { transform: translate(80px, -150px) scale(1) rotate(15deg); }
+        .flower.pop:nth-child(5) { transform: translate(130px, -120px) scale(0.9) rotate(25deg); }
+
 
         /* =========================================
            2. THE 3D CARD & CAKE
@@ -125,12 +155,18 @@
 
         /* Magic Typing Typography */
         .cover-title {
-            font-family: 'Playfair Display', serif; font-size: 3.2rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1;
-            text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.4); text-align: center; width: 100%;
+            font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1;
+            text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.3); text-align: center; width: 100%;
         }
+        
+        .name-input-container {
+            width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6);
+            margin-top: 40px; display: flex; justify-content: center;
+        }
+        
         .name-input {
-            background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.8);
-            color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 80%; outline: none; margin-top: 40px; padding-bottom: 5px;
+            background: transparent; border: none; 
+            color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         .name-input::placeholder { color: rgba(255,255,255,0.4); font-size: 1.2rem; font-style: italic; font-family: 'Montserrat', sans-serif; text-shadow: none; }
 
@@ -177,7 +213,7 @@
         ========================================= */
         #camera-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #2c3e50; /* Dark background to make camera pop */
+            background-color: #2c3e50; 
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 250; opacity: 0; pointer-events: none; transition: opacity 1s;
         }
@@ -188,24 +224,19 @@
             position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             display: flex; justify-content: center; z-index: 10;
         }
-        /* Camera Stripes */
         .retro-camera::after {
             content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 30px; height: 100%;
-            background: linear-gradient(to right, #ff5e5e 33%, #ffb142 33%, #ffb142 66%, #4b7bec 66%);
-            z-index: 1;
+            width: 30px; height: 100%; background: linear-gradient(to right, #ff5e5e 33%, #ffb142 33%, #ffb142 66%, #4b7bec 66%); z-index: 1;
         }
-        /* Camera Lens */
         .lens {
             width: 90px; height: 90px; background: #2f3640; border-radius: 50%;
             position: absolute; top: 30px; border: 10px solid #7f8fa6;
             z-index: 2; box-shadow: inset 0 0 20px #000, 0 5px 15px rgba(0,0,0,0.2);
         }
-        .lens::after { /* Lens reflection */
+        .lens::after { 
             content: ''; position: absolute; top: 15px; left: 15px; width: 20px; height: 20px;
             background: rgba(255,255,255,0.4); border-radius: 50%;
         }
-        /* Glowing Shutter Button */
         .shutter-btn {
             position: absolute; top: -15px; right: 25px; width: 40px; height: 20px;
             background: #ff4757; border-radius: 5px 5px 0 0; cursor: pointer;
@@ -215,35 +246,20 @@
         @keyframes shutterGlow { 0% { box-shadow: 0 0 5px #ff4757; } 100% { box-shadow: 0 0 25px #ff4757; } }
         .shutter-btn:active { transform: translateY(5px); }
 
-        /* The Flash Screen */
-        .flash-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 1000; opacity: 0; pointer-events: none;
-        }
+        .flash-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; opacity: 0; pointer-events: none; }
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
         @keyframes screenFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-        /* The Polaroid Photo */
         .polaroid-frame {
             position: absolute; bottom: 10px; width: 150px; height: 180px;
             background: white; padding: 10px; padding-bottom: 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 5;
             transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: translateY(0) scale(0.8); /* Hidden inside bottom of camera */
-            pointer-events: none;
+            transform: translateY(0) scale(0.8); pointer-events: none;
         }
-        /* The Actual Image inside the Polaroid */
-        .polaroid-img {
-            width: 100%; height: 100%; background-color: #eee;
-            background-size: cover; background-position: center;
-        }
-        
+        .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; }
         .polaroid-text { font-family: 'Caveat', cursive; text-align: center; font-size: 1.5rem; color: #333; margin-top: 5px; }
-        
-        /* The Eject Animation */
-        .polaroid-frame.eject {
-            transform: translateY(200px) scale(1.1) rotate(2deg); /* Slides out and slightly tilts */
-        }
+        .polaroid-frame.eject { transform: translateY(200px) scale(1.1) rotate(2deg); }
 
 
         /* =========================================
@@ -268,8 +284,10 @@
         button.standard-btn:active { transform: scale(0.95); }
 
         .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
+        
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
-        #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; }
+        
+        #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: var(--text-main); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 50; transition: transform 0.2s; }
         
         #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
         .fine-print { font-size: 0.85rem; color: #888; font-style: italic; margin-top: 50px;}
@@ -280,16 +298,32 @@
 
     <!-- PHASE 1: ENVELOPE SCREEN -->
     <div id="envelope-screen">
-        <div class="envelope-container" id="env-container" onclick="openEnvelope()">
-            <div class="envelope-flap"></div>
-            <div class="envelope-body"></div>
+        <div class="env-wrapper" id="env-container" onclick="openEnvelope()">
+            <div class="env-back"></div>
             
-            <!-- Draggable Flowers -->
-            <div class="flower">🌸</div>
-            <div class="flower">🌺</div>
-            <div class="flower">🌼</div>
-            <div class="flower">🌷</div>
-            <div class="flower">🌹</div>
+            <div class="env-flowers">
+                <!-- 5 Custom SVG Flowers -->
+                <div class="flower">
+                    <svg viewBox="0 0 100 200"><path d="M50,80 Q40,150 45,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M48,130 Q20,130 20,110 Q30,100 48,120" fill="#52b788"/><path d="M50,85 C20,85 10,50 30,30 C50,10 70,30 50,50 C70,30 90,50 70,85 Z" fill="#e63946"/><path d="M50,80 C30,80 20,55 35,40 C50,25 65,40 50,55 C65,40 80,55 70,80 Z" fill="#da1e37"/><path d="M50,75 C40,75 35,60 42,50 C50,40 58,50 50,60 C58,50 65,60 58,75 Z" fill="#a01a22"/></svg>
+                </div>
+                <div class="flower">
+                    <svg viewBox="0 0 100 200"><path d="M50,90 Q60,150 55,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M53,140 Q80,130 80,100 Q70,110 53,130" fill="#52b788"/><path d="M25,90 C25,40 40,20 50,20 C60,20 75,40 75,90 Z" fill="#ffb703"/><path d="M35,90 C35,50 45,30 50,30 C55,30 65,50 65,90 Z" fill="#fb8500"/></svg>
+                </div>
+                <div class="flower">
+                    <svg viewBox="0 0 100 200"><path d="M50,80 Q45,140 50,200" stroke="#52b788" stroke-width="5" fill="none"/><g fill="#fff" stroke="#eee" stroke-width="1"><ellipse cx="50" cy="30" rx="8" ry="25" /><ellipse cx="50" cy="70" rx="8" ry="25" /><ellipse cx="30" cy="50" rx="25" ry="8" /><ellipse cx="70" cy="50" rx="25" ry="8" /><ellipse cx="36" cy="36" rx="20" ry="8" transform="rotate(45 36 36)" /><ellipse cx="64" cy="64" rx="20" ry="8" transform="rotate(45 64 64)" /><ellipse cx="64" cy="36" rx="20" ry="8" transform="rotate(-45 64 36)" /><ellipse cx="36" cy="64" rx="20" ry="8" transform="rotate(-45 36 64)" /></g><circle cx="50" cy="50" r="12" fill="#ffb703"/></svg>
+                </div>
+                <div class="flower">
+                    <svg viewBox="0 0 100 200"><path d="M50,90 Q50,150 45,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M20,60 Q50,90 50,90 Q50,60 20,60 Z" fill="#ff99c8"/><path d="M80,60 Q50,90 50,90 Q50,60 80,60 Z" fill="#ff99c8"/><path d="M50,20 Q65,60 50,90 Q35,60 50,20 Z" fill="#fcf6bd"/></svg>
+                </div>
+                <div class="flower">
+                    <svg viewBox="0 0 100 200"><path d="M50,85 Q60,150 50,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M25,85 C25,40 40,25 50,25 C60,25 75,40 75,85 Z" fill="#c77dff"/><path d="M35,85 C35,50 45,35 50,35 C55,35 65,50 65,85 Z" fill="#9d4edd"/></svg>
+                </div>
+            </div>
+
+            <div class="env-front-left"></div>
+            <div class="env-front-right"></div>
+            <div class="env-front-bottom"></div>
+            <div class="env-flap"></div>
 
             <div class="env-instruction" id="env-hint">Tap to open</div>
         </div>
@@ -313,7 +347,10 @@
         <div id="card-flap" class="card-left-flap">
             <div class="flap-face flap-front">
                 <h1 class="cover-title">Happy 30th<br>Birthday</h1>
-                <input type="text" id="name-input" class="name-input" placeholder="Type name here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                
+                <div class="name-input-container">
+                    <input type="text" id="name-input" class="name-input" placeholder="Type name here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
             </div>
             <div class="flap-face flap-back"></div>
         </div>
@@ -328,23 +365,18 @@
     <!-- PHASE 3: POLAROID CAMERA -->
     <div id="camera-screen">
         <div class="flash-overlay" id="flash"></div>
-        
         <div class="retro-camera">
             <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
             <div class="lens"></div>
             
-            <!-- The Polaroid that ejects -->
             <div class="polaroid-frame" id="polaroid">
-                
                 <!-- ==========================================
                      ⬇️ PASTE YOUR PHOTO URL IN THE URL() BELOW ⬇️ 
                      ========================================== -->
                 <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
-                
                 <div class="polaroid-text">Memories</div>
             </div>
         </div>
-        
         <p style="color: white; margin-top: 250px; font-family: 'Montserrat'; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Tap the red button</p>
     </div>
 
@@ -397,13 +429,14 @@
             envContainer.classList.add('open');
             hint.innerText = "Drag flowers away";
             
-            // Pop out flowers after flap opens
+            // Wait for flap to mostly open, then bring flowers to front and pop them
             setTimeout(() => {
-                document.querySelectorAll('.flower').forEach(f => f.classList.add('pop'));
-            }, 400);
+                document.querySelectorAll('.flower').forEach(f => {
+                    f.classList.add('pop');
+                });
+            }, 600); 
         }
 
-        // Draggable Flowers (Touch & Mouse)
         let activeFlower = null;
         let startX, startY, curX = 0, curY = 0;
 
@@ -414,11 +447,10 @@
 
         function dragStart(e) {
             if(!envelopeOpened) return;
-            activeFlower = e.target;
-            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            activeFlower = e.currentTarget;
+            let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
-            // Read current transform
             let style = window.getComputedStyle(activeFlower);
             let matrix = new WebKitCSSMatrix(style.transform);
             curX = matrix.m41; curY = matrix.m42;
@@ -432,13 +464,12 @@
 
         function dragMove(e) {
             if(!activeFlower) return;
-            e.preventDefault(); // Stop mobile scrolling
-            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            e.preventDefault(); 
+            let clientX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
             curX = clientX - startX; curY = clientY - startY;
-            // Add slight rotation based on drag distance for effect
-            activeFlower.style.transform = `translate(${curX}px, ${curY}px) scale(1.2) rotate(${curX/5}deg)`;
+            activeFlower.style.transform = `translate(${curX}px, ${curY}px) scale(1.3) rotate(${curX/5}deg)`;
         }
 
         document.addEventListener('mouseup', dragEnd);
@@ -447,23 +478,20 @@
         function dragEnd() {
             if(!activeFlower) return;
             
-            // If dragged far enough away from center
-            if(Math.abs(curX) > 130 || Math.abs(curY) > 130) {
+            if(Math.abs(curX) > 150 || Math.abs(curY) > 150) {
                 activeFlower.style.opacity = '0';
                 activeFlower.style.pointerEvents = 'none';
                 draggedFlowers++;
                 
-                // If all flowers are gone, hide envelope screen
                 if(draggedFlowers >= totalFlowers) {
                     const envScreen = document.getElementById('envelope-screen');
                     envScreen.style.opacity = '0';
                     setTimeout(() => envScreen.style.display = 'none', 1000);
                 }
             } else {
-                // Snap back to relative center if not dragged far enough
                 activeFlower.style.transform = `translate(${curX/2}px, ${curY/2}px) scale(1)`;
             }
-            activeFlower.style.zIndex = 4;
+            activeFlower.style.zIndex = 6;
             activeFlower = null;
         }
 
@@ -480,6 +508,7 @@
             let len = nameInput.value.length;
             if (len > targetName.length) len = targetName.length;
             
+            // Magic replacement!
             nameInput.value = targetName.substring(0, len);
 
             if (nameInput.value === targetName) {
@@ -529,7 +558,6 @@
             }
         }
 
-        // Blow out candles (Tapping candles div or Mic success)
         function blowOutCandles() {
             if (isBlown) return;
             isBlown = true;
@@ -539,7 +567,6 @@
             document.getElementById('flame-1').classList.add('off');
             document.getElementById('flame-2').classList.add('off');
 
-            // Drop card, and reveal POLAROID CAMERA screen
             setTimeout(() => {
                 wrapper.classList.add('exit');
                 setTimeout(() => { 
@@ -595,19 +622,12 @@
             const polaroid = document.getElementById('polaroid');
             const cameraScreen = document.getElementById('camera-screen');
             
-            // Stop glowing
             shutter.style.animation = 'none';
             shutter.style.boxShadow = '0 0 5px #ff4757';
-            
-            // Trigger Flash
             flash.classList.add('flash');
             
-            // Eject Polaroid
-            setTimeout(() => {
-                polaroid.classList.add('eject');
-            }, 300);
+            setTimeout(() => { polaroid.classList.add('eject'); }, 300);
 
-            // Wait a few seconds for her to look at the photo, then move to message screen
             setTimeout(() => {
                 cameraScreen.style.opacity = '0';
                 setTimeout(() => {
@@ -617,8 +637,9 @@
             }, 4500);
         }
 
+
         /* ==================================
-           5. STANDARD SCREENS & TRICK
+           5. 30-TAP TRICK & COUNTDOWN
         ================================== */
         function showScreen(id) {
             document.querySelectorAll('.overlay-screen').forEach(s => s.classList.remove('active'));
@@ -626,6 +647,11 @@
         }
 
         const btnYes = document.getElementById('btn-yes');
+        const btnNo = document.getElementById('btn-no');
+        let currentScale = 1;
+        let tapCount = 0;
+        const maxTaps = 30;
+
         const handleTrick = (e) => {
             if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();
             const container = document.querySelector('.btn-container');
@@ -635,6 +661,12 @@
             btnYes.style.left = `${Math.max(0, Math.floor(Math.random() * maxX))}px`; 
             btnYes.style.top = `${Math.max(0, Math.floor(Math.random() * maxY))}px`;
             btnYes.style.transform = 'none'; 
+
+            if (tapCount < maxTaps) {
+                tapCount++;
+                currentScale += 0.4; // Grows slowly up to 30 taps
+                btnNo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+            }
         };
         btnYes.addEventListener('mouseover', handleTrick);
         btnYes.addEventListener('touchstart', handleTrick);

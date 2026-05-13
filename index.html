@@ -26,12 +26,11 @@
         }
 
         /* =========================================
-           1. SMOOTH ENVELOPE, FOLIAGE & FLOWERS
+           1. SMOOTH ENVELOPE, EXTRA FOLIAGE & FLOWERS
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-page);
-            display: flex; justify-content: center; align-items: center;
+            background-color: var(--bg-page); display: flex; justify-content: center; align-items: center;
             z-index: 300; transition: opacity 1s;
         }
         
@@ -64,19 +63,23 @@
         .f-sway { width: 100%; height: 100%; transform-origin: bottom center; animation: flowerSway 3s ease-in-out infinite alternate; }
         @keyframes flowerSway { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
 
-        /* --- BACKGROUND FOLIAGE (Non-Interactive) --- */
+        /* --- BACKGROUND FOLIAGE (More grass!) --- */
         .f-foliage {
             position: absolute; bottom: 20px; left: 140px; width: 80px; height: 160px;
             transform: scale(0) translateY(50px); opacity: 0; pointer-events: none; z-index: 1;
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .env-wrapper.open .f-foliage.pop { opacity: 1; z-index: 5; }
-        .env-wrapper.open .f-foliage.pop:nth-of-type(1) { transform: translate(-120px, -110px) scale(0.6) rotate(-20deg); }
-        .env-wrapper.open .f-foliage.pop:nth-of-type(2) { transform: translate(120px, -100px) scale(0.6) rotate(30deg); }
-        .env-wrapper.open .f-foliage.pop:nth-of-type(3) { transform: translate(-60px, -150px) scale(0.7) rotate(-10deg); }
-        .env-wrapper.open .f-foliage.pop:nth-of-type(4) { transform: translate(70px, -130px) scale(0.65) rotate(15deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(1) { transform: translate(-120px, -110px) scale(0.7) rotate(-20deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(2) { transform: translate(120px, -100px) scale(0.7) rotate(30deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(3) { transform: translate(-60px, -150px) scale(0.8) rotate(-10deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(4) { transform: translate(70px, -130px) scale(0.75) rotate(15deg); }
+        /* Extra Grass Elements */
+        .env-wrapper.open .f-foliage.pop:nth-of-type(5) { transform: translate(0px, -180px) scale(0.9) rotate(5deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(6) { transform: translate(-140px, -70px) scale(0.6) rotate(-35deg); }
+        .env-wrapper.open .f-foliage.pop:nth-of-type(7) { transform: translate(140px, -60px) scale(0.6) rotate(40deg); }
 
-        /* --- DRAGGABLE FLOWERS --- */
+        /* --- DRAGGABLE FLOWERS (Increased Size) --- */
         .f-wrapper {
             position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -86,19 +89,20 @@
         .f-wrapper * { pointer-events: none; } 
 
         .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 10; }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(5) { transform: translate(calc(-80px + var(--dx)), calc(-170px + var(--dy))) scale(0.4) rotate(-25deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(6) { transform: translate(calc(10px + var(--dx)), calc(-200px + var(--dy))) scale(0.45) rotate(0deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(7) { transform: translate(calc(90px + var(--dx)), calc(-160px + var(--dy))) scale(0.4) rotate(25deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(8) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(-40deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(9) { transform: translate(calc(50px + var(--dx)), calc(-120px + var(--dy))) scale(0.35) rotate(40deg); }
-        .env-wrapper.open .f-wrapper.pop:nth-of-type(10) { transform: translate(calc(0px + var(--dx)), calc(-150px + var(--dy))) scale(0.5) rotate(5deg); }
+        /* Flowers bumped up from ~0.4 to ~0.55 */
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(8) { transform: translate(calc(-90px + var(--dx)), calc(-170px + var(--dy))) scale(0.55) rotate(-25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(9) { transform: translate(calc(20px + var(--dx)), calc(-210px + var(--dy))) scale(0.6) rotate(0deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(10) { transform: translate(calc(100px + var(--dx)), calc(-160px + var(--dy))) scale(0.55) rotate(25deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(11) { transform: translate(calc(-50px + var(--dx)), calc(-120px + var(--dy))) scale(0.5) rotate(-40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(12) { transform: translate(calc(60px + var(--dx)), calc(-120px + var(--dy))) scale(0.5) rotate(40deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-of-type(13) { transform: translate(calc(-10px + var(--dx)), calc(-150px + var(--dy))) scale(0.65) rotate(5deg); }
 
-        .f-wrapper:nth-of-type(5) .f-sway { animation-duration: 3.2s; animation-delay: 0s; }
-        .f-wrapper:nth-of-type(6) .f-sway { animation-duration: 2.8s; animation-delay: -1s; }
-        .f-wrapper:nth-child(7) .f-sway { animation-duration: 3.5s; animation-delay: -2s; }
-        .f-wrapper:nth-child(8) .f-sway { animation-duration: 3.0s; animation-delay: -0.5s; }
-        .f-wrapper:nth-child(9) .f-sway { animation-duration: 3.8s; animation-delay: -1.5s; }
-        .f-wrapper:nth-child(10) .f-sway { animation-duration: 2.5s; animation-delay: -0.8s; }
+        .f-wrapper:nth-of-type(8) .f-sway { animation-duration: 3.2s; animation-delay: 0s; }
+        .f-wrapper:nth-of-type(9) .f-sway { animation-duration: 2.8s; animation-delay: -1s; }
+        .f-wrapper:nth-of-type(10) .f-sway { animation-duration: 3.5s; animation-delay: -2s; }
+        .f-wrapper:nth-of-type(11) .f-sway { animation-duration: 3.0s; animation-delay: -0.5s; }
+        .f-wrapper:nth-of-type(12) .f-sway { animation-duration: 3.8s; animation-delay: -1.5s; }
+        .f-wrapper:nth-of-type(13) .f-sway { animation-duration: 2.5s; animation-delay: -0.8s; }
 
         .f-wrapper.cyan { --f-c1: #54b8aa; --f-c2: #a7ffee; --f-c3: #39c6d6; --f-glow: #6bf0ff; --f-stem: #14757a; }
         .f-wrapper.pink { --f-c1: #b8548a; --f-c2: #ffa7d8; --f-c3: #d63996; --f-glow: #ff6bbf; --f-stem: #7a1445; }
@@ -131,13 +135,11 @@
         .flap-front::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 40px; background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, transparent 100%); border-radius: 4px 0 0 4px; }
         .flap-back { background-color: #fcfcfc; transform: rotateY(180deg); z-index: 1; background: linear-gradient(to left, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 15%, #fcfcfc 40%); border-radius: 12px 4px 4px 12px; }
 
-        /* Magic Typing Typography */
         .cover-title { font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: #fff; margin: 0; line-height: 1.1; text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(212,175,55,0.3); text-align: center; width: 100%; }
         .name-input-container { width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6); margin-top: 40px; display: flex; justify-content: center; }
         .name-input { background: transparent; border: none; color: #fff; font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
         .name-input::placeholder { color: rgba(255,255,255,0.4); font-size: 1.2rem; font-style: italic; font-family: 'Montserrat', sans-serif; text-shadow: none; }
 
-        /* Cake Elements */
         .cake-scale-wrapper { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transform: scale(0.65); margin-top: 40px; }
         #birthday-cake { position: relative; top: 20px; left: 0; }
         #birthday-cake:before { content:""; position: absolute; background-color: #ede0d4; width: 400px; height:140px; border-radius:50%; left:50%; top:50%; transform: translate(-50%,-10%); box-shadow: inset -2px -5px #e6ccb2; }
@@ -188,9 +190,10 @@
 
         .camera-wrapper {
             position: relative; display: flex; flex-direction: column; align-items: center;
-            margin-top: -80px; /* Lifts the camera up higher */
+            margin-top: -100px; /* Lifts the camera up higher */
         }
 
+        /* The Main Camera Body (Z-index 10) */
         .retro-camera {
             width: 220px; height: 160px; background: #fdfaf6; border-radius: 10px 10px 0 0;
             position: relative; display: flex; justify-content: center; z-index: 10;
@@ -203,7 +206,7 @@
         }
         .camera-base {
             position: absolute; bottom: -40px; left: 0; width: 100%; height: 40px;
-            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 5;
+            background: #2f3542; border-radius: 0 0 10px 10px; z-index: 10; /* Must cover photo */
             box-shadow: inset 0 10px 15px rgba(0,0,0,0.2);
         }
         .lens {
@@ -227,26 +230,29 @@
         .flash-overlay.flash { animation: screenFlash 0.8s ease-out forwards; }
         @keyframes screenFlash { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-        /* The Photo That Ejects DOWN */
+        /* The Photo (Placed behind the camera body, Z-index 5) */
         .polaroid-frame {
-            position: absolute; bottom: 0px; width: 150px; height: 180px;
+            position: absolute; top: 10px; left: 50%; margin-left: -75px; 
+            width: 150px; height: 180px;
             background: white; padding: 10px; padding-bottom: 40px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-            z-index: 2; /* Behind the black camera base (z-index 5) */
-            transition: transform 3s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
+            z-index: 5; /* Behind retro-camera (10) */
+            /* 6 Second Super-Slow Drop Animation */
+            transition: transform 6s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.5s;
             transform: translateY(0) scale(0.9); pointer-events: none; opacity: 0;
         }
         .polaroid-img { width: 100%; height: 100%; background-color: #eee; background-size: cover; background-position: center; }
         .polaroid-text { font-family: 'Caveat', cursive; text-align: center; font-size: 1.5rem; color: #333; margin-top: 5px; }
         
+        /* Drops down from out from under the camera body */
         .polaroid-frame.eject {
             opacity: 1;
-            transform: translateY(180px) scale(1) rotate(-2deg); /* Slides out the bottom */
-            z-index: 2;
+            transform: translateY(210px) scale(1) rotate(-3deg); 
+            z-index: 5;
         }
 
         .camera-instruction {
-            color: white; margin-top: 250px; font-family: 'Montserrat'; font-size: 0.9rem; 
+            color: white; margin-top: 280px; font-family: 'Montserrat'; font-size: 0.9rem; 
             text-transform: uppercase; letter-spacing: 2px; transition: opacity 0.5s;
         }
 
@@ -281,7 +287,7 @@
             
             <div class="env-flowers">
                 
-                <!-- BACKGROUND FOLIAGE (Non-Interactive, just sways beautifully) -->
+                <!-- BACKGROUND FOLIAGE -->
                 <div class="f-foliage f-foliage-1"><div class="f-sway" style="animation-duration: 3.5s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q50,100 20,20" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q60,120 80,40" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q40,150 10,90" stroke="#1aaa15" stroke-width="2" fill="none"/><path d="M50,200 Q70,140 90,80" stroke="#159faa" stroke-width="3" fill="none"/><path d="M50,200 Q50,80 50,0" stroke="#079097" stroke-width="4" fill="none"/></svg>
                 </div></div>
@@ -293,6 +299,16 @@
                 </div></div>
                 <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg>
+                </div></div>
+                <!-- Extra Foliage -->
+                <div class="f-foliage f-foliage-5"><div class="f-sway" style="animation-duration: 3.3s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q45,100 20,10" stroke="#079097" stroke-width="3" fill="none"/><path d="M50,200 Q55,100 80,20" stroke="#159faa" stroke-width="2" fill="none"/></svg>
+                </div></div>
+                <div class="f-foliage f-foliage-6"><div class="f-sway" style="animation-duration: 2.9s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q60,120 90,40" stroke="#1aaa15" stroke-width="3" fill="none"/></svg>
+                </div></div>
+                <div class="f-foliage f-foliage-7"><div class="f-sway" style="animation-duration: 3.6s;">
+                    <svg viewBox="0 0 100 200"><path d="M50,200 Q40,120 10,40" stroke="#079097" stroke-width="3" fill="none"/></svg>
                 </div></div>
 
 
@@ -370,16 +386,16 @@
         <div class="flash-overlay" id="flash"></div>
         
         <div class="camera-wrapper">
+            <!-- The Photo Placed BEHIND the Camera Body -->
+            <div class="polaroid-frame" id="polaroid">
+                <!-- PHOTO URL HERE -->
+                <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
+                <div class="polaroid-text">Memories</div>
+            </div>
+
+            <!-- The Main Camera Body -->
             <div class="retro-camera">
                 <div class="camera-stripe"></div>
-                
-                <!-- The Photo Slides DOWN from behind the base -->
-                <div class="polaroid-frame" id="polaroid">
-                    <!-- PHOTO URL HERE -->
-                    <div class="polaroid-img" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=400&auto=format&fit=crop');"></div>
-                    <div class="polaroid-text">Memories</div>
-                </div>
-
                 <div class="viewfinder"></div>
                 <div class="lens"></div>
                 <div class="shutter-btn" id="shutter" onclick="takePhoto()"></div>
@@ -433,8 +449,11 @@
             if (envelopeOpened) return;
             envelopeOpened = true;
             
-            document.getElementById('env-container').classList.add('open');
-            document.getElementById('env-hint').innerText = "Drag flowers away";
+            const envContainer = document.getElementById('env-container');
+            const hint = document.getElementById('env-hint');
+            
+            envContainer.classList.add('open');
+            hint.innerText = "Drag flowers away";
             
             setTimeout(() => {
                 document.querySelectorAll('.f-wrapper, .f-foliage').forEach(f => f.classList.add('pop'));
@@ -604,14 +623,14 @@
             document.getElementById('flash').classList.add('flash');
             document.getElementById('camera-hint').style.opacity = '0';
             
-            // Photo ejects DOWN out of the bottom slot
+            // Photo ejects SLOWLY DOWN from underneath the camera body
             setTimeout(() => { document.getElementById('polaroid').classList.add('eject'); }, 300);
 
-            // Wait 5 seconds so she can admire the photo, then proceed
+            // Wait 8.5 seconds (6s for the drop animation + 2.5s to admire it)
             setTimeout(() => {
                 document.getElementById('camera-screen').style.opacity = '0';
                 setTimeout(() => { document.getElementById('camera-screen').classList.remove('active'); showScreen('message-screen'); }, 1000);
-            }, 6000);
+            }, 8500);
         }
 
         /* ==================================
@@ -643,7 +662,6 @@
             let randomX, randomY;
             let isSafe = false;
 
-            // Ensures YES button never overlaps NO button
             while(!isSafe) {
                 randomX = Math.floor(Math.random() * maxX);
                 randomY = Math.floor(Math.random() * maxY);

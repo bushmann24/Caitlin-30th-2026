@@ -8,11 +8,11 @@
     <style>
         :root {
             /* CHIC PASTEL & BLUSH PALETTE */
-            --bg-page: #fbf5f6; /* Very soft blush pastel */
-            --card-cover: #e4b5c0; /* Elegant rose/blush pink */
-            --card-inside: #ffffff; /* Crisp white inside */
-            --gold-accent: #d297a7; /* Rose-gold for buttons and highlights */
-            --text-main: #4a4142; /* Soft slate/charcoal instead of brown */
+            --bg-page: #fbf5f6; 
+            --card-cover: #e4b5c0; 
+            --card-inside: #ffffff; 
+            --gold-accent: #d297a7; 
+            --text-main: #4a4142; 
         }
 
         body, html {
@@ -42,7 +42,6 @@
         }
         .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default; }
 
-        /* FIXED LAYER TRANSPARENCY */
         .env-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #eacbd2; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 1; }
         .env-inner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fcf4f5; border-radius: 4px; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); z-index: 2; }
         .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; overflow: visible; }
@@ -58,7 +57,6 @@
             transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s; z-index: 6;
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
-        /* Flap goes to z-index 0 (behind env-back which is 1) ensuring no see-through! */
         .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 0; }
         
         .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #a6989a; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
@@ -269,11 +267,20 @@
         ========================================= */
         .overlay-screen { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; text-align: center; padding: 40px; box-sizing: border-box; z-index: 200; opacity: 0; transition: opacity 1s ease-in; }
         .overlay-screen.active { display: flex; opacity: 1; }
-        .msg-h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; color: var(--card-cover); margin: 0; font-style: italic;}
-        .msg-p { color: var(--text-main); font-size: 1.15rem; line-height: 1.8; max-width: 450px; font-weight: 400; margin-top: 20px;}
         
+        /* CUSTOM JAVON MESSAGE STYLING */
+        .msg-container {
+            max-width: 90%; background: rgba(255,255,255,0.7); padding: 30px; 
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .msg-h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--card-cover); margin: 0 0 10px 0; font-style: italic;}
+        .msg-p { color: var(--text-main); font-size: 1rem; line-height: 1.6; text-align: left;}
+        
+        /* LARGE PARTY HEADING */
+        .party-h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 12vw, 5.5rem); line-height: 1.1; color: var(--card-cover); margin-bottom: 20px; font-style: italic;}
+
         button.standard-btn { 
-            margin-top: 40px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; 
+            margin-top: 30px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; 
             background-color: var(--gold-accent); color: white; cursor: pointer; 
             box-shadow: 0 6px 15px rgba(210, 151, 167, 0.4); transition: transform 0.2s; 
             font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; 
@@ -286,8 +293,8 @@
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: #a49799; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 50; }
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
-        #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 30px 0;}
-        .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 50px;}
+        #timer { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-accent); margin: 10px 0;}
+        .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 30px;}
 
     </style>
 </head>
@@ -314,7 +321,6 @@
                 <div class="f-foliage f-foliage-4"><div class="f-sway" style="animation-duration: 3.8s; animation-delay: -1.5s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q60,100 90,30" stroke="#1aaa15" stroke-width="3" fill="none"/><path d="M50,200 Q40,120 20,50" stroke="#079097" stroke-width="2.5" fill="none"/><path d="M50,200 Q70,150 95,90" stroke="#159faa" stroke-width="2" fill="none"/></svg>
                 </div></div>
-                <!-- Extra Foliage -->
                 <div class="f-foliage f-foliage-5"><div class="f-sway" style="animation-duration: 3.3s;">
                     <svg viewBox="0 0 100 200"><path d="M50,200 Q45,100 20,10" stroke="#079097" stroke-width="3" fill="none"/><path d="M50,200 Q55,100 80,20" stroke="#159faa" stroke-width="2" fill="none"/></svg>
                 </div></div>
@@ -421,8 +427,18 @@
 
     <!-- PHASE 4: FINAL SCREENS -->
     <div id="message-screen" class="overlay-screen">
-        <h1 class="msg-h1">Happy Birthday</h1>
-        <p class="msg-p">Welcome to the 30 club. I hope you have the most amazing day ever, because you truly deserve it.</p>
+        <div class="msg-container">
+            <h1 class="msg-h1">Dear Caitlin,</h1>
+            <p class="msg-p">
+                I guess it’s your birthday!!!<br>
+                And who would’ve thought? You don’t look a day over 24...<br><br>
+                I truly hope you have the bestest birthday... week... month!!!! You are one of the kindest (most of the time) people I have met, and I’m glad to have met you at this wonderful place we call work.<br><br>
+                Thanks for always keeping up with my bullshit over this last year. You is the realest brown girl.<br><br>
+                Keep being you, period. 💅🏾<br><br>
+                Love,<br>
+                Javon
+            </p>
+        </div>
         <button class="standard-btn" onclick="showScreen('trick-screen')">Next</button>
     </div>
 
@@ -436,13 +452,13 @@
     </div>
 
     <div id="joke-screen" class="overlay-screen">
-        <h1 class="msg-h1">Oh okay...</h1>
+        <h1 class="msg-h1" style="font-size: 3.5rem;">Oh okay...</h1>
         <p class="msg-p">I guess I'll just have to give it to you tomorrow........</p>
         <button class="standard-btn" onclick="startCountdown()">Wait, what? Next...</button>
     </div>
 
     <div id="countdown-screen" class="overlay-screen">
-        <p class="msg-p" style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">Just kidding. You have to wait exactly...</p>
+        <h1 class="party-h1">Time till we PARTY!!!</h1>
         <div id="timer">Loading...</div>
         <p class="fine-print">...this just counts down till I finish work.</p>
     </div>
@@ -559,7 +575,7 @@
         let canSwipe = false; 
         const nameInput = document.getElementById('name-input');
         const swipeHint = document.getElementById('swipe-hint');
-        const targetName = "Caitling";
+        const targetName = "Caitling"; // (Inside joke spelling!)
 
         nameInput.addEventListener('input', () => {
             if(document.getElementById('card-flap').classList.contains('open')) {
@@ -583,6 +599,9 @@
         ================================== */
         let micEnabled = false;
         let isBlown = false;
+        let micStream = null;
+        let audioCtx = null;
+        
         const wrapper = document.getElementById('main-card');
         const flap = document.getElementById('card-flap');
         const micBtn = document.getElementById('mic-btn');
@@ -608,6 +627,11 @@
         function blowOutCandles() {
             if (isBlown) return;
             isBlown = true;
+            micEnabled = false; 
+            
+            // Clean up microphone to prevent background audio bug
+            if (micStream) micStream.getTracks().forEach(track => track.stop());
+            if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
             
             // Delete entire UI container so text never returns
             document.getElementById('card-ui-container').style.display = 'none';
@@ -626,19 +650,29 @@
             if (isBlown) return;
             micBtn.innerText = "Listening...";
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
-                const audioCtx = new AudioContext();
+                audioCtx = new AudioContext();
                 const analyser = audioCtx.createAnalyser();
-                const microphone = audioCtx.createMediaStreamSource(stream);
+                const microphone = audioCtx.createMediaStreamSource(micStream);
                 microphone.connect(analyser); analyser.fftSize = 256;
                 const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
                 micEnabled = true;
                 micBtn.innerText = "Blow now!"; micBtn.style.color = "var(--text-main)"; micBtn.style.borderColor = "var(--text-main)";
 
+                // 10 Second Security Timer - Shuts off mic to save battery/audio conflicts
+                setTimeout(() => {
+                    if (micEnabled && !isBlown) {
+                        micEnabled = false;
+                        micBtn.innerText = "Mic Timed Out (Tap Candles)";
+                        if (micStream) micStream.getTracks().forEach(track => track.stop());
+                        if (audioCtx && audioCtx.state !== 'closed') audioCtx.close();
+                    }
+                }, 10000);
+
                 function detectBlow() {
-                    if (isBlown) return;
+                    if (isBlown || !micEnabled) return; 
                     analyser.getByteFrequencyData(dataArray);
                     let sum = 0; for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
                     if ((sum / dataArray.length) > 75) blowOutCandles();

@@ -22,11 +22,11 @@
             overflow: hidden; 
             perspective: 2500px; 
             color: var(--text-main);
-            touch-action: none; /* Prevents screen bouncing while dragging flowers */
+            touch-action: none; 
         }
 
         /* =========================================
-           1. SMOOTH ENVELOPE & SVG FLOWERS
+           1. SMOOTH ENVELOPE & GLOWING FLOWERS
         ========================================= */
         #envelope-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -40,50 +40,26 @@
             transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
             cursor: pointer; transform: scale(1);
         }
-        
-        /* Smooth zoom-in animation when tapped */
         .env-wrapper.open { transform: scale(1.1) translateY(15px); cursor: default;}
 
         .env-back {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #e0d8cc; border-radius: 4px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            background: #e0d8cc; border-radius: 4px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
-        .env-flowers {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 2; overflow: visible;
-        }
+        .env-flowers { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; overflow: visible; }
 
-        .env-front-left {
-            position: absolute; top: 0; left: 0; width: 0; height: 0;
-            border-left: 160px solid #f9f5f0;
-            border-top: 105px solid transparent; border-bottom: 105px solid transparent;
-            z-index: 3; border-radius: 4px 0 0 4px;
-        }
-        .env-front-right {
-            position: absolute; top: 0; right: 0; width: 0; height: 0;
-            border-right: 160px solid #f9f5f0;
-            border-top: 105px solid transparent; border-bottom: 105px solid transparent;
-            z-index: 3; border-radius: 0 4px 4px 0;
-        }
-        .env-front-bottom {
-            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
-            border-left: 160px solid transparent; border-right: 160px solid transparent;
-            border-bottom: 115px solid #fffdfa;
-            z-index: 4; border-radius: 0 0 4px 4px;
-        }
+        .env-front-left { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 4px 0 0 4px; }
+        .env-front-right { position: absolute; top: 0; right: 0; width: 0; height: 0; border-right: 160px solid #f9f5f0; border-top: 105px solid transparent; border-bottom: 105px solid transparent; z-index: 3; border-radius: 0 4px 4px 0; }
+        .env-front-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 115px solid #fffdfa; z-index: 4; border-radius: 0 0 4px 4px; }
 
         .env-flap {
             position: absolute; top: 0; left: 0; width: 0; height: 0;
             border-left: 160px solid transparent; border-right: 160px solid transparent;
-            border-top: 120px solid #fdfbf7;
-            transform-origin: top;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 5;
+            border-top: 120px solid #fdfbf7; transform-origin: top;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 5;
             filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.08));
         }
-        
         .env-wrapper.open .env-flap { transform: rotateX(180deg); }
 
         .env-instruction {
@@ -91,26 +67,66 @@
             width: 100%; text-align: center; color: #888; font-size: 0.85rem;
             text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite;
         }
-        @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* SVG Flowers */
-        .flower {
-            position: absolute; bottom: 20px; left: 120px;
-            width: 80px; height: 160px;
-            opacity: 0; transform: scale(0.2) translateY(50px); 
+        /* --- THE GLOWING FLOWERS COMPONENT --- */
+        .f-wrapper {
+            position: absolute; bottom: 20px; left: 140px; transform: scale(0);
             transition: opacity 0.4s, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1; /* Starts hidden inside */
-            cursor: grab;
+            cursor: grab; z-index: 1; opacity: 0;
         }
-        .flower:active { cursor: grabbing; }
-        
-        /* The pop out animation class */
-        .flower.pop { opacity: 1; z-index: 6; }
-        .flower.pop:nth-child(1) { transform: translate(-100px, -130px) scale(0.9) rotate(-25deg); }
-        .flower.pop:nth-child(2) { transform: translate(-40px, -160px) scale(1) rotate(-10deg); }
-        .flower.pop:nth-child(3) { transform: translate(20px, -170px) scale(1.1) rotate(5deg); }
-        .flower.pop:nth-child(4) { transform: translate(80px, -150px) scale(1) rotate(15deg); }
-        .flower.pop:nth-child(5) { transform: translate(130px, -120px) scale(0.9) rotate(25deg); }
+        .f-wrapper:active { cursor: grabbing; }
+        .f-wrapper * { pointer-events: none; } /* Crucial for smooth dragging */
+
+        /* Pop Out Positions */
+        .env-wrapper.open .f-wrapper.pop { opacity: 1; z-index: 6; }
+        .env-wrapper.open .f-wrapper.pop:nth-child(1) { transform: translate(-80px, -170px) scale(0.4) rotate(-15deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(2) { transform: translate(10px, -200px) scale(0.45) rotate(5deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(3) { transform: translate(90px, -160px) scale(0.4) rotate(20deg); }
+        .env-wrapper.open .f-wrapper.pop:nth-child(4) { transform: translate(-30px, -150px) scale(0.35) rotate(-25deg); }
+
+        /* Flower Color Themes */
+        .f-wrapper.cyan { --f-c1: #54b8aa; --f-c2: #a7ffee; --f-c3: #39c6d6; --f-glow: #6bf0ff; --f-stem: #14757a; }
+        .f-wrapper.pink { --f-c1: #b8548a; --f-c2: #ffa7d8; --f-c3: #d63996; --f-glow: #ff6bbf; --f-stem: #7a1445; }
+        .f-wrapper.purple { --f-c1: #8a54b8; --f-c2: #d8a7ff; --f-c3: #9639d6; --f-glow: #bf6bff; --f-stem: #4a147a; }
+
+        /* Flower Head */
+        .f-leafs { position: relative; width: 80px; height: 80px; }
+        .f-leafs::after { 
+            content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; background-color: var(--f-glow); filter: blur(30px); z-index: -1; 
+        }
+        .f-leaf {
+            position: absolute; bottom: 0; left: 50%; width: 80px; height: 110px;
+            border-radius: 51% 49% 47% 53% / 44% 45% 55% 69%;
+            background-color: var(--f-c2); background-image: linear-gradient(to top, var(--f-c1), var(--f-c2));
+            transform-origin: bottom center; opacity: 0.9; box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        .f-leaf--1 { transform: translate(-50%, 0) rotate(-40deg); }
+        .f-leaf--2 { transform: translate(-50%, 0) rotate(0deg); }
+        .f-leaf--3 { transform: translate(-50%, 0) rotate(40deg); }
+        .f-leaf--4 {
+            width: 80px; height: 80px; transform-origin: bottom left; border-radius: 40px 100px 40px 40px;
+            transform: translate(-50%, 0) rotate(-43deg); background-image: linear-gradient(to top, var(--f-c3), var(--f-c2)); z-index: 1; opacity: 0.8;
+        }
+        .f-white-circle {
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            width: 90px; height: 40px; border-radius: 50%; background-color: #fff; z-index: 2;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        /* Stem & Leaves */
+        .f-line {
+            position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+            width: 15px; height: 250px;
+            background-image: linear-gradient(to top, transparent 5%, var(--f-stem), var(--f-c3));
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.5); z-index: -1;
+        }
+        .f-line__leaf {
+            position: absolute; top: 20%; left: 100%; width: 70px; height: 90px;
+            border-top-right-radius: 90px; border-bottom-left-radius: 90px;
+            background-image: linear-gradient(to top, rgba(0,0,0, 0.2), var(--f-c3));
+            transform-origin: bottom left; transform: rotate(30deg);
+        }
+        .f-line__leaf--2 { top: 50%; left: -460%; transform-origin: bottom right; border-radius: 90px 0 0 90px; transform: rotate(-30deg); }
 
 
         /* =========================================
@@ -201,8 +217,10 @@
 
         /* --- UI ELEMENTS --- */
         .ui-container { position: absolute; bottom: 6%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 5; }
-        .swipe-instruction { font-size: 0.85rem; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        .swipe-instruction.show { opacity: 1; animation: pulseFade 2.5s infinite; }
+        
+        .swipe-instruction { font-size: 0.85rem; color: #999; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
+        /* When ready to swipe, show and pulse */
+        .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
         
         .mic-btn { margin-top: 15px; padding: 12px 28px; font-size: 0.8rem; font-weight: 600; border: 2px solid var(--gold-accent); border-radius: 30px; background-color: transparent; color: var(--gold-accent); cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px; opacity: 0; pointer-events: none; }
         .mic-btn.visible { opacity: 1; pointer-events: auto; }
@@ -302,22 +320,40 @@
             <div class="env-back"></div>
             
             <div class="env-flowers">
-                <!-- 5 Custom SVG Flowers -->
-                <div class="flower">
-                    <svg viewBox="0 0 100 200"><path d="M50,80 Q40,150 45,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M48,130 Q20,130 20,110 Q30,100 48,120" fill="#52b788"/><path d="M50,85 C20,85 10,50 30,30 C50,10 70,30 50,50 C70,30 90,50 70,85 Z" fill="#e63946"/><path d="M50,80 C30,80 20,55 35,40 C50,25 65,40 50,55 C65,40 80,55 70,80 Z" fill="#da1e37"/><path d="M50,75 C40,75 35,60 42,50 C50,40 58,50 50,60 C58,50 65,60 58,75 Z" fill="#a01a22"/></svg>
+                
+                <!-- Custom Glowing CSS Flowers -->
+                <div class="f-wrapper cyan">
+                    <div class="f-leafs">
+                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
+                        <div class="f-white-circle"></div>
+                    </div>
+                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-                <div class="flower">
-                    <svg viewBox="0 0 100 200"><path d="M50,90 Q60,150 55,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M53,140 Q80,130 80,100 Q70,110 53,130" fill="#52b788"/><path d="M25,90 C25,40 40,20 50,20 C60,20 75,40 75,90 Z" fill="#ffb703"/><path d="M35,90 C35,50 45,30 50,30 C55,30 65,50 65,90 Z" fill="#fb8500"/></svg>
+
+                <div class="f-wrapper pink">
+                    <div class="f-leafs">
+                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
+                        <div class="f-white-circle"></div>
+                    </div>
+                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-                <div class="flower">
-                    <svg viewBox="0 0 100 200"><path d="M50,80 Q45,140 50,200" stroke="#52b788" stroke-width="5" fill="none"/><g fill="#fff" stroke="#eee" stroke-width="1"><ellipse cx="50" cy="30" rx="8" ry="25" /><ellipse cx="50" cy="70" rx="8" ry="25" /><ellipse cx="30" cy="50" rx="25" ry="8" /><ellipse cx="70" cy="50" rx="25" ry="8" /><ellipse cx="36" cy="36" rx="20" ry="8" transform="rotate(45 36 36)" /><ellipse cx="64" cy="64" rx="20" ry="8" transform="rotate(45 64 64)" /><ellipse cx="64" cy="36" rx="20" ry="8" transform="rotate(-45 64 36)" /><ellipse cx="36" cy="64" rx="20" ry="8" transform="rotate(-45 36 64)" /></g><circle cx="50" cy="50" r="12" fill="#ffb703"/></svg>
+
+                <div class="f-wrapper purple">
+                    <div class="f-leafs">
+                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
+                        <div class="f-white-circle"></div>
+                    </div>
+                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-                <div class="flower">
-                    <svg viewBox="0 0 100 200"><path d="M50,90 Q50,150 45,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M20,60 Q50,90 50,90 Q50,60 20,60 Z" fill="#ff99c8"/><path d="M80,60 Q50,90 50,90 Q50,60 80,60 Z" fill="#ff99c8"/><path d="M50,20 Q65,60 50,90 Q35,60 50,20 Z" fill="#fcf6bd"/></svg>
+
+                <div class="f-wrapper pink">
+                    <div class="f-leafs">
+                        <div class="f-leaf f-leaf--1"></div><div class="f-leaf f-leaf--2"></div><div class="f-leaf f-leaf--3"></div><div class="f-leaf f-leaf--4"></div>
+                        <div class="f-white-circle"></div>
+                    </div>
+                    <div class="f-line"><div class="f-line__leaf"></div><div class="f-line__leaf f-line__leaf--2"></div></div>
                 </div>
-                <div class="flower">
-                    <svg viewBox="0 0 100 200"><path d="M50,85 Q60,150 50,200" stroke="#52b788" stroke-width="5" fill="none"/><path d="M25,85 C25,40 40,25 50,25 C60,25 75,40 75,85 Z" fill="#c77dff"/><path d="M35,85 C35,50 45,35 50,35 C55,35 65,50 65,85 Z" fill="#9d4edd"/></svg>
-                </div>
+
             </div>
 
             <div class="env-front-left"></div>
@@ -347,7 +383,6 @@
         <div id="card-flap" class="card-left-flap">
             <div class="flap-face flap-front">
                 <h1 class="cover-title">Happy 30th<br>Birthday</h1>
-                
                 <div class="name-input-container">
                     <input type="text" id="name-input" class="name-input" placeholder="Type name here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 </div>
@@ -356,6 +391,7 @@
         </div>
     </div>
 
+    <!-- UI Overlay (Swipe Hint is ONLY shown on front page, never cake) -->
     <div class="ui-container" style="z-index: 5;">
         <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
         <button id="mic-btn" class="mic-btn" onclick="startMic()">Tap here</button>
@@ -417,7 +453,7 @@
         ================================== */
         let envelopeOpened = false;
         let draggedFlowers = 0;
-        const totalFlowers = 5;
+        const totalFlowers = 4; // We have 4 glowing CSS flowers
 
         function openEnvelope() {
             if (envelopeOpened) return;
@@ -429,9 +465,9 @@
             envContainer.classList.add('open');
             hint.innerText = "Drag flowers away";
             
-            // Wait for flap to mostly open, then bring flowers to front and pop them
+            // Pop out flowers after flap opens
             setTimeout(() => {
-                document.querySelectorAll('.flower').forEach(f => {
+                document.querySelectorAll('.f-wrapper').forEach(f => {
                     f.classList.add('pop');
                 });
             }, 600); 
@@ -440,7 +476,7 @@
         let activeFlower = null;
         let startX, startY, curX = 0, curY = 0;
 
-        document.querySelectorAll('.flower').forEach(f => {
+        document.querySelectorAll('.f-wrapper').forEach(f => {
             f.addEventListener('mousedown', dragStart);
             f.addEventListener('touchstart', dragStart, {passive: false});
         });
@@ -469,7 +505,7 @@
             let clientY = e.type.includes('mouse') ? e.clientY : e.changedTouches[0].clientY;
             
             curX = clientX - startX; curY = clientY - startY;
-            activeFlower.style.transform = `translate(${curX}px, ${curY}px) scale(1.3) rotate(${curX/5}deg)`;
+            activeFlower.style.transform = `translate(${curX}px, ${curY}px) scale(0.6) rotate(${curX/5}deg)`;
         }
 
         document.addEventListener('mouseup', dragEnd);
@@ -489,7 +525,7 @@
                     setTimeout(() => envScreen.style.display = 'none', 1000);
                 }
             } else {
-                activeFlower.style.transform = `translate(${curX/2}px, ${curY/2}px) scale(1)`;
+                activeFlower.style.transform = `translate(${curX/2}px, ${curY/2}px) scale(0.4)`;
             }
             activeFlower.style.zIndex = 6;
             activeFlower = null;
@@ -548,11 +584,19 @@
             if (deltaY < 100) {
                 if (!flap.classList.contains('open') && deltaX > 40) { 
                     flap.classList.add('open');
-                    swipeHint.style.display = 'none'; 
+                    
+                    // Remove swipe hint completely once opened
+                    swipeHint.classList.remove('show'); 
+                    swipeHint.style.display = 'none';
+
                     setTimeout(() => { if(!micEnabled && !isBlown) micBtn.classList.add('visible'); }, 800);
                 } else if (flap.classList.contains('open') && deltaX < -40) {
                     flap.classList.remove('open');
-                    swipeHint.style.display = 'block'; 
+                    
+                    // Bring hint back when closed
+                    swipeHint.style.display = 'block';
+                    setTimeout(() => { swipeHint.classList.add('show'); }, 50);
+
                     micBtn.classList.remove('visible');
                 }
             }
@@ -650,7 +694,7 @@
         const btnNo = document.getElementById('btn-no');
         let currentScale = 1;
         let tapCount = 0;
-        const maxTaps = 30;
+        const maxTaps = 30; // Slower growth, 30 taps to fill screen
 
         const handleTrick = (e) => {
             if(e.type === 'touchstart' || e.type === 'click') e.preventDefault();
@@ -664,7 +708,7 @@
 
             if (tapCount < maxTaps) {
                 tapCount++;
-                currentScale += 0.4; // Grows slowly up to 30 taps
+                currentScale += 0.4; 
                 btnNo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
             }
         };

@@ -20,7 +20,9 @@
         }
 
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 100%; 
+            /* 100dvh fixes the iPhone Safari address bar overlap issue */
+            height: 100dvh; min-height: -webkit-fill-available;
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-page);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -28,6 +30,14 @@
             perspective: 2500px; 
             color: var(--text-main);
             touch-action: none; 
+        }
+
+        /* Responsive scaling for shorter phone screens */
+        @media (max-height: 700px) {
+            .env-wrapper { transform: scale(0.85) !important; }
+            .env-wrapper.open { transform: scale(0.95) translateY(10px) !important; }
+            .cake-scale-wrapper { transform: scale(0.55) !important; }
+            .retro-camera { transform: scale(0.85); }
         }
 
         /* =========================================
@@ -63,7 +73,7 @@
         }
         .env-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 0; }
         
-        .env-instruction { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #a6989a; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
+        .env-instruction { position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); width: 100%; text-align: center; color: #a6989a; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; animation: pulseFade 2s infinite; }
 
         /* --- THE SWAY ANIMATION --- */
         .f-sway { width: 100%; height: 100%; transform-origin: bottom center; animation: flowerSway 3s ease-in-out infinite alternate; }
@@ -129,7 +139,7 @@
         /* =========================================
            2. THE 3D CARD & CAKE
         ========================================= */
-        .card-wrapper { width: 85%; max-width: 350px; height: 65vh; max-height: 500px; position: relative; transform: rotateX(2deg); transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s; z-index: 10; }
+        .card-wrapper { width: 85%; max-width: 350px; height: 60dvh; max-height: 500px; position: relative; transform: rotateX(2deg); transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s; z-index: 10; }
         .card-wrapper.exit { transform: translateY(120vh) rotateZ(10deg) rotateX(20deg); opacity: 0; pointer-events: none; }
         .card-right-side { position: absolute; top: 0; right: 0; width: 100%; height: 100%; background-color: var(--card-inside); border-radius: 4px 12px 12px 4px; box-shadow: 15px 20px 40px rgba(0,0,0,0.12), inset 25px 0 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1; overflow: hidden; }
         .card-left-flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform-origin: left center; transform-style: preserve-3d; transition: transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 2; }
@@ -139,7 +149,6 @@
         .flap-front::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 40px; background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, transparent 100%); border-radius: 4px 0 0 4px; }
         .flap-back { background-color: var(--card-inside); transform: rotateY(180deg); z-index: 1; background: linear-gradient(to left, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 15%, var(--card-inside) 40%); border-radius: 12px 4px 4px 12px; }
 
-        /* Responsive Text Sizing */
         .cover-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 10vw, 3rem); font-style: italic; color: #fff; margin: 0; line-height: 1.1; text-shadow: 1px 2px 0px rgba(0,0,0,0.1), 0 0 25px rgba(255,255,255,0.4); text-align: center; width: 100%; }
         .name-input-container { width: 80%; border-bottom: 2px solid rgba(255,255,255,0.6); margin-top: 40px; display: flex; justify-content: center; }
         .name-input { background: transparent; border: none; color: #fff; font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 8vw, 2.2rem); text-align: center; width: 100%; outline: none; padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
@@ -174,8 +183,8 @@
         @keyframes flameAnim { 0%, 25%, 100% {transform: scaleY(1) rotate(-45deg);} 50%, 75% {transform: scaleY(1.1) rotate(-45deg);} }
         .flame.off, .flame2.off, .flame3.off { opacity: 0; pointer-events: none; }
 
-        /* iPhone UI Overlays (z-index 100 prevents hiding) */
-        .ui-container { position: absolute; bottom: 8%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 100; }
+        /* UI Overlays */
+        .ui-container { position: absolute; bottom: max(5%, 20px); left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 100; }
         .swipe-instruction { font-size: 0.85rem; color: #a6989a; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
         .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
         @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
@@ -194,7 +203,7 @@
         }
         #camera-screen.active { opacity: 1; pointer-events: auto; }
 
-        .camera-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: -10vh; }
+        .camera-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: -10dvh; }
 
         .retro-camera { width: 220px; height: 160px; background: #fdfaf6; border-radius: 10px 10px 0 0; position: relative; display: flex; justify-content: center; z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .camera-stripe { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 100%; z-index: 2; background: linear-gradient(to right, #ff4757 20%, #ffa502 20% 40%, #eccc68 40% 60%, #2ed573 60% 80%, #1e90ff 80%); }
@@ -230,28 +239,28 @@
            4. STANDARD OVERLAYS (SMOOTH CROSSFADES)
         ========================================= */
         .overlay-screen { 
-            visibility: hidden; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; 
-            position: absolute; top: 0; left: 0; text-align: center; padding: 40px; box-sizing: border-box; 
+            visibility: hidden; width: 100%; height: 100dvh; flex-direction: column; justify-content: center; align-items: center; 
+            position: absolute; top: 0; left: 0; text-align: center; padding: 20px; box-sizing: border-box; 
             z-index: 200; opacity: 0; transition: opacity 0.8s ease-in-out, visibility 0.8s; display: flex; pointer-events: none;
         }
         .overlay-screen.active { visibility: visible; opacity: 1; pointer-events: auto; z-index: 210;}
         
         .msg-container { max-width: 90%; background: rgba(255,255,255,0.7); padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .msg-h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 8vw, 3.5rem); color: var(--card-cover); margin: 0 0 10px 0; font-style: italic;}
-        .msg-p { color: var(--text-main); font-size: clamp(0.9rem, 4vw, 1rem); line-height: 1.6; text-align: left;}
+        .msg-p { color: var(--text-main); font-size: clamp(0.85rem, 4vw, 1rem); line-height: 1.6; text-align: left;}
         
-        .countdown-wrapper { display: flex; flex-direction: column; align-items: center; transform: translateY(-8vh); }
+        .countdown-wrapper { display: flex; flex-direction: column; align-items: center; transform: translateY(-8dvh); }
         .party-h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 10vw, 4.5rem); line-height: 1.1; color: var(--card-cover); margin-bottom: 20px; font-style: italic; text-shadow: 2px 2px 0px rgba(0,0,0,0.05);}
 
         button.standard-btn { 
-            margin-top: 30px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; 
+            margin-top: 20px; padding: 16px 36px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; 
             background-color: var(--gold-accent); color: white; cursor: pointer; 
             box-shadow: 0 6px 15px rgba(210, 151, 167, 0.4); transition: transform 0.2s; 
             font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 2px; 
         }
         button.standard-btn:active { transform: scale(0.95); }
         
-        .btn-container { position: relative; width: 100%; height: 400px; margin-top: 40px; max-width: 320px; overflow: visible;}
+        .btn-container { position: relative; width: 100%; height: 40dvh; min-height: 250px; max-height: 350px; margin-top: 20px; max-width: 320px; overflow: visible;}
         
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: #a49799; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 50; }
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
@@ -324,7 +333,7 @@
     </div>
 
     <!-- UI Overlay -->
-    <div class="ui-container" id="card-ui-container" style="z-index: 100;">
+    <div class="ui-container" id="card-ui-container">
         <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
         <button id="mic-btn" class="mic-btn" onclick="startMic()">Tap here</button>
     </div>
@@ -397,8 +406,9 @@
         /* ==================================
            GLOBAL: PRE-LOAD TIMER & CONFETTI
         ================================== */
-        // HARDCODED TO MAY 15, 2026 AT 5:00 PM
-        let targetTime = new Date("May 15, 2026 17:00:00");
+        // HARDCODED TO MAY 15, 2026 AT 5:00 PM SAFELY (Year, Month[0-11], Day, Hour, Min, Sec)
+        // 4 = May
+        let targetTime = new Date(2026, 4, 15, 17, 0, 0);
 
         function updateTimer() {
             const timerDisplay = document.getElementById("timer");
@@ -418,25 +428,8 @@
         function fireConfetti() {
             const colors = ['#d4af37', '#e4b5c0', '#f4a7b9', '#54b8aa', '#ffb703', '#d63996'];
             
-            // Left Cannon
-            confetti({
-                particleCount: 100,
-                angle: 60,
-                spread: 70,
-                origin: { x: 0, y: 1 },
-                colors: colors,
-                zIndex: 1000
-            });
-            
-            // Right Cannon
-            confetti({
-                particleCount: 100,
-                angle: 120,
-                spread: 70,
-                origin: { x: 1, y: 1 },
-                colors: colors,
-                zIndex: 1000
-            });
+            confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 1 }, colors: colors, zIndex: 1000 });
+            confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 1 }, colors: colors, zIndex: 1000 });
         }
 
         /* ==================================
@@ -526,7 +519,7 @@
         let canSwipe = false; 
         const nameInput = document.getElementById('name-input');
         const swipeHint = document.getElementById('swipe-hint');
-        const targetName = "Caitling"; 
+        const targetName = "Caitwin"; 
 
         nameInput.addEventListener('input', () => {
             if(document.getElementById('card-flap').classList.contains('open')) {
@@ -629,7 +622,9 @@
                     if (isBlown || !micEnabled) return; 
                     analyser.getByteFrequencyData(dataArray);
                     let sum = 0; for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-                    if ((sum / dataArray.length) > 75) blowOutCandles();
+                    
+                    // Reduced threshold so it triggers very easily
+                    if ((sum / dataArray.length) > 35) blowOutCandles();
                     else requestAnimationFrame(detectBlow);
                 }
                 detectBlow();

@@ -323,6 +323,7 @@
         </div>
     </div>
 
+    <!-- UI Overlay -->
     <div class="ui-container" id="card-ui-container" style="z-index: 5;">
         <div id="swipe-hint" class="swipe-instruction">Swipe Left to Open</div>
         <button id="mic-btn" class="mic-btn" onclick="startMic()">Tap here</button>
@@ -396,10 +397,8 @@
         /* ==================================
            GLOBAL: PRE-LOAD TIMER & CONFETTI
         ================================== */
-        // Calculate target to ALWAYS be exactly 5 PM the very next day.
-        let targetTime = new Date();
-        targetTime.setDate(targetTime.getDate() + 1); // Push to tomorrow
-        targetTime.setHours(17, 0, 0, 0); // Set to 5:00 PM
+        // Exactly May 15, 2026 at 5:00 PM
+        let targetTime = new Date("May 15, 2026 17:00:00");
 
         function updateTimer() {
             const timerDisplay = document.getElementById("timer");

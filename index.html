@@ -183,8 +183,8 @@
         @keyframes flameAnim { 0%, 25%, 100% {transform: scaleY(1) rotate(-45deg);} 50%, 75% {transform: scaleY(1.1) rotate(-45deg);} }
         .flame.off, .flame2.off, .flame3.off { opacity: 0; pointer-events: none; }
 
-        /* UI Overlays */
-        .ui-container { position: absolute; bottom: max(5%, 20px); left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 100; }
+        /* iPhone UI Overlays */
+        .ui-container { position: absolute; bottom: 8%; left: 0; width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; z-index: 100; }
         .swipe-instruction { font-size: 0.85rem; color: #a6989a; font-weight: 500; text-transform: uppercase; letter-spacing: 5px; display: none; }
         .swipe-instruction.show { display: block; animation: pulseFade 2.5s infinite; }
         @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
@@ -265,6 +265,7 @@
         #btn-no { position: absolute; left: 50%; top: 80%; transform: translate(-50%, -50%); background-color: #a49799; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 50; }
         #btn-yes { position: absolute; left: 50%; top: 20%; transform: translate(-50%, -50%); transition: left 0.1s ease-out, top 0.1s ease-out; white-space: nowrap; z-index: 1000; }
         
+        /* Total hours styling */
         #timer { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: clamp(2.2rem, 8vw, 4rem); color: var(--gold-accent); margin: 10px 0; font-variant-numeric: tabular-nums; letter-spacing: 1px;}
         .fine-print { font-size: 0.85rem; color: #a6989a; font-style: italic; margin-top: 20px; margin-bottom: 20px;}
 
@@ -406,16 +407,18 @@
         /* ==================================
            GLOBAL: PRE-LOAD TIMER & CONFETTI
         ================================== */
-        // HARDCODED TO MAY 15, 2026 AT 5:00 PM SAFELY (Year, Month[0-11], Day, Hour, Min, Sec)
-        // 4 = May
-        let targetTime = new Date(2026, 4, 15, 17, 0, 0);
+        // HARDCODED TO MAY 15, 2026 AT 5:00 PM (AEST / UTC+10)
+        // Using ISO String to strictly lock the date so it works universally on all OS's
+        let targetTime = new Date("2026-05-15T17:00:00+10:00");
 
         function updateTimer() {
             const timerDisplay = document.getElementById("timer");
             if(!timerDisplay) return;
             let distance = targetTime.getTime() - new Date().getTime();
             if (distance < 0) { timerDisplay.innerHTML = "PARTY TIME!"; return; }
-            let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            // MATH FIX: Now displays total hours (e.g., 29h) instead of resetting after 24 hours!
+            let h = Math.floor(distance / (1000 * 60 * 60));
             let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             let s = Math.floor((distance % (1000 * 60)) / 1000);
             const p = (num) => num < 10 ? "0" + num : num;
@@ -427,7 +430,6 @@
         // Authentic Canvas Firework Cannon Confetti!
         function fireConfetti() {
             const colors = ['#d4af37', '#e4b5c0', '#f4a7b9', '#54b8aa', '#ffb703', '#d63996'];
-            
             confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 1 }, colors: colors, zIndex: 1000 });
             confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 1 }, colors: colors, zIndex: 1000 });
         }
@@ -596,10 +598,7 @@
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
                 
-                // CRITICAL FOR IOS: Resume audio context after creation
-                if (audioCtx.state === 'suspended') {
-                    await audioCtx.resume();
-                }
+                if (audioCtx.state === 'suspended') await audioCtx.resume();
 
                 const analyser = audioCtx.createAnalyser();
                 const microphone = audioCtx.createMediaStreamSource(micStream);
@@ -623,7 +622,7 @@
                     analyser.getByteFrequencyData(dataArray);
                     let sum = 0; for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
                     
-                    // Reduced threshold so it triggers very easily
+                    // Reduced threshold so it triggers very easily on iPhones
                     if ((sum / dataArray.length) > 35) blowOutCandles();
                     else requestAnimationFrame(detectBlow);
                 }
@@ -706,14 +705,12 @@
         function startCountdown() {
             showScreen('countdown-screen');
             
-            // Autoplay music
             const bgMusic = document.getElementById('bg-music');
             if (bgMusic) {
                 bgMusic.volume = 0.6;
                 bgMusic.play().catch(e => console.log("Audio autoplay blocked."));
             }
             
-            // Launch initial cannon confetti
             fireConfetti();
         }
     </script>
